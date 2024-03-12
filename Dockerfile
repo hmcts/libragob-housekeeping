@@ -11,6 +11,7 @@ RUN apt-get install -y --no-install-recommends \
   postgresql-client
 
 COPY scripts/${SCRIPT_FILE} ${SCRIPT_FILE}
+COPY sql sql
 RUN chmod +x ${SCRIPT_FILE}
 
 ENTRYPOINT bash "$SCRIPT"
