@@ -9,7 +9,7 @@ RUN apt-get update -y && apt-get upgrade -y && useradd -m libragob
 RUN apt-get install -y --no-install-recommends \
   postgresql-client
 
-COPY scrips/${SCRIPT_FILE} /home/libragob/${SCRIPT_FILE}
+COPY scripts/${SCRIPT_FILE} /home/libragob/${SCRIPT_FILE}
 RUN chmod +x /home/libragob/${SCRIPT_FILE}
 
 USER libragob
