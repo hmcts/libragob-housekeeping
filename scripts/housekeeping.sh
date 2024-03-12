@@ -14,4 +14,4 @@ DB_USER=$event_username
 PGPASSWORD=$event_password
 DB_NAME=$event_db
 
-psql "sslmode=require host=${DB_HOST} dbname=${DB_NAME} user=${DB_USER} port=5432 password=${PGPASSWORD} file=./sql/public_update_tables_housekeeping.sql"
+psql "sslmode=require host=${DB_HOST} dbname=${DB_NAME} user=${DB_USER} port=5432 password=${PGPASSWORD}" --file=./sql/public_update_tables_housekeeping.sql
