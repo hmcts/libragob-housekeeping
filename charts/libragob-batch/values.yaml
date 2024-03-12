@@ -1,0 +1,5 @@
+job:
+  image: hmctspublic.azurecr.io/libragob/housekeeping:prod-f41d0947-1710249695
+  schedule: "*/1 * * * *"
+global:
+  jobKind: CronJob
