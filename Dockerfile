@@ -14,4 +14,4 @@ RUN chmod +x /home/libragob/${SCRIPT_FILE}
 
 USER libragob
 
-ENTRYPOINT ["./home/libragob/${SCRIPT_FILE}"]
+ENTRYPOINT "./home/libragob/${SCRIPT_FILE}"
