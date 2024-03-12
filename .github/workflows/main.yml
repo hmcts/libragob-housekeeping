@@ -1,0 +1,42 @@
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
+
+name: Build and Publish images
+
+jobs:
+  build-and-publish:
+    strategy:
+      matrix:
+        script: [ 'housekeeping', 'ams-reporting']
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Generate build ID
+        id: prep
+        run: |
+          sha=${GITHUB_SHA::8}
+          ts=$(date +%s)
+          echo "::set-output name=BUILD_ID::${sha}-${ts}"
+
+      - name: 'Docker Login'
+        uses: azure/docker-login@v1
+        with:
+          login-server: ${{ secrets.REGISTRY_LOGIN_SERVER }}
+          username: ${{ secrets.REGISTRY_USERNAME }}
+          password: ${{ secrets.REGISTRY_PASSWORD }}
+      - run: |
+          docker build . -t ${{ secrets.REGISTRY_LOGIN_SERVER }}/libragob-${{matrix.script}}:pr-${{github.event.number}}-${{ steps.prep.outputs.BUILD_ID }} --build-arg="SCRIPT=${{matrix.script}}.sh"
+          docker push ${{ secrets.REGISTRY_LOGIN_SERVER }}/libragob-${{matrix.script}}:pr-${{github.event.number}}-${{ steps.prep.outputs.BUILD_ID }}
+        if: startsWith(github.ref, 'refs/pull')
+        name: 'Build and publish ${{matrix.script}} image'
+      - run: |
+          docker build . -t ${{ secrets.REGISTRY_LOGIN_SERVER }}/libragob-${{matrix.script}}:prod-${{ steps.prep.outputs.BUILD_ID }} --build-arg="SCRIPT=${{matrix.script}}.sh"
+          docker push ${{ secrets.REGISTRY_LOGIN_SERVER }}/libragob-${{matrix.script}}:prod-${{ steps.prep.outputs.BUILD_ID }}
+        if: github.ref == 'refs/heads/main'
+        name: 'Build and publish ${{matrix.script}} image'
