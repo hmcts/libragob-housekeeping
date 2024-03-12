@@ -31,12 +31,12 @@ jobs:
           username: ${{ secrets.REGISTRY_USERNAME }}
           password: ${{ secrets.REGISTRY_PASSWORD }}
       - run: |
-          docker build . -t ${{ secrets.REGISTRY_LOGIN_SERVER }}/libragob/${{matrix.script}}:pr-${{github.event.number}}-${{ steps.prep.outputs.BUILD_ID }} --build-arg="SCRIPT=${{matrix.script}}.sh"
+          docker build . -t ${{ secrets.REGISTRY_LOGIN_SERVER }}/libragob/${{matrix.script}}:pr-${{github.event.number}}-${{ steps.prep.outputs.BUILD_ID }} --build-arg="SCRIPT_FILE=${{matrix.script}}.sh"
           docker push ${{ secrets.REGISTRY_LOGIN_SERVER }}/libragob/${{matrix.script}}:pr-${{github.event.number}}-${{ steps.prep.outputs.BUILD_ID }}
         if: startsWith(github.ref, 'refs/pull')
         name: 'Build and publish ${{matrix.script}} image'
       - run: |
-          docker build . -t ${{ secrets.REGISTRY_LOGIN_SERVER }}/libragob/${{matrix.script}}:prod-${{ steps.prep.outputs.BUILD_ID }} --build-arg="SCRIPT=${{matrix.script}}.sh"
+          docker build . -t ${{ secrets.REGISTRY_LOGIN_SERVER }}/libragob/${{matrix.script}}:prod-${{ steps.prep.outputs.BUILD_ID }} --build-arg="SCRIPT_FILE=${{matrix.script}}.sh"
           docker push ${{ secrets.REGISTRY_LOGIN_SERVER }}/libragob/${{matrix.script}}:prod-${{ steps.prep.outputs.BUILD_ID }}
         if: github.ref == 'refs/heads/main'
         name: 'Build and publish ${{matrix.script}} image'
