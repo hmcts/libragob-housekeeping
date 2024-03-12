@@ -1,5 +1,5 @@
 FROM ubuntu:22.04
-ARG SCRIPT_FILE="housekeeping.sh"
+ARG SCRIPT_FILE
 ENV SCRIPT=${SCRIPT_FILE}
 
 ENV DEBIAN_FRONTEND=noninteractive
