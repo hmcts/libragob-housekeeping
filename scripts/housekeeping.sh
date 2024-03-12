@@ -16,8 +16,9 @@ DB_NAME=$event_db
 
 psql "sslmode=require host=${DB_HOST} dbname=${DB_NAME} user=${DB_USER} port=5432 password=${PGPASSWORD}" --file=./sql/public_update_tables_housekeeping.sql
 
-themis_gateway_username=$(cat /mnt/secrets/$KV_NAME/themis-gateway-dbusername)
-themis_gateway_password=$(cat /mnt/secrets/$KV_NAME/themis-gateway-dbpassword)
+#themis_gateway_username=$(cat /mnt/secrets/$KV_NAME/themis-gateway-dbusername)
+themis_gateway_username=pgadmin
+themis_gateway_password=$(cat /mnt/secrets/$KV_NAME/libragob-pg-admin-password)
 themis_gateway_url=$(cat /mnt/secrets/$KV_NAME/themis-gateway-datasourceurl)
 themis_gateway_host=$(echo "$themis_gateway_url" | sed 's/jdbc:postgresql:\/\///' | sed 's/:5432//' | sed 's/\/.*//')
 themis_gateway_db=$(echo "$themis_gateway_url" | sed 's/jdbc:postgresql:\/\///' | sed 's/:5432//' | sed 's/.*\///')
