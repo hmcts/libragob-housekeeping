@@ -1,4 +1,4 @@
-SELECT * FROM public.table_updates
+SELECT COUNT(*) FROM public.table_updates
 WHERE created_date < CURRENT_TIMESTAMP - interval '5 days';
-SELECT *  FROM public.update_requests
+SELECT COUNT(*)  FROM public.update_requests
 WHERE created_date < CURRENT_TIMESTAMP - interval '5 days';
