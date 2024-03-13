@@ -16,5 +16,4 @@ DB_NAME=$event_db
 
 psql "sslmode=require host=${DB_HOST} dbname=${DB_NAME} user=${DB_USER} port=5432 password=${PGPASSWORD}" --file=./sql/update_requests_reporting.sql
 
-ls
-cat ./output.csv
+ls -la
