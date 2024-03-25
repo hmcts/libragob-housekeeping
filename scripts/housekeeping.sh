@@ -29,4 +29,19 @@ DB_USER=$themis_gateway_username
 PGPASSWORD=$themis_gateway_password
 DB_NAME=$themis_gateway_db
 
-psql "sslmode=require host=${DB_HOST} dbname=${DB_NAME} user=${DB_USER} port=5432 password=${PGPASSWORD}" --file=./sql/audit_messages_housekeeping.sql
+psql "sslmode=require host=${DB_HOST} dbname=${DB_NAME} user=${DB_USER} port=5432 password=${PGPASSWORD}" --file=./sql/gateway_audit_messages_housekeeping.sql
+
+themis_dac_username=$(cat /mnt/secrets/$KV_NAME/dac-datasource-username)
+themis_dac_password=$(cat /mnt/secrets/$KV_NAME/dac-datasource-password)
+themis_dac_url=$(cat /mnt/secrets/$KV_NAME/dac-datasource-url)
+themis_dac_host=$(echo "$themis_dac_url" | sed 's/jdbc:postgresql:\/\///' | sed 's/:5432//' | sed 's/\/.*//')
+themis_dac_db=$(echo "$themis_dac_url" | sed 's/jdbc:postgresql:\/\///' | sed 's/:5432//' | sed 's/.*\///')
+
+echo "Connecting to $themis_dac_db database at $themis_dac_host"
+
+DB_HOST=$themis_dac_host
+DB_USER=$themis_dac_username
+PGPASSWORD=$themis_dac_password
+DB_NAME=$themis_dac_db
+
+psql "sslmode=require host=${DB_HOST} dbname=${DB_NAME} user=${DB_USER} port=5432 password=${PGPASSWORD}" --file=./sql/dac_audit_messages_housekeeping.sql
