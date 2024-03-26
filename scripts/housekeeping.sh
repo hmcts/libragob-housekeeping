@@ -2,19 +2,16 @@
 echo "Running housekeeping tasks against the LibraGoB database..."
 
 runSQL() {
-  $username = $1
-  $password = $2
-  $url = $3
-  $filepath = $4
-  host=$(echo "$url" | sed 's/jdbc:postgresql:\/\///' | sed 's/:5432//' | sed 's/\/.*//')
-  db=$(echo "$url" | sed 's/jdbc:postgresql:\/\///' | sed 's/:5432//' | sed 's/.*\///')
+  DB_USER=$1
+  PGPASSWORD=$2
+  url=$3
+  filepath=$4
+  DB_HOST=$(echo "$url" | sed 's/jdbc:postgresql:\/\///' | sed 's/:5432//' | sed 's/\/.*//')
+  DB_NAME=$(echo "$url" | sed 's/jdbc:postgresql:\/\///' | sed 's/:5432//' | sed 's/.*\///')
 
-  echo "Connecting to $db database at $host"
+  echo "Connecting to $DB_NAME database at $DB_HOST"
 
-  $DB_HOST=$host
-  $DB_USER=$username
-  $PGPASSWORD=$password
-  $DB_NAME=$db
+  echo $filepath
 
   psql "sslmode=require host=${DB_HOST} dbname=${DB_NAME} user=${DB_USER} port=5432 password=${PGPASSWORD}" --file=$filepath
 }
