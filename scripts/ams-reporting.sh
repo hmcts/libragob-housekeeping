@@ -17,3 +17,13 @@ DB_NAME=$event_db
 psql "sslmode=require host=${DB_HOST} dbname=${DB_NAME} user=${DB_USER} port=5432 password=${PGPASSWORD}" --file=./sql/update_requests_reporting.sql
 
 cat /tmp/output.csv
+
+if [ -f /mnt/secrets/$KV_NAME/sftp-endpoint ] && [ -f /mnt/secrets/$KV_NAME/sftp-username ] && [ -f /mnt/secrets/$KV_NAME/sftp-password ]; then
+  stfp_endpoint=$(cat /mnt/secrets/$KV_NAME/sftp-endpoint)
+  sftp_username=$(cat /mnt/secrets/$KV_NAME/sftp-username)
+  sftp_password=$(cat /mnt/secrets/$KV_NAME/sftp-password)
+
+  echo "Uploading the report to SFTP server $sftp_endpoint"
+
+  sftp $sftp_username@$sftp_endpoint:/ <<< $'put /tmp/output.csv'
+fi
