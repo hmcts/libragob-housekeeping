@@ -1,0 +1,1 @@
+\copy (select to_char(date_trunc('day',processed_date),'dd/mm/yyyy'),count(*) from table_updates where processed_date is not null group by to_char(date_trunc('day',processed_date),'dd/mm/yyyy') order by 1 desc) To '/scripts/12nAZUREDB_AMD_daily_completed_table_updates_counts.csv' With CSV DELIMITER ','
