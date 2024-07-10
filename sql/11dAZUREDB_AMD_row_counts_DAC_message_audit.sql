@@ -1,0 +1,1 @@
+\copy (select count(*) from themis_dac.message_audit) To '/scripts/11dAZUREDB_AMD_row_counts_DAC_message_audit.csv' With CSV DELIMITER ','

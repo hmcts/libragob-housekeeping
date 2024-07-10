@@ -1,0 +1,1 @@
+\copy (select date_trunc('hour',processed_date),count(*) from table_updates where processed_date is not null group by date_trunc('hour',processed_date) order by 1 desc limit 100) To '/scripts/12pAZUREDB_AMD_hourly_completed_table_updates_counts.csv' With CSV DELIMITER ','
