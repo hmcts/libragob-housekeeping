@@ -731,7 +731,7 @@ else
 eta_units=days
 fi
 
-if [[ $sum_number_of_table_updates -gt $backlog_adaptive_threshold ]] || [[  ;then
+if [[ $sum_number_of_table_updates -gt $backlog_adaptive_threshold ]];then
 echo "$dt,AZDB001_msg_backlog,MessageBacklogCheck,$schema_id,$status,$count_updates,$max_number_of_table_updates,$sum_number_of_table_updates,$backlog_adaptive_threshold,$db_dac_rate,$total_dac_rate,$total_gw_rate,$combined_rate_secs,$roundtrip_threshold,$adj_delivery_rate_secs$eta_units,warn" >> $OUTFILE
 else
 echo "$dt,AZDB001_msg_backlog,MessageBacklogCheck,$schema_id,$status,$count_updates,$max_number_of_table_updates,$sum_number_of_table_updates,$backlog_adaptive_threshold,$db_dac_rate,$total_dac_rate,$total_gw_rate,$combined_rate_secs,$roundtrip_threshold,$adj_delivery_rate_secs$eta_units,ok" >> $OUTFILE
