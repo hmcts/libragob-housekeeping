@@ -64,18 +64,34 @@ distinct_records AS (
         table_name,
         update_type,
         new_value_date_1 AS new_value_date,
-        processed_date_1 AS processed_date
+        processed_date_1 AS processed_date,
+        update_request_id_2,
+        new_value_date_2,
+        processed_date_2
     FROM
         comparison_results
 )
-INSERT INTO data_differences_table (update_request_id, primary_key_id, table_name, update_type, new_value_date, processed_date)
+INSERT INTO data_differences_table (
+    update_request_id, 
+    primary_key_id, 
+    table_name, 
+    update_type, 
+    new_value_date, 
+    processed_date, 
+    update_request_id_2, 
+    new_value_date_2, 
+    processed_date_2
+)
 SELECT 
     dr.update_request_id,
     dr.primary_key_id,
     dr.table_name,
     dr.update_type,
     dr.new_value_date,
-    dr.processed_date
+    dr.processed_date,
+    dr.update_request_id_2,
+    dr.new_value_date_2,
+    dr.processed_date_2
 FROM
     distinct_records dr
 WHERE
@@ -88,6 +104,9 @@ WHERE
         AND tt.update_type = dr.update_type
         AND tt.new_value_date = dr.new_value_date
         AND tt.processed_date = dr.processed_date
+        AND tt.update_request_id_2 = dr.update_request_id_2
+        AND tt.new_value_date_2 = dr.new_value_date_2
+        AND tt.processed_date_2 = dr.processed_date_2
     );
 INSERT INTO public.table_updates_backup
 SELECT *
