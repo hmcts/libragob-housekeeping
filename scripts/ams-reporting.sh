@@ -13,9 +13,9 @@ event_url=$(cat /mnt/secrets/$KV_NAME/event-datasource-url)
 event_db=$(echo "$event_url" | sed 's/jdbc:postgresql:\/\///' | sed 's/:5432//' | sed 's/.*\///')
 
 # PostgresDB connection variables
-postgres_username=$(cat /mnt/secrets/$KV_NAME/postgres-datasource-username)
-postgres_password=$(cat /mnt/secrets/$KV_NAME/postgres-datasource-password)
-postgres_url=$(cat /mnt/secrets/$KV_NAME/postgres-datasource-url)
+postgres_username=$(cat /mnt/secrets/$KV_NAME/themis-gateway-dbusername)
+postgres_password=$(cat /mnt/secrets/$KV_NAME/themis-gateway-dbpassword)
+postgres_url=$(cat /mnt/secrets/$KV_NAME/themis-gateway-datasourceurl)
 postgres_db=$(echo "$postgres_url" | sed 's/jdbc:postgresql:\/\///' | sed 's/:5432//' | sed 's/.*\///')
 
 # ConfiscationDB connection variables
@@ -31,9 +31,9 @@ fines_url=$(cat /mnt/secrets/$KV_NAME/fines-datasource-url)
 fines_db=$(echo "$fines_url" | sed 's/jdbc:nm_fines_db:\/\///' | sed 's/:5432//' | sed 's/.*\///')
 
 # MaintenanceDB connection variables
-maintenance_username=$(cat /mnt/secrets/$KV_NAME/postgres-datasource-username)
-maintenance_password=$(cat /mnt/secrets/$KV_NAME/postgres-datasource-password)
-maintenance_url=$(cat /mnt/secrets/$KV_NAME/postgres-datasource-url)
+maintenance_username=$(cat /mnt/secrets/$KV_NAME/maintenance-datasource-username)
+maintenance_password=$(cat /mnt/secrets/$KV_NAME/maintenance-datasource-password)
+maintenance_url=$(cat /mnt/secrets/$KV_NAME/maintenance-datasource-url)
 maintenance_db=$(echo "$maintenance_url" | sed 's/jdbc:nm_maintenance_db:\/\///' | sed 's/:5432//' | sed 's/.*\///')
 ####################################################### CHECK 1
 dt=$(date "+%d/%m/%Y %T")
