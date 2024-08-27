@@ -1,9 +1,9 @@
 name: libragob-batch
 home: https://github.com/hmcts/libragob-batch-jobs
-version: 0.0.1
+version: 0.0.2
 description: HMCTS Libra Green on Black batch jobs
 apiVersion: v2
 dependencies:
   - name: job
-    version: 2.1.1
+    version: 2.1.2
     repository: 'https://hmctspublic.azurecr.io/helm/v1/repo/'
