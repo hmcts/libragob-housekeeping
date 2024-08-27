@@ -10,6 +10,7 @@ echo "$dt" > $OUTFILE
 event_username=$(cat /mnt/secrets/$KV_NAME/event-datasource-username)
 event_password=$(cat /mnt/secrets/$KV_NAME/event-datasource-password)
 event_url=$(cat /mnt/secrets/$KV_NAME/event-datasource-url)
+echo $event_url
 event_db=$(echo "$event_url" | sed 's/jdbc:postgresql:\/\///' | sed 's/:5432//' | sed 's/.*\///')
 
 # PostgresDB connection variables
