@@ -14,8 +14,8 @@ event_url=$(cat /mnt/secrets/$KV_NAME/event-datasource-url)
 echo $event_username
 echo $event_password
 echo $event_url
-event_db=`echo "$event_url" | awk -F"//" {'print $1'} | awk -F":" {'print $1'}`
-event_port=`echo "$event_url" | awk -F":" {'print $3'} | awk -F"/" {'print $1'}`
+event_host=`echo $event_url | awk -F"//" {'print $1'} | awk -F":" {'print $1'}`
+event_port=`echo $event_url | awk -F":" {'print $3'} | awk -F"/" {'print $1'}`
 echo $event_host
 echo $event_port
 
@@ -48,7 +48,7 @@ echo "DateTime,CheckName,Description,Status,Result" >> $OUTFILE
 echo "$(date "+%d/%m/%Y %T") Starting Check #1" >> $OUTFILE_LOG
 echo "$(date "+%d/%m/%Y %T") Connecting to $event_db database" >> $OUTFILE_LOG
 #psql "sslmode=require host=${event_url} user=${event_username} port=5432 password=${event_password}" --file=./sql/1AZUREDB_AMD_locked_schemas.sql
-psql sslmode=require host=${event_host} --user=${event_username}@${event_password} --port=5432 --file=./sql/1AZUREDB_AMD_locked_schemas.sql
+psql sslmode=require --host=${event_host}:${event_port} --user=${event_username}@${event_password} --file=./sql/1AZUREDB_AMD_locked_schemas.sql
 echo "$(date "+%d/%m/%Y %T") Connecting to $event_db database" >> $OUTFILE_LOG
 echo "$(date "+%d/%m/%Y %T") SQL for Check #1 has been run" >> $OUTFILE_LOG
 
