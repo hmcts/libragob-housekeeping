@@ -4,7 +4,7 @@ dt=$(date "+%d/%m/%Y %T")
 dt_today=$(date "+%Y/%m/%D")
 OUTFILE=/scripts/AZURE_DB001_AMD.csv
 OUTFILE_LOG=/scripts/AZURE_DB001_AMD.log
-echo "$dt" > $OUTFILE
+echo $(date "+%d/%m/%Y %T") > $OUTFILE
 
 # EventDB connection variables
 event_username=$(cat /mnt/secrets/$KV_NAME/event-datasource-username)
@@ -43,13 +43,14 @@ maintenance_password=$(cat /mnt/secrets/$KV_NAME/maintenance-datasource-password
 maintenance_url=$(cat /mnt/secrets/$KV_NAME/maintenance-datasource-url)
 maintenance_db=$(echo "$maintenance_url" | sed 's/jdbc:nm_maintenance_db:\/\///' | sed 's/:5432//' | sed 's/.*\///')
 ####################################################### CHECK 1
-dt=$(date "+%d/%m/%Y %T")
 echo "[Check #1: Locked Schemas] >> $OUTFILE
 echo "DateTime,CheckName,Description,Status,Result" >> $OUTFILE
-echo "$dt Starting Check #1" >> $OUTFILE_LOG
-echo "$dt Connecting to $event_db database" >> $OUTFILE_LOG
+echo "$(date "+%d/%m/%Y %T") Starting Check #1" >> $OUTFILE_LOG
+echo "$(date "+%d/%m/%Y %T") Connecting to $event_db database" >> $OUTFILE_LOG
 #psql "sslmode=require host=${event_url} user=${event_username} port=5432 password=${event_password}" --file=./sql/1AZUREDB_AMD_locked_schemas.sql
 psql sslmode=require host=${event_host} --user=${event_username}@${event_password} --port=5432 --file=./sql/1AZUREDB_AMD_locked_schemas.sql
+echo "$(date "+%d/%m/%Y %T") Connecting to $event_db database" >> $OUTFILE_LOG
+echo "$(date "+%d/%m/%Y %T") SQL for Check #1 has been run" >> $OUTFILE_LOG
 
 while read -r line;do
 
@@ -62,6 +63,8 @@ echo "$dt,AZDB001_schema_lock,Locked Schema Check,No Schema Locks,ok" >> $OUTFIL
 fi
 
 done < /scripts/1AZUREDB_AMD_locked_schemas.csv
+
+echo "$(date "+%d/%m/%Y %T") Check #1 complete" >> $OUTFILE_LOG
 
 exit 0
 ####################################################### CHECK 2
