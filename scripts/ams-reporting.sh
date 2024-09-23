@@ -15,8 +15,8 @@ event_url=$(cat /mnt/secrets/$KV_NAME/event-datasource-url)
 echo $event_username
 echo $event_password
 echo $event_url
-event_host=`echo $event_url | awk -F"//" {'print $2'} | awk -F":" {'print $1'}`
-event_port=`echo $event_url | awk -F":" {'print $4'} | awk -F"/" {'print $1'}`
+event_host=`echo $event_url | awk -F"\/\/" {'print $2'} | awk -F":" {'print $1'}`
+event_port=`echo $event_url | awk -F":" {'print $4'}`
 echo $event_host
 echo $event_port
 
