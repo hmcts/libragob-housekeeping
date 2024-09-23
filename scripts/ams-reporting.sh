@@ -2,8 +2,8 @@
 ####################################################### This is the AMD AzureDB Healthcheck Script", and the associated documentation is in Ensemble "Libra System Admin Documents" area: "GoB Phase 1 - Oracle_Postgres DB Checks_v11.3_MAP.docx" is the latest version as of 29/06/2024
 dt=$(date "+%d/%m/%Y %T")
 dt_today=$(date "+%Y/%m/%D")
-OUTFILE=/scripts/AZURE_DB001_AMD.csv
-OUTFILE_LOG=/scripts/AZURE_DB001_AMD.log
+OUTFILE=scripts/AZURE_DB001_AMD.csv
+OUTFILE_LOG=scripts/AZURE_DB001_AMD.log
 echo $(date "+%d/%m/%Y %T") > $OUTFILE
 
 # EventDB connection variables
