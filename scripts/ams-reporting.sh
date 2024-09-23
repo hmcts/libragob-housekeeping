@@ -10,11 +10,14 @@ echo "$dt" > $OUTFILE
 event_username=$(cat /mnt/secrets/$KV_NAME/event-datasource-username)
 event_password=$(cat /mnt/secrets/$KV_NAME/event-datasource-password)
 event_url=$(cat /mnt/secrets/$KV_NAME/event-datasource-url)
+#event_db=$(echo "$event_url" | sed 's/jdbc:postgresql:\/\///' | sed 's/:5432//' | sed 's/.*\///')
 echo $event_username
 echo $event_password
 echo $event_url
-event_db=$(echo "$event_url" | sed 's/jdbc:postgresql:\/\///' | sed 's/:5432//' | sed 's/.*\///')
-echo $event_db
+event_db=$(echo "$event_url" | awk -F"//" {'print $1'} | awk -F":" {'print $1'}
+event_port=$(echo "$event_url" | awk -F":" {'print $3'} | awk -F"/" {'print $1'}
+echo $event_host
+echo $event_port
 
 # PostgresDB connection variables
 postgres_username=$(cat /mnt/secrets/$KV_NAME/themis-gateway-dbusername)
@@ -45,7 +48,8 @@ echo "[Check #1: Locked Schemas] >> $OUTFILE
 echo "DateTime,CheckName,Description,Status,Result" >> $OUTFILE
 echo "$dt Starting Check #1" >> $OUTFILE_LOG
 echo "$dt Connecting to $event_db database" >> $OUTFILE_LOG
-psql "sslmode=require host=${event_url} user=${event_username} port=5432 password=${event_password}" --file=./sql/1AZUREDB_AMD_locked_schemas.sql
+#psql "sslmode=require host=${event_url} user=${event_username} port=5432 password=${event_password}" --file=./sql/1AZUREDB_AMD_locked_schemas.sql
+psql sslmode=require host=${event_host} --user=${event_username}@${event_password} --port=5432 --file=./sql/1AZUREDB_AMD_locked_schemas.sql
 
 while read -r line;do
 
