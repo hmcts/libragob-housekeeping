@@ -10,6 +10,7 @@ echo "$dt" > $OUTFILE
 event_username=$(cat /mnt/secrets/$KV_NAME/event-datasource-username)
 event_password=$(cat /mnt/secrets/$KV_NAME/event-datasource-password)
 event_url=$(cat /mnt/secrets/$KV_NAME/event-datasource-url)
+echo $event_url
 event_db=$(echo "$event_url" | sed 's/jdbc:postgresql:\/\///' | sed 's/:5432//' | sed 's/.*\///')
 
 # PostgresDB connection variables
@@ -43,7 +44,7 @@ echo "$dt Starting Check #1" >> $OUTFILE_LOG
 echo "$dt Connecting to $event_db database" >> $OUTFILE_LOG
 psql "sslmode=require host=${event_db} user=${event_username} port=5432 password=${event_password}" --file=./sql/1AZUREDB_AMD_locked_schemas.sql
 
-while read -r line
+while read -r line;do
 
 schema_lock=`echo $line | awk '{print $1}'`
 
@@ -64,7 +65,7 @@ echo "$dt Starting Check #2" >> $OUTFILE_LOG
 echo "$dt Connecting to $postgres_db database" >> $OUTFILE_LOG
 psql "sslmode=require host=${postgres_db} user=${postgres_username} port=5432 password=${postgres_password}" --file=./sql/2AZUREDB_AMD_locked_keys.sql
 
-while read -r line
+while read -r line;do
 
 key_lock=`echo $line | awk '{print $1}'`
 
@@ -86,7 +87,7 @@ psql "sslmode=require host=${event_db} user=${event_username} port=5432 password
 idle_threshold=450
 nonidle_threshold=12
 
-while read -r line
+while read -r line;do
 
 state=`echo $line | awk '{print $1}'`
 count=`echo $line | awk '{print $2}'`
@@ -117,7 +118,7 @@ if [[ `/scripts/5AZUREDB_AMD_message_log_errors.csv | wc -l | xargs` -gt 100 ]];
 tail -100 /scripts/5AZUREDB_AMD_message_log_errors.csv > /scripts/5AZUREDB_AMD_message_log_errors_100.csv
 fi
 
-while read -r line
+while read -r line;do
 
 message_log_id=`echo $line | awk '{print $1}'`
 message_uuid=`echo $line | awk '{print $2}'`
@@ -142,7 +143,7 @@ echo "$dt Starting Check #6" >> $OUTFILE_LOG
 echo "$dt Connecting to $event_db database" >> $OUTFILE_LOG
 psql "sslmode=require host=${event_db} user=${event_username} port=5432 password=${event_password}" --file=./sql/6AZUREDB_AMD_update_processing_backlog.sql
 
-while read -r line
+while read -r line;do
 
 dt_now=$(date "+%Y-%m-%d %T")
 schema_id=`echo $line | awk '{print $1}'`
@@ -178,7 +179,7 @@ psql "sslmode=require host=${event_db} user=${event_username} port=5432 password
 
 bundled_print_threshold=50000
 
-while read -r line
+while read -r line;do
 
 schema_id=`echo $line | awk '{print $1}'`
 count_updates=`echo $line | awk '{print $2}'`
@@ -200,7 +201,7 @@ echo "$dt Starting Check #8" >> $OUTFILE_LOG
 echo "$dt Connecting to $event_db database" >> $OUTFILE_LOG
 psql "sslmode=require host=${event_db} user=${event_username} port=5432 password=${event_password}" --file=./sql/8AZUREDB_AMD_todays_hourly_update_counts.sql
 
-while read -r line
+while read -r line;do
 
 schema_id=`echo $line | awk '{print $1}'`
 count_updates=`echo $line | awk '{print $2}'`
@@ -239,7 +240,7 @@ echo "$dt Starting Check #9d" >> $OUTFILE_LOG
 echo "$dt Connecting to $confiscation_db database" >> $OUTFILE_LOG
 psql "sslmode=require host=${confiscation_db} user=${confiscation_username} port=5432 password=${confiscation_password}" --file=./sql/9dAZUREDB_AMD_confiscation_ERRORS.sql $RR_ID
 
-while read -r line
+while read -r line;do
 
 schema_id=`echo $line | awk '{print $3}'`
 item=`echo $line | awk '{print $4}'
@@ -283,7 +284,7 @@ echo "$dt Connecting to $fines_db database" >> $OUTFILE_LOG
 echo "$dt Starting Check #9h" >> $OUTFILE_LOG
 psql "sslmode=require host=${fines_db} user=${fines_username} port=5432 password=${fines_password}" --file=./sql/9hAZUREDB_AMD_fines_ERRORS.sql $RR_ID
 
-while read -r line
+while read -r line;do
 
 schema_id=`echo $line | awk '{print $3}'`
 item=`echo $line | awk '{print $4}'
@@ -327,7 +328,7 @@ echo "$dt Connecting to $maintenance_db database" >> $OUTFILE_LOG
 echo "$dt Starting Check #9l" >> $OUTFILE_LOG
 psql "sslmode=require host=${maintenance_db} user=${maintenance_username} port=5432 password=${maintenance_password}" --file=./sql/9lAZUREDB_AMD_maintenance_ERRORS.sql $RR_ID
 
-while read -r line
+while read -r line;do
 
 schema_id=`echo $line | awk '{print $3}'`
 item=`echo $line | awk '{print $4}'
@@ -382,7 +383,7 @@ echo "$dt Starting Check #12a" >> $OUTFILE_LOG
 echo "$dt Connecting to $postgres_db database" >> $OUTFILE_LOG
 psql "sslmode=require host=${postgres_db} user=${postgres_username} port=5432 password=${postgres_password}" --file=./sql/12aAZUREDB_AMD_dacaudit_DBstep13-12_latest100_processing_rates.sql
 
-while read -r line
+while read -r line;do
 
 updated_date=`echo $line | awk '{print $1}'`
 uuid=`echo $line | awk '{print $2}'`
@@ -399,7 +400,7 @@ echo "$dt Starting Check #12b" >> $OUTFILE_LOG
 echo "$dt Connecting to $postgres_db database" >> $OUTFILE_LOG
 psql "sslmode=require host=${postgres_db} user=${postgres_username} port=5432 password=${postgres_password}" --file=./sql/12bAZUREDB_AMD_dacaudit_step10-1_latest100_processing_rates.sql
 
-while read -r line
+while read -r line;do
 
 updated_date=`echo $line | awk '{print $1}'`
 uuid=`echo $line | awk '{print $2}'`
@@ -416,7 +417,7 @@ echo "$dt Starting Check #12c" >> $OUTFILE_LOG
 echo "$dt Connecting to $postgres_db database" >> $OUTFILE_LOG
 psql "sslmode=require host=${postgres_db} user=${postgres_username} port=5432 password=${postgres_password}" --file=./sql/12cAZUREDB_AMD_gwaudit_step10-1_latest100_processing_rates.sql
 
-while read -r line
+while read -r line;do
 
 updated_date=`echo $line | awk '{print $1}'`
 uuid=`echo $line | awk '{print $2}'`
@@ -433,7 +434,7 @@ echo "$dt Starting Check #12d" >> $OUTFILE_LOG
 echo "$dt Connecting to $postgres_db database" >> $OUTFILE_LOG
 psql "sslmode=require host=${postgres_db} user=${postgres_username} port=5432 password=${postgres_password}" --file=./sql/12dAZUREDB_AMD_dacaudit_DBstep13-12_avgDailyRT.sql
 
-while read -r line
+while read -r line;do
 
 dateddmmyyyy=`echo $line | awk '{print $1}'`
 avgDailyRT=`echo $line | awk '{print $2}'`
@@ -451,7 +452,7 @@ echo "$dt Starting Check #12e" >> $OUTFILE_LOG
 echo "$dt Connecting to $postgres_db database" >> $OUTFILE_LOG
 psql "sslmode=require host=${postgres_db} user=${postgres_username} port=5432 password=${postgres_password}" --file=./sql/12eAZUREDB_AMD_dacaudit_step10-1_avgDailyRT.sql
 
-while read -r line
+while read -r line;do
 
 dateddmmyyyy=`echo $line | awk '{print $1}'`
 avgDailyRT=`echo $line | awk '{print $2}'`
@@ -469,7 +470,7 @@ echo "$dt Starting Check #12f" >> $OUTFILE_LOG
 echo "$dt Connecting to $postgres_db database" >> $OUTFILE_LOG
 psql "sslmode=require host=${postgres_db} user=${postgres_username} port=5432 password=${postgres_password}" --file=./sql/12fAZUREDB_AMD_gwaudit_step10-1_avgDailyRT.sql
 
-while read -r line
+while read -r line;do
 
 dateddmmyyyy=`echo $line | awk '{print $1}'`
 avgDailyRT=`echo $line | awk '{print $2}'`
@@ -487,7 +488,7 @@ echo "$dt Starting Check #12g" >> $OUTFILE_LOG
 echo "$dt Connecting to $postgres_db database" >> $OUTFILE_LOG
 psql "sslmode=require host=${postgres_db} user=${postgres_username} port=5432 password=${postgres_password}" --file=./sql/12gAZUREDB_AMD_dacaudit_DBstep13-12_avgHourlyRT.sql
 
-while read -r line
+while read -r line;do
 
 dateddmmyyyy=`echo $line | awk '{print $1}'`
 avgHourlyRT=`echo $line | awk '{print $2}'`
@@ -505,7 +506,7 @@ echo "$dt Starting Check #12h" >> $OUTFILE_LOG
 echo "$dt Connecting to $postgres_db database" >> $OUTFILE_LOG
 psql "sslmode=require host=${postgres_db} user=${postgres_username} port=5432 password=${postgres_password}" --file=./sql/12hAZUREDB_AMD_dacaudit_DBstep13-12_avgMinuteRT.sql
 
-while read -r line
+while read -r line;do
 
 dateddmmyyyy=`echo $line | awk '{print $1}'`
 avgMinuteRT=`echo $line | awk '{print $2}'`
@@ -523,7 +524,7 @@ echo "$dt Starting Check #12i" >> $OUTFILE_LOG
 echo "$dt Connecting to $postgres_db database" >> $OUTFILE_LOG
 psql "sslmode=require host=${postgres_db} user=${postgres_username} port=5432 password=${postgres_password}" --file=./sql/12iAZUREDB_AMD_dacaudit_DBstep10-1_avgHourlyRT.sql
 
-while read -r line
+while read -r line;do
 
 dateddmmyyyy=`echo $line | awk '{print $1}'`
 avgHourlyRT=`echo $line | awk '{print $2}'`
@@ -541,7 +542,7 @@ echo "$dt Starting Check #12j" >> $OUTFILE_LOG
 echo "$dt Connecting to $postgres_db database" >> $OUTFILE_LOG
 psql "sslmode=require host=${postgres_db} user=${postgres_username} port=5432 password=${postgres_password}" --file=./sql/12jAZUREDB_AMD_dacaudit_DBstep10-1_avgMinuteRT.sql
 
-while read -r line
+while read -r line;do
 
 dateddmmyyyy=`echo $line | awk '{print $1}'`
 avgMinuteRT=`echo $line | awk '{print $2}'`
@@ -559,7 +560,7 @@ echo "$dt Starting Check #12k" >> $OUTFILE_LOG
 echo "$dt Connecting to $postgres_db database" >> $OUTFILE_LOG
 psql "sslmode=require host=${postgres_db} user=${postgres_username} port=5432 password=${postgres_password}" --file=./sql/12kAZUREDB_AMD_gwaudit_step10-1_avgHourlyRT.sql
 
-while read -r line
+while read -r line;do
 
 dateddmmyyyy=`echo $line | awk '{print $1}'`
 avgHourlyRT=`echo $line | awk '{print $2}'`
@@ -577,7 +578,7 @@ echo "$dt Starting Check #12l" >> $OUTFILE_LOG
 echo "$dt Connecting to $postgres_db database" >> $OUTFILE_LOG
 psql "sslmode=require host=${postgres_db} user=${postgres_username} port=5432 password=${postgres_password}" --file=./sql/12lAZUREDB_AMD_gwaudit_step10-1_avgMinuteRT.sql
 
-while read -r line
+while read -r line;do
 
 dateddmmyyyy=`echo $line | awk '{print $1}'`
 avgMinuteRT=`echo $line | awk '{print $2}'`
@@ -595,7 +596,7 @@ echo "$dt Starting Check #12m" >> $OUTFILE_LOG
 echo "$dt Connecting to $event_db database" >> $OUTFILE_LOG
 psql "sslmode=require host=${event_db} user=${event_username} port=5432 password=${event_password}" --file=./sql/12mAZUREDB_AMD_daily_completed_update_request_counts.sql
 
-while read -r line
+while read -r line;do
 
 dateddmmyyyy=`echo $line | awk '{print $1}'`
 records=`echo $line | awk '{print $2}'`
@@ -611,7 +612,7 @@ echo "$dt Starting Check #12n" >> $OUTFILE_LOG
 echo "$dt Connecting to $event_db database" >> $OUTFILE_LOG
 psql "sslmode=require host=${event_db} user=${event_username} port=5432 password=${event_password}" --file=./sql/12nAZUREDB_AMD_daily_completed_table_updates_counts.sql
 
-while read -r line
+while read -r line;do
 
 dateddmmyyyy=`echo $line | awk '{print $1}'`
 records=`echo $line | awk '{print $2}'`
@@ -627,7 +628,7 @@ echo "$dt Starting Check #12o" >> $OUTFILE_LOG
 echo "$dt Connecting to $event_db database" >> $OUTFILE_LOG
 psql "sslmode=require host=${event_db} user=${event_username} port=5432 password=${event_password}" --file=./sql/12oAZUREDB_AMD_Hourly_completed_update_request_counts.sql
 
-while read -r line
+while read -r line;do
 
 dateddmmyyyy=`echo $line | awk '{print $1}'`
 records=`echo $line | awk '{print $2}'`
@@ -643,7 +644,7 @@ echo "$dt Starting Check #12p" >> $OUTFILE_LOG
 echo "$dt Connecting to $event_db database" >> $OUTFILE_LOG
 psql "sslmode=require host=${event_db} user=${event_username} port=5432 password=${event_password}" --file=./sql/12pAZUREDB_AMD_Hourly_completed_table_updates_counts.sql
 
-while read -r line
+while read -r line;do
 
 dateddmmyyyy=`echo $line | awk '{print $1}'`
 records=`echo $line | awk '{print $2}'`
@@ -659,7 +660,7 @@ echo "$dt Starting Check #12q" >> $OUTFILE_LOG
 echo "$dt Connecting to $event_db database" >> $OUTFILE_LOG
 psql "sslmode=require host=${event_db} user=${event_username} port=5432 password=${event_password}" --file=./sql/12qAZUREDB_AMD_Minute_completed_update_request_counts.sql
 
-while read -r line
+while read -r line;do
 
 dateddmmyyyy=`echo $line | awk '{print $1}'`
 records=`echo $line | awk '{print $2}'`
@@ -675,7 +676,7 @@ echo "$dt Starting Check #12r" >> $OUTFILE_LOG
 echo "$dt Connecting to $event_db database" >> $OUTFILE_LOG
 psql "sslmode=require host=${event_db} user=${event_username} port=5432 password=${event_password}" --file=./sql/12rAZUREDB_AMD_Minute_completed_table_updates_counts.sql
 
-while read -r line
+while read -r line;do
 
 dateddmmyyyy=`echo $line | awk '{print $1}'`
 records=`echo $line | awk '{print $2}'`
@@ -705,7 +706,7 @@ else
 backlog_adaptive_threshold = $(($backlog_threshold/$dt_hr))
 fi
 
-while read -r line
+while read -r line;do
 
 schema_id=`echo $line | awk '{print $1}'`
 status=`echo $line | awk '{print $2}'`
@@ -731,7 +732,7 @@ else
 eta_units=days
 fi
 
-if [[ $sum_number_of_table_updates -gt $backlog_adaptive_threshold ]] || [[  ;then
+if [[ $sum_number_of_table_updates -gt $backlog_adaptive_threshold ]];then
 echo "$dt,AZDB001_msg_backlog,MessageBacklogCheck,$schema_id,$status,$count_updates,$max_number_of_table_updates,$sum_number_of_table_updates,$backlog_adaptive_threshold,$db_dac_rate,$total_dac_rate,$total_gw_rate,$combined_rate_secs,$roundtrip_threshold,$adj_delivery_rate_secs$eta_units,warn" >> $OUTFILE
 else
 echo "$dt,AZDB001_msg_backlog,MessageBacklogCheck,$schema_id,$status,$count_updates,$max_number_of_table_updates,$sum_number_of_table_updates,$backlog_adaptive_threshold,$db_dac_rate,$total_dac_rate,$total_gw_rate,$combined_rate_secs,$roundtrip_threshold,$adj_delivery_rate_secs$eta_units,ok" >> $OUTFILE
@@ -746,7 +747,7 @@ echo "$dt Starting Check #13" >> $OUTFILE_LOG
 echo "$dt Connecting to $event_db database" >> $OUTFILE_LOG
 psql "sslmode=require host=${event_db} user=${event_username} port=5432 password=${event_password}" --file=./sql/13AZUREDB_AMD_ora_rowscn_bug_seq_nums.sql
 
-while read -r line
+while read -r line;do
 
 update_request_id=`echo $line | awk '{print $1}'`
 schema_id=`echo $line | awk '{print $2}'`
