@@ -16,9 +16,11 @@ echo $event_username
 echo $event_password
 echo $event_url
 event_host=`echo $event_url | awk -F"\/\/" {'print $2'} | awk -F":" {'print $1'}`
-event_port=`echo $event_url | awk -F":" {'print $4'}`
+event_port=`echo $event_url | awk -F":" {'print $4'} | awk -F"\/" {'print $1'}`
+event_db=`echo $event_url | awk -F":" {'print $4'} | awk -F"\/" {'print $2'}`
 echo $event_host
 echo $event_port
+echo $event_db
 
 # PostgresDB connection variables
 postgres_username=$(cat /mnt/secrets/$KV_NAME/themis-gateway-dbusername)
@@ -49,7 +51,7 @@ echo "DateTime,CheckName,Description,Status,Result" >> $OUTFILE
 echo "$(date "+%d/%m/%Y %T") Starting Check #1" >> $OUTFILE_LOG
 echo "$(date "+%d/%m/%Y %T") Connecting to $event_db database" >> $OUTFILE_LOG
 #psql "sslmode=require host=${event_url} user=${event_username} port=5432 password=${event_password}" --file=./sql/1AZUREDB_AMD_locked_schemas.sql
-psql --host=${event_host}:${event_port} --user=${event_username}@${event_password} --file=./sql/1AZUREDB_AMD_locked_schemas.sql
+psql --host=${event_host}:${event_port} --dbname=${event_db} --user=${event_username}@${event_password} --file=./sql/1AZUREDB_AMD_locked_schemas.sql
 echo "$(date "+%d/%m/%Y %T") Connecting to $event_db database" >> $OUTFILE_LOG
 echo "$(date "+%d/%m/%Y %T") SQL for Check #1 has been run" >> $OUTFILE_LOG
 
