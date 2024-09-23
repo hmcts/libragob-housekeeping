@@ -57,9 +57,9 @@ while read -r line;do
 schema_lock=`echo $line | awk '{print $1}'`
 
 if [[ ! -z $schema_lock ]];then
-echo "$dt,AZDB001_schema_lock,Locked Schema Check,SchemaId $schema_lock is locked,warn" >> $OUTFILE
+echo "$(date "+%d/%m/%Y %T"),AZDB001_schema_lock,Locked Schema Check,SchemaId $schema_lock is locked,warn" >> $OUTFILE
 else
-echo "$dt,AZDB001_schema_lock,Locked Schema Check,No Schema Locks,ok" >> $OUTFILE
+echo "$(date "+%d/%m/%Y %T"),AZDB001_schema_lock,Locked Schema Check,No Schema Locks,ok" >> $OUTFILE
 fi
 
 done < /scripts/1AZUREDB_AMD_locked_schemas.csv
