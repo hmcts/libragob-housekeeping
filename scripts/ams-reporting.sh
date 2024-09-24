@@ -50,7 +50,7 @@ echo "DateTime,CheckName,Description,Status,Result" >> $OUTFILE
 echo "$(date "+%d/%m/%Y %T") Starting Check #1" >> $OUTFILE_LOG
 echo "$(date "+%d/%m/%Y %T") Connecting to $event_db database" >> $OUTFILE_LOG
 #psql "sslmode=require host=${event_url} user=${event_username} port=5432 password=${event_password}" --file=/sql/1AZUREDB_AMD_locked_schemas.sql
-psql "sslmode=require host=${event_host} dbname=${event_db} port=${event_port} user=${event_username}@${event_password}" --file=/sql/1AZUREDB_AMD_locked_schemas.sql
+psql "sslmode=require host="jdbc:postgresql://${event_host} dbname=${event_db} port=${event_port} user=${event_username}@${event_password}" --file=/sql/1AZUREDB_AMD_locked_schemas.sql
 echo "$(date "+%d/%m/%Y %T") SQL for Check #1 has been run" >> $OUTFILE_LOG
 
 while read -r line;do
