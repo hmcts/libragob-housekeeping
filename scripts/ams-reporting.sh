@@ -4,8 +4,8 @@
 #dt=$(date "+%d/%m/%Y %T")
 dt_today=$(date "+%Y/%m/%D")
 #mkdir -p scripts
-OUTFILE=/scripts/AZURE_DB001_AMD.csv
-OUTFILE_LOG=/scripts/AZURE_DB001_AMD.log
+OUTFILE="/scripts/AZURE_DB001_AMD.csv"
+OUTFILE_LOG="/scripts/AZURE_DB001_AMD.log"
 echo $(date "+%d/%m/%Y %T") > $OUTFILE
 
 # EventDB connection variables
@@ -52,7 +52,7 @@ echo "DateTime,CheckName,Description,Status,Result" >> $OUTFILE
 echo "$(date "+%d/%m/%Y %T") Starting Check #1" >> $OUTFILE_LOG
 echo "$(date "+%d/%m/%Y %T") Connecting to $event_db database" >> $OUTFILE_LOG
 #psql "sslmode=require host=${event_url} user=${event_username} port=5432 password=${event_password}" --file=/sql/1AZUREDB_AMD_locked_schemas.sql
-psql --host=${event_host}:${event_port} --dbname=${event_db} --user=${event_username}@${event_password} --file=/sql/1AZUREDB_AMD_locked_schemas.sql
+psql "--host=${event_host}:${event_port} --dbname=${event_db} --user=${event_username}@${event_password} --file=/sql/1AZUREDB_AMD_locked_schemas.sql"
 echo "$(date "+%d/%m/%Y %T") Connecting to $event_db database" >> $OUTFILE_LOG
 echo "$(date "+%d/%m/%Y %T") SQL for Check #1 has been run" >> $OUTFILE_LOG
 
@@ -66,7 +66,7 @@ else
 echo "$(date "+%d/%m/%Y %T"),AZDB001_schema_lock,Locked Schema Check,No Schema Locks,ok" >> $OUTFILE
 fi
 
-done < /scripts/1AZUREDB_AMD_locked_schemas.csv
+done < "/scripts/1AZUREDB_AMD_locked_schemas.csv"
 
 echo "$(date "+%d/%m/%Y %T") Check #1 complete" >> $OUTFILE_LOG
 
