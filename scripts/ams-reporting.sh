@@ -5,6 +5,7 @@ dt_today=$(date "+%Y/%m/%D")
 echo "Script Version 2.3: echos fix"
 mkdir /tmp/ams-reporting/
 OPDIR="/tmp/ams-reporting/"
+export OPDIR
 OUTFILE="${OPDIR}AZURE_DB001_AMD.csv"
 OUTFILE_LOG="${OPDIR}AZURE_DB001_AMD.log"
 echo $(date "+%d/%m/%Y %T") > $OUTFILE
