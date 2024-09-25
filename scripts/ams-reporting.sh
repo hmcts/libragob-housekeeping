@@ -4,8 +4,9 @@
 dt_today=$(date "+%Y/%m/%D")
 echo "Script Version 2.3: echos fix"
 mkdir /tmp/ams-reporting/
-OUTFILE="/tmp/ams-reporting/AZURE_DB001_AMD.csv"
-OUTFILE_LOG="/tmp/ams-reporting/AZURE_DB001_AMD.log"
+OPDIR=/tmp/ams-reporting/
+OUTFILE="${OPDIR}AZURE_DB001_AMD.csv"
+OUTFILE_LOG="${OPDIR}AZURE_DB001_AMD.log"
 echo $(date "+%d/%m/%Y %T") > $OUTFILE
 
 # EventDB connection variables
@@ -58,7 +59,7 @@ else
 echo "$(date "+%d/%m/%Y %T"),AZDB001_schema_lock,Locked Schema Check,No Schemas Locks,ok" >> $OUTFILE
 fi
 
-done < /scripts/1AZUREDB_AMD_locked_schemas.csv
+done < ${OPDIR}1AZUREDB_AMD_locked_schemas.csv
 
 echo "$(date "+%d/%m/%Y %T") Check #1 complete" >> $OUTFILE_LOG
 
