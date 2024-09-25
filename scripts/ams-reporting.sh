@@ -2,19 +2,16 @@
 ####################################################### This is the AMD AzureDB Healthcheck Script, and the associated documentation is in Ensemble under the "Libra System Admin Documents" area:
 ####################################################### "GoB Phase 1 - Oracle_Postgres DB Checks_v11.5_MAP.docx" is the latest version as of 01/08/2024
 dt_today=$(date "+%Y/%m/%D")
-echo "Script Version 1.4"
-mkdir /tmp/testdir/
-OUTFILE="/tmp/testdir/AZURE_DB001_AMD.csv"
-OUTFILE_LOG="/tmp/testdir/AZURE_DB001_AMD.log"
+echo "Script Version 2.0"
+OUTFILE="/tmp/ams-reporting/AZURE_DB001_AMD.csv"
+OUTFILE_LOG="/tmp/ams-reporting/AZURE_DB001_AMD.log"
 echo $(date "+%d/%m/%Y %T") > $OUTFILE
 echo "Current location: $(pwd)" 
-sleep 300
 
 # EventDB connection variables
 event_username=$(cat /mnt/secrets/$KV_NAME/event-datasource-username)
 event_password=$(cat /mnt/secrets/$KV_NAME/event-datasource-password)
 event_url=$(cat /mnt/secrets/$KV_NAME/event-datasource-url)
-#event_db=$(echo "$event_url" | sed 's/jdbc:postgresql:\/\///' | sed 's/:5432//' | sed 's/.*\///')
 echo $event_username
 echo $event_password
 echo $event_url
@@ -53,9 +50,7 @@ echo "[Check #1: Locked Schemas] >> $OUTFILE
 echo "DateTime,CheckName,Description,Status,Result" >> $OUTFILE
 echo "$(date "+%d/%m/%Y %T") Starting Check #1" >> $OUTFILE_LOG
 echo "$(date "+%d/%m/%Y %T") Connecting to $event_db database" >> $OUTFILE_LOG
-#psql "sslmode=require host=${event_url} user=${event_username} port=5432 password=${event_password}" --file=/sql/1AZUREDB_AMD_locked_schemas.sql
-psql "sslmode=require host=${event_host} dbname=${event_db} port=${event_port} user=${event_username} password=${event_password}" --file=./sql/1AZUREDB_AMD_locked_schemas.sql
-#sleep 300
+psql "sslmode=require host=${event_host} dbname=${event_db} port=${event_port} user=${event_username} password=${event_password}" --file=/sql/1AZUREDB_AMD_locked_schemas.sql
 echo "$(date "+%d/%m/%Y %T") SQL for Check #1 has been run" >> $OUTFILE_LOG
 
 while read -r line;do
@@ -68,7 +63,7 @@ else
 echo "$(date "+%d/%m/%Y %T"),AZDB001_schema_lock,Locked Schema Check,No Schema Locks,ok" >> $OUTFILE
 fi
 
-done < "./ams-reporting/outputs/1AZUREDB_AMD_locked_schemas.csv"
+done < "/tmp/ams-reporting/1AZUREDB_AMD_locked_schemas.csv"
 
 echo "$(date "+%d/%m/%Y %T") Check #1 complete" >> $OUTFILE_LOG
 
