@@ -58,16 +58,16 @@ else
 echo "$(date "+%d/%m/%Y %T"),AZDB001_schema_lock,Locked Schema Check,No Schemas Locks,ok" >> $OUTFILE
 fi
 
-done < /tmp/ams-reporting/1AZUREDB_AMD_locked_schemas.csv
+done < $OUTFILE
 
 echo "$(date "+%d/%m/%Y %T") Check #1 complete" >> $OUTFILE_LOG
 
-cat %OUTFILE
+cat $OUTFILE
 
 exit 0
 ####################################################### CHECK 2
 dt=$(date "+%d/%m/%Y %T")
-echo "[Check #2: Locked Instance Keys] >> $OUTFILE
+echo "[Check #2: Locked Instance Keys]" >> $OUTFILE
 echo "DateTime,CheckName,Description,Threshold,Status,Result" >> $OUTFILE
 echo "$dt Starting Check #2" >> $OUTFILE_LOG
 echo "$dt Connecting to $postgres_db database" >> $OUTFILE_LOG
@@ -86,7 +86,7 @@ fi
 done < /scripts/2AZUREDB_AMD_locked_keys.csv
 ####################################################### CHECK 4
 dt=$(date "+%d/%m/%Y %T")
-echo "[Check #4: Thread Status Counts] >> $OUTFILE
+echo "[Check #4: Thread Status Counts]" >> $OUTFILE
 echo "DateTime,CheckName,Description,State,Threshold,Count,Result" >> $OUTFILE
 echo "$dt Starting Check #4" >> $OUTFILE_LOG
 echo "$dt Connecting to $event_db database" >> $OUTFILE_LOG
@@ -115,7 +115,7 @@ fi
 done < /scripts/4AZUREDB_AMD_thread_status_counts.csv
 ####################################################### CHECK 5
 dt=$(date "+%d/%m/%Y %T")
-echo "[Check #5: MESSAGE_LOG Errors] >> $OUTFILE
+echo "[Check #5: MESSAGE_LOG Errors]" >> $OUTFILE
 echo "DateTime,CheckName,Description,message_log_id,message_uuid,created_date,procedure_name,,error_message,update_request_id,schema_id,Result" >> $OUTFILE
 echo "$dt Starting Check #5" >> $OUTFILE_LOG
 echo "$dt Connecting to $event_db database" >> $OUTFILE_LOG
@@ -145,7 +145,7 @@ fi
 done < /scripts/5AZUREDB_AMD_message_log_errors_100.csv
 ####################################################### CHECK 6
 dt=$(date "+%d/%m/%Y %T")
-echo "[Check #6: Unprocessed, Complete & Processing Checks] >> $OUTFILE
+echo "[Check #6: Unprocessed, Complete & Processing Checks]" >> $OUTFILE
 echo "DateTime,CheckName,Description,schema_id,earliest_unprocessed,latest_complete,latest_processing,Result" >> $OUTFILE
 echo "$dt Starting Check #6" >> $OUTFILE_LOG
 echo "$dt Connecting to $event_db database" >> $OUTFILE_LOG
@@ -179,7 +179,7 @@ done < /scripts/6AZUREDB_AMD_update_processing_backlog.csv
 mv /scripts/earliest_unprocessed_timestamps.tmp /scripts/earliest_unprocessed_timestamps_last_check.tmp
 ####################################################### CHECK 7
 dt=$(date "+%d/%m/%Y %T")
-echo "[Check #7: Max Daily Update Counts by SchemaId] >> $OUTFILE
+echo "[Check #7: Max Daily Update Counts by SchemaId]" >> $OUTFILE
 echo "DateTime,CheckName,Description,schema_id,count_updates,sum_number_of_table_updates,max_number_of_table_updates,Result" >> $OUTFILE
 echo "$dt Starting Check #7" >> $OUTFILE_LOG
 echo "$dt Connecting to $event_db database" >> $OUTFILE_LOG
@@ -203,7 +203,7 @@ fi
 done < /scripts/7AZUREDB_AMD_max_daily_update_counts_by_schemaid.csv
 ####################################################### CHECK 8
 dt=$(date "+%d/%m/%Y %T")
-echo "[Check #8: Today's Hourly Update Counts] >> $OUTFILE
+echo "[Check #8: Today's Hourly Update Counts]" >> $OUTFILE
 echo "DateTime,CheckName,Description,schema_id,count_updates,sum_number_of_table_updates,max_number_of_table_updates,Result" >> $OUTFILE
 echo "$dt Starting Check #8" >> $OUTFILE_LOG
 echo "$dt Connecting to $event_db database" >> $OUTFILE_LOG
@@ -221,7 +221,7 @@ echo "dt,AZDB001_hourly_updates,Today's Hourly Updates,$schema_id,$count_updates
 done < /scripts/8AZUREDB_AMD_todays_hourly_update_counts.csv
 ####################################################### CHECK 9
 dt=$(date "+%d/%m/%Y %T")
-echo "[Check #9: Azure Recon (ORA Recon check is on AMD Database INFO tab)] >> $OUTFILE
+echo "[Check #9: Azure Recon (ORA Recon check is on AMD Database INFO tab)]" >> $OUTFILE
 echo "DateTime,CheckName,Description,Status,Result" >> $OUTFILE
 echo "$dt Starting Check #9a" >> $OUTFILE_LOG
 echo "$dt Connecting to $confiscation_db database" >> $OUTFILE_LOG
@@ -355,12 +355,12 @@ fi
 fi
 ####################################################### CHECK 10
 dt=$(date "+%d/%m/%Y %T")
-echo "[Check #10: Themis WebLogic] >> $OUTFILE
+echo "[Check #10: Themis WebLogic]" >> $OUTFILE
 echo "Message" >> $OUTFILE
 echo "Remember to check Themis Process States & WL Backlogs on AMD LIBRA Web App - WL34" >> $OUTFILE_LOG
 ####################################################### CHECK 11
 dt=$(date "+%d/%m/%Y %T")
-echo "[Check #11: Table Row Counts] >> $OUTFILE
+echo "[Check #11: Table Row Counts]" >> $OUTFILE
 echo "DateTime,CheckName,Description,Threshold,Status,Result" >> $OUTFILE
 echo "$dt Starting Check #11a" >> $OUTFILE_LOG
 echo "$dt Connecting to $event_db database" >> $OUTFILE_LOG
@@ -385,7 +385,7 @@ cat /scripts/11dAZUREDB_AMD_row_counts_DAC_message_audit.csv >> $OUTFILE
 cat /scripts/11eAZUREDB_AMD_row_counts_GW_message_audit.csv >> $OUTFILE
 ####################################################### CHECK 12
 dt=$(date "+%d/%m/%Y %T")
-echo "[Check #12a: Today's Latest 100 DACAudit DB Roundtrip Deltas Step 13-12] >> $OUTFILE
+echo "[Check #12a: Today's Latest 100 DACAudit DB Roundtrip Deltas Step 13-12]" >> $OUTFILE
 echo "DateTime,CheckName,Description,updated_date,uuid,Roundtrip in Millisecs,Result" >> $OUTFILE
 echo "$dt Starting Check #12a" >> $OUTFILE_LOG
 echo "$dt Connecting to $postgres_db database" >> $OUTFILE_LOG
@@ -402,7 +402,7 @@ echo "dt,AZDB001_dacaudit_db_100_proc_rates,Today's Latest 100 DACAudit DB Round
 done < /scripts/12aAZUREDB_AMD_dacaudit_DBstep13-12_latest100_processing_rates.csv
 ######################################################################################################################################################################################################
 dt=$(date "+%d/%m/%Y %T")
-echo "[Check #12b: Today's Latest 100 DACAudit Full Roundtrip Deltas Step 10-1] >> $OUTFILE
+echo "[Check #12b: Today's Latest 100 DACAudit Full Roundtrip Deltas Step 10-1]" >> $OUTFILE
 echo "DateTime,CheckName,Description,updated_date,uuid,Roundtrip in Millisecs,Result" >> $OUTFILE
 echo "$dt Starting Check #12b" >> $OUTFILE_LOG
 echo "$dt Connecting to $postgres_db database" >> $OUTFILE_LOG
@@ -419,7 +419,7 @@ echo "dt,AZDB001_dacaudit_100_proc_rates,Today's Latest 100 DACAudit Full Roundt
 done < /scripts/12bAZUREDB_AMD_dacaudit_DBstep10-1_latest100_processing_rates.csv
 ######################################################################################################################################################################################################
 dt=$(date "+%d/%m/%Y %T")
-echo "[Check #12c: Today's Latest 100 GatewayAudit Full Roundtrip Deltas Step 10-1] >> $OUTFILE
+echo "[Check #12c: Today's Latest 100 GatewayAudit Full Roundtrip Deltas Step 10-1]" >> $OUTFILE
 echo "DateTime,CheckName,Description,updated_date,uuid,Roundtrip in Millisecs,Result" >> $OUTFILE
 echo "$dt Starting Check #12c" >> $OUTFILE_LOG
 echo "$dt Connecting to $postgres_db database" >> $OUTFILE_LOG
@@ -436,7 +436,7 @@ echo "dt,AZDB001_gwaudit_100_proc_rates,Today's Latest 100 GatewayAudit Full Rou
 done < /scripts/12cAZUREDB_AMD_gwaudit_step10-1_latest100_processing_rates.csv
 ######################################################################################################################################################################################################
 dt=$(date "+%d/%m/%Y %T")
-echo "[Check #12d: Daily AVG DACAudit DB Roundtrip Deltas Step 13-12] >> $OUTFILE
+echo "[Check #12d: Daily AVG DACAudit DB Roundtrip Deltas Step 13-12]" >> $OUTFILE
 echo "DateTime,CheckName,Description,avgDailyRT in Millisecs,TotalWorkload in Hours,RecordCount,Result" >> $OUTFILE
 echo "$dt Starting Check #12d" >> $OUTFILE_LOG
 echo "$dt Connecting to $postgres_db database" >> $OUTFILE_LOG
@@ -454,7 +454,7 @@ echo "dt,AZDB001_dacaudit_db_avgDailyRT,Daily AVG DACAudit DB Roundtrip Deltas S
 done < /scripts/12dAZUREDB_AMD_dacaudit_DBstep13-12_avgDailyRT.csv
 ######################################################################################################################################################################################################
 dt=$(date "+%d/%m/%Y %T")
-echo "[Check #12e: Daily AVG DACAudit Full Roundtrip Deltas Step 10-1] >> $OUTFILE
+echo "[Check #12e: Daily AVG DACAudit Full Roundtrip Deltas Step 10-1]" >> $OUTFILE
 echo "DateTime,CheckName,Description,avgDailyRT in Millisecs,TotalWorkload in Hours,RecordCount,Result" >> $OUTFILE
 echo "$dt Starting Check #12e" >> $OUTFILE_LOG
 echo "$dt Connecting to $postgres_db database" >> $OUTFILE_LOG
@@ -472,7 +472,7 @@ echo "dt,AZDB001_dacaudit_avgDailyRT,Daily AVG DACAudit Full Roundtrip Deltas St
 done < /scripts/12eAZUREDB_AMD_dacaudit_step10-1_avgDailyRT.csv
 ######################################################################################################################################################################################################
 dt=$(date "+%d/%m/%Y %T")
-echo "[Check #12f: Daily AVG GatewayAudit Full Roundtrip Deltas Step 10-1] >> $OUTFILE
+echo "[Check #12f: Daily AVG GatewayAudit Full Roundtrip Deltas Step 10-1]" >> $OUTFILE
 echo "DateTime,CheckName,Description,avgDailyRT in Millisecs,TotalWorkload in Hours,RecordCount,Result" >> $OUTFILE
 echo "$dt Starting Check #12f" >> $OUTFILE_LOG
 echo "$dt Connecting to $postgres_db database" >> $OUTFILE_LOG
@@ -490,7 +490,7 @@ echo "dt,AZDB001_gwaudit_avgDailyRT,Daily AVG GatewayAudit Full Roundtrip Deltas
 done < /scripts/12fAZUREDB_AMD_gwaudit_step10-1_avgDailyRT.csv
 ######################################################################################################################################################################################################
 dt=$(date "+%d/%m/%Y %T")
-echo "[Check #12g: 48 Hourly AVG DACAudit DB Roundtrip Deltas Step 13-12] >> $OUTFILE
+echo "[Check #12g: 48 Hourly AVG DACAudit DB Roundtrip Deltas Step 13-12]" >> $OUTFILE
 echo "DateTime,CheckName,Description,avgHourlyRT in Millisecs,TotalWorkload in Mins,RecordCount,Result" >> $OUTFILE
 echo "$dt Starting Check #12g" >> $OUTFILE_LOG
 echo "$dt Connecting to $postgres_db database" >> $OUTFILE_LOG
@@ -508,7 +508,7 @@ echo "dt,AZDB001_dacaudit_db_avgHourlyRT,48 Hourly AVG DACAudit DB Roundtrip Del
 done < /scripts/12gAZUREDB_AMD_dacaudit_DBstep13-12_avgHourlyRT.csv
 ######################################################################################################################################################################################################
 dt=$(date "+%d/%m/%Y %T")
-echo "[Check #12h: 60 Minute AVG DACAudit DB Roundtrip Deltas Step 13-12] >> $OUTFILE
+echo "[Check #12h: 60 Minute AVG DACAudit DB Roundtrip Deltas Step 13-12]" >> $OUTFILE
 echo "DateTime,CheckName,Description,avgMinuteRT in Millisecs,TotalWorkload in Secs,RecordCount,Result" >> $OUTFILE
 echo "$dt Starting Check #12h" >> $OUTFILE_LOG
 echo "$dt Connecting to $postgres_db database" >> $OUTFILE_LOG
@@ -526,7 +526,7 @@ echo "dt,AZDB001_dacaudit_db_avgMinuteRT,60 Minute AVG DACAudit DB Roundtrip Del
 done < /scripts/12hAZUREDB_AMD_dacaudit_DBstep13-12_avgMinuteRT.csv
 ######################################################################################################################################################################################################
 dt=$(date "+%d/%m/%Y %T")
-echo "[Check #12i: 48 Hourly AVG DACAudit DB Roundtrip Deltas Step 10-1] >> $OUTFILE
+echo "[Check #12i: 48 Hourly AVG DACAudit DB Roundtrip Deltas Step 10-1]" >> $OUTFILE
 echo "DateTime,CheckName,Description,avgHourlyRT in Millisecs,TotalWorkload in Mins,RecordCount,Result" >> $OUTFILE
 echo "$dt Starting Check #12i" >> $OUTFILE_LOG
 echo "$dt Connecting to $postgres_db database" >> $OUTFILE_LOG
@@ -544,7 +544,7 @@ echo "dt,AZDB001_dacaudit_db_avgHourlyRT,48 Hourly AVG DACAudit DB Roundtrip Del
 done < /scripts/12iAZUREDB_AMD_dacaudit_DBstep10-1_avgHourlyRT.csv
 ######################################################################################################################################################################################################
 dt=$(date "+%d/%m/%Y %T")
-echo "[Check #12j: 60 Minute AVG DACAudit DB Roundtrip Deltas Step 10-1] >> $OUTFILE
+echo "[Check #12j: 60 Minute AVG DACAudit DB Roundtrip Deltas Step 10-1]" >> $OUTFILE
 echo "DateTime,CheckName,Description,avgMinuteRT in Millisecs,TotalWorkload in Secs,RecordCount,Result" >> $OUTFILE
 echo "$dt Starting Check #12j" >> $OUTFILE_LOG
 echo "$dt Connecting to $postgres_db database" >> $OUTFILE_LOG
@@ -562,7 +562,7 @@ echo "dt,AZDB001_dacaudit_db_avgMinuteRT,60 Minute AVG DACAudit DB Roundtrip Del
 done < /scripts/12jAZUREDB_AMD_dacaudit_DBstep10-1_avgMinuteRT.csv
 ######################################################################################################################################################################################################
 dt=$(date "+%d/%m/%Y %T")
-echo "[Check #12k: 48 Hourly AVG GatewayAudit Full Roundtrip Deltas Step 10-1] >> $OUTFILE
+echo "[Check #12k: 48 Hourly AVG GatewayAudit Full Roundtrip Deltas Step 10-1]" >> $OUTFILE
 echo "DateTime,CheckName,Description,avgHourlyRT in Millisecs,TotalWorkload in Mins,RecordCount,Result" >> $OUTFILE
 echo "$dt Starting Check #12k" >> $OUTFILE_LOG
 echo "$dt Connecting to $postgres_db database" >> $OUTFILE_LOG
@@ -580,7 +580,7 @@ echo "dt,AZDB001_gwaudit_avgHourlyRT,48 Hourly AVG GatewayAudit Full Roundtrip D
 done < /scripts/12kAZUREDB_AMD_gwaudit_step10-1_avgHourlyRT.csv
 ######################################################################################################################################################################################################
 dt=$(date "+%d/%m/%Y %T")
-echo "[Check #12l: 60 Minute AVG GatewayAudit Full Roundtrip Deltas Step 10-1] >> $OUTFILE
+echo "[Check #12l: 60 Minute AVG GatewayAudit Full Roundtrip Deltas Step 10-1]" >> $OUTFILE
 echo "DateTime,CheckName,Description,avgMinuteRT in Millisecs,TotalWorkload in Mins,RecordCount,Result" >> $OUTFILE
 echo "$dt Starting Check #12l" >> $OUTFILE_LOG
 echo "$dt Connecting to $postgres_db database" >> $OUTFILE_LOG
@@ -598,7 +598,7 @@ echo "dt,AZDB001_gwaudit_avgMinuteRT,60 Minute AVG GatewayAudit Full Roundtrip D
 done < /scripts/12lAZUREDB_AMD_gwaudit_step10-1_avgMinuteRT.csv
 ######################################################################################################################################################################################################
 dt=$(date "+%d/%m/%Y %T")
-echo "[Check #12m: Daily Completed UPDATE_REQUESTS Counts] >> $OUTFILE
+echo "[Check #12m: Daily Completed UPDATE_REQUESTS Counts]" >> $OUTFILE
 echo "DateTime,CheckName,Description,DTBucket,RecordCount,Result" >> $OUTFILE
 echo "$dt Starting Check #12m" >> $OUTFILE_LOG
 echo "$dt Connecting to $event_db database" >> $OUTFILE_LOG
@@ -614,7 +614,7 @@ echo "dt,AZDB001_daily_completed_update_requests,Daily Completed UPDATE_REQUESTS
 done < /scripts/12mAZUREDB_AMD_daily_completed_update_request_counts.csv
 ######################################################################################################################################################################################################
 dt=$(date "+%d/%m/%Y %T")
-echo "[Check #12n: Daily Completed TABLE_UPDATES Counts] >> $OUTFILE
+echo "[Check #12n: Daily Completed TABLE_UPDATES Counts]" >> $OUTFILE
 echo "DateTime,CheckName,Description,DTBucket,RecordCount,Result" >> $OUTFILE
 echo "$dt Starting Check #12n" >> $OUTFILE_LOG
 echo "$dt Connecting to $event_db database" >> $OUTFILE_LOG
@@ -630,7 +630,7 @@ echo "dt,AZDB001_daily_completed_table_updates,Daily Completed TABLE_UPDATES Cou
 done < /scripts/12nAZUREDB_AMD_daily_completed_table_updates_counts.csv
 ######################################################################################################################################################################################################
 dt=$(date "+%d/%m/%Y %T")
-echo "[Check #12o: Hourly Completed UPDATE_REQUESTS Counts] >> $OUTFILE
+echo "[Check #12o: Hourly Completed UPDATE_REQUESTS Counts]" >> $OUTFILE
 echo "DateTime,CheckName,Description,DTBucket,RecordCount,Result" >> $OUTFILE
 echo "$dt Starting Check #12o" >> $OUTFILE_LOG
 echo "$dt Connecting to $event_db database" >> $OUTFILE_LOG
@@ -646,7 +646,7 @@ echo "dt,AZDB001_hourly_completed_update_requests,Hourly Completed UPDATE_REQUES
 done < /scripts/12oAZUREDB_AMD_hourly_completed_update_request_counts.csv
 ######################################################################################################################################################################################################
 dt=$(date "+%d/%m/%Y %T")
-echo "[Check #12p: Hourly Completed TABLE_UPDATES Counts] >> $OUTFILE
+echo "[Check #12p: Hourly Completed TABLE_UPDATES Counts]" >> $OUTFILE
 echo "DateTime,CheckName,Description,DTBucket,RecordCount,Result" >> $OUTFILE
 echo "$dt Starting Check #12p" >> $OUTFILE_LOG
 echo "$dt Connecting to $event_db database" >> $OUTFILE_LOG
@@ -662,7 +662,7 @@ echo "dt,AZDB001_hourly_completed_table_updates,Hourly Completed TABLE_UPDATES C
 done < /scripts/12pAZUREDB_AMD_hourly_completed_table_updates_counts.csv
 ######################################################################################################################################################################################################
 dt=$(date "+%d/%m/%Y %T")
-echo "[Check #12q: Minute Completed UPDATE_REQUESTS Counts] >> $OUTFILE
+echo "[Check #12q: Minute Completed UPDATE_REQUESTS Counts]" >> $OUTFILE
 echo "DateTime,CheckName,Description,DTBucket,RecordCount,Result" >> $OUTFILE
 echo "$dt Starting Check #12q" >> $OUTFILE_LOG
 echo "$dt Connecting to $event_db database" >> $OUTFILE_LOG
@@ -678,7 +678,7 @@ echo "dt,AZDB001_minute_completed_update_requests,Minute Completed UPDATE_REQUES
 done < /scripts/12qAZUREDB_AMD_minute_completed_update_request_counts.csv
 ######################################################################################################################################################################################################
 dt=$(date "+%d/%m/%Y %T")
-echo "[Check #12r: Minute Completed TABLE_UPDATES Counts] >> $OUTFILE
+echo "[Check #12r: Minute Completed TABLE_UPDATES Counts]" >> $OUTFILE
 echo "DateTime,CheckName,Description,DTBucket,RecordCount,Result" >> $OUTFILE
 echo "$dt Starting Check #12r" >> $OUTFILE_LOG
 echo "$dt Connecting to $event_db database" >> $OUTFILE_LOG
@@ -694,7 +694,7 @@ echo "dt,AZDB001_minute_completed_table_updates,Minute Completed TABLE_UPDATES C
 done < /scripts/12rAZUREDB_AMD_minute_completed_table_updates_counts.csv
 ####################################################### CHECK 3
 dt=$(date "+%d/%m/%Y %T")
-echo "[Check #3: Message Backlogs] >> $OUTFILE
+echo "[Check #3: Message Backlogs]" >> $OUTFILE
 echo "DateTime,CheckName,Description,SchemaId,Status,COUNTupdates,max_number_of_table_updates,sum_number_of_table_updates,AdaptiveBacklogThreshold,DBdacRate_inMS,TOTALdacRate_inMS,TOTALgwRate_inMS,Total Roundtrip in Millisecs,RoundtripThreshold,DeliveryETA,Result" >> $OUTFILE
 echo "$dt Starting Check #3" >> $OUTFILE_LOG
 echo "$dt Connecting to $event_db database" >> $OUTFILE_LOG
@@ -749,7 +749,7 @@ fi
 done < /scripts/3AZUREDB_AMD_message_backlogs.csv
 ####################################################### CHECK 13
 dt=$(date "+%d/%m/%Y %T")
-echo "[Check #13: ora_rowscn SequenceNumber Bug] >> $OUTFILE
+echo "[Check #13: ora_rowscn SequenceNumber Bug]" >> $OUTFILE
 echo "DateTime,CheckName,Description,update_request_id,schema_id,sequence_number,previous_sequence_number,Result" >> $OUTFILE
 echo "$dt Starting Check #13" >> $OUTFILE_LOG
 echo "$dt Connecting to $event_db database" >> $OUTFILE_LOG
