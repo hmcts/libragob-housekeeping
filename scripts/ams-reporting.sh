@@ -12,15 +12,9 @@ echo "Current location: $(pwd)"
 event_username=$(cat /mnt/secrets/$KV_NAME/event-datasource-username)
 event_password=$(cat /mnt/secrets/$KV_NAME/event-datasource-password)
 event_url=$(cat /mnt/secrets/$KV_NAME/event-datasource-url)
-echo $event_username
-echo $event_password
-echo $event_url
 event_host=`echo $event_url | awk -F"\/\/" {'print $2'} | awk -F":" {'print $1'}`
 event_port=`echo $event_url | awk -F":" {'print $4'} | awk -F"\/" {'print $1'}`
 event_db=`echo $event_url | awk -F":" {'print $4'} | awk -F"\/" {'print $2'}`
-echo $event_host
-echo $event_port
-echo $event_db
 
 # PostgresDB connection variables
 postgres_username=$(cat /mnt/secrets/$KV_NAME/themis-gateway-dbusername)
