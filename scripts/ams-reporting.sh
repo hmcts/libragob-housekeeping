@@ -50,7 +50,7 @@ echo "$(date "+%d/%m/%Y %T") SQL for Check #1 has been run" >> $OUTFILE_LOG
 while read -r line;do
 
 schema_lock=`echo $line | awk '{print $1}'`
-echo "schema_locked=$schema_locked"
+echo "schema_locked=$schema_lock"
 
 if [[ ! -z $schema_lock ]];then
 echo "$(date "+%d/%m/%Y %T"),AZDB001_schema_lock,Locked Schema Check,SchemaId $schema_lock is locked,warn" >> $OUTFILE
