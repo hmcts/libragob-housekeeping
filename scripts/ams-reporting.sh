@@ -81,7 +81,7 @@ while read -r line;do
 
 key_lock=`echo $line | awk '{print $1}'`
 
-if [[ ! -z $key_lock ]];then
+if [ ! -z $key_lock ];then
 echo "$dt,AZDB001_key_lock,Locked Instance Key Check,Instance Key $key_lock is locked,warn" >> $OUTFILE
 else
 echo "$dt,AZDB001_key_lock,Locked Instance Key Check,No Instance Key Locks,ok" >> $OUTFILE
@@ -140,7 +140,7 @@ error_message=`echo $line | awk '{print $5}'`
 update_request_id=`echo $line | awk '{print $6}'`
 schema_id=`echo $line | awk '{print $7}'`
 
-if [[ ! -z $message_log_id ]];then
+if [ ! -z $message_log_id ];then
 echo "$dt,AZDB001_db_message_log_error,Message Log Error Check,$message_log_id,$message_uuid,$created_date,$procedure_name,$error_message,$update_request_id,$schema_id,warn" >> $OUTFILE
 else
 echo "$dt,AZDB001_db_message_log_error,Message Log Error Check,$message_log_id,$message_uuid,$created_date,$procedure_name,$error_message,$update_request_id,$schema_id,ok" >> $OUTFILE
