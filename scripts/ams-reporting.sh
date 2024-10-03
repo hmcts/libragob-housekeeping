@@ -71,7 +71,7 @@ cat $OUTFILE_LOG
 ############################################################################
 ### Push CSV file to BAIS so it can be ingested and displayed in the AMD ###
 ############################################################################
-if [ -e /mnt/secrets/$KV_NAME/sftp-endpoint ] && [ -e /mnt/secrets/$KV_NAME/sftp-username ] && [ -e /mnt/secrets/$KV_NAME/sftp-password ];then
+#if [ -e /mnt/secrets/$KV_NAME/sftp-endpoint ] && [ -e /mnt/secrets/$KV_NAME/sftp-username ] && [ -e /mnt/secrets/$KV_NAME/sftp-password ];then
   stfp_endpoint=$(cat /mnt/secrets/$KV_NAME/sftp-endpoint)
   sftp_username=$(cat /mnt/secrets/$KV_NAME/sftp-username)
   sftp_password=$(cat /mnt/secrets/$KV_NAME/sftp-password)
@@ -81,9 +81,9 @@ echo "password=$stfp_password"
   echo "$(date "+%d/%m/%Y %T") Uploading the report to SFTP server $sftp_endpoint" >> $OUTFILE_LOG
   #sftp $sftp_username@$sftp_endpoint:/ <<< $'put $OUTFILE'
   sshpass $stfp_password -e sftp $sftp_username@$sftp_endpoint:/ <<< $'put $OUTFILE'
-else
+#else
   echo "Cannot access BAIS KeyVault connection variables" 
-fi
+#fi
 
 exit 0
 
