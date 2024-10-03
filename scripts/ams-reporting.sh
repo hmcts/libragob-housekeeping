@@ -68,6 +68,8 @@ cat $OUTFILE
 echo "cat of OUTFILE_LOG:"
 cat $OUTFILE_LOG
 
+exit 0
+
 if [[ 0 == 1 ]];then
 ####################################################### CHECK 2
 dt=$(date "+%d/%m/%Y %T")
