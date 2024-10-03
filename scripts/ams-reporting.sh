@@ -2,7 +2,7 @@
 ####################################################### This is the AMD AzureDB Healthcheck Script, and the associated documentation is in Ensemble under the "Libra System Admin Documents" area:
 ####################################################### "GoB Phase 1 - Oracle_Postgres DB Checks_v11.5_MAP.docx" is the latest version as of 01/08/2024
 dt_today=$(date "+%Y/%m/%D")
-echo "Script Version 2.5: KV list"
+echo "Script Version 2.5: cat line 162"
 mkdir /tmp/ams-reporting/
 OPDIR="/tmp/ams-reporting/"
 OUTFILE="${OPDIR}AZURE_DB001_AMD.csv"
@@ -154,7 +154,7 @@ echo "$(date "+%d/%m/%Y %T") Connecting to $event_db database" >> $OUTFILE_LOG
 psql "sslmode=require host=${event_db} user=${event_username} port=5432 password=${event_password}" --file=/sql/5AZUREDB_AMD_message_log_errors.sql
 
 # Put protection in to only work last 100 lines of errors
-if [[ `${OPDIR}5AZUREDB_AMD_message_log_errors.csv | wc -l | xargs` -gt 100 ]];then
+if [[ `cat ${OPDIR}5AZUREDB_AMD_message_log_errors.csv | wc -l | xargs` -gt 100 ]];then
 tail -100 ${OPDIR}5AZUREDB_AMD_message_log_errors.csv > ${OPDIR}5AZUREDB_AMD_message_log_errors_100.csv
 fi
 
