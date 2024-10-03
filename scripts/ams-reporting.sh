@@ -18,10 +18,17 @@ event_port=`echo $event_url | awk -F":" {'print $4'} | awk -F"\/" {'print $1'}`
 event_db=`echo $event_url | awk -F":" {'print $4'} | awk -F"\/" {'print $2'}`
 
 # PostgresDB connection variables
-postgres_username=$(cat /mnt/secrets/$KV_NAME/themis-gateway-dbusername)
-postgres_password=$(cat /mnt/secrets/$KV_NAME/themis-gateway-dbpassword)
-postgres_url=$(cat /mnt/secrets/$KV_NAME/themis-gateway-datasourceurl)
-postgres_db=$(echo "$postgres_url" | sed 's/jdbc:postgresql:\/\///' | sed 's/:5432//' | sed 's/.*\///')
+#postgres_username=$(cat /mnt/secrets/$KV_NAME/themis-gateway-dbusername)
+#postgres_password=$(cat /mnt/secrets/$KV_NAME/themis-gateway-dbpassword)
+#postgres_url=$(cat /mnt/secrets/$KV_NAME/themis-gateway-datasourceurl)
+postgres_username=$(cat /mnt/secrets/$KV_NAME/postgres-dbusername)
+postgres_password=$(cat /mnt/secrets/$KV_NAME/postgres-dbpassword)
+postgres_url=$(cat /mnt/secrets/$KV_NAME/postgres-datasourceurl)
+postgres_host=`echo $postgres_url | awk -F"\/\/" {'print $2'} | awk -F":" {'print $1'}`
+postgres_port=`echo $postgres_url | awk -F":" {'print $4'} | awk -F"\/" {'print $1'}`
+postgres_db=`echo $postgres_url | awk -F":" {'print $4'} | awk -F"\/" {'print $2'}
+
+ls -altr /mnt/secrets/$KV_NAME/
 
 # ConfiscationDB connection variables
 confiscation_username=$(cat /mnt/secrets/$KV_NAME/confiscation-datasource-username)
@@ -102,7 +109,7 @@ else
 echo "$(date "+%d/%m/%Y %T"),AZDB001_key_lock,Locked Instance Key Check,No Instance Key Locks,ok" >> $OUTFILE
 fi
 
-done < /scripts/2AZUREDB_AMD_locked_keys.csv
+done < ${OPDIR}2AZUREDB_AMD_locked_keys.csv
 
 exit 0
 ####################################################### CHECK 4
@@ -133,7 +140,7 @@ else
 echo "$(date "+%d/%m/%Y %T"),AZDB001_db_threads,Thread Count Check,$state,$nonidle_threshold,$count,ok" >> $OUTFILE
 fi
 
-done < /scripts/4AZUREDB_AMD_thread_status_counts.csv
+done < ${OPDIR}4AZUREDB_AMD_thread_status_counts.csv
 ####################################################### CHECK 5
 dt=$(date "+%d/%m/%Y %T")
 echo "[Check #5: MESSAGE_LOG Errors]" >> $OUTFILE
@@ -143,8 +150,8 @@ echo "$(date "+%d/%m/%Y %T") Connecting to $event_db database" >> $OUTFILE_LOG
 psql "sslmode=require host=${event_db} user=${event_username} port=5432 password=${event_password}" --file=/sql/5AZUREDB_AMD_message_log_errors.sql
 
 # Put protection in to only work last 100 lines of errors
-if [[ `/scripts/5AZUREDB_AMD_message_log_errors.csv | wc -l | xargs` -gt 100 ]];then
-tail -100 /scripts/5AZUREDB_AMD_message_log_errors.csv > /scripts/5AZUREDB_AMD_message_log_errors_100.csv
+if [[ `${OPDIR}5AZUREDB_AMD_message_log_errors.csv | wc -l | xargs` -gt 100 ]];then
+tail -100 ${OPDIR}5AZUREDB_AMD_message_log_errors.csv > ${OPDIR}5AZUREDB_AMD_message_log_errors_100.csv
 fi
 
 while read -r line;do
@@ -163,7 +170,7 @@ else
 echo "$(date "+%d/%m/%Y %T"),AZDB001_db_message_log_error,Message Log Error Check,$message_log_id,$message_uuid,$created_date,$procedure_name,$error_message,$update_request_id,$schema_id,ok" >> $OUTFILE
 fi
 
-done < /scripts/5AZUREDB_AMD_message_log_errors_100.csv
+done < ${OPDIR}5AZUREDB_AMD_message_log_errors_100.csv
 ####################################################### CHECK 6
 dt=$(date "+%d/%m/%Y %T")
 echo "[Check #6: Unprocessed, Complete & Processing Checks]" >> $OUTFILE
@@ -181,8 +188,8 @@ t_in=`echo $earliest_unprocessed | awk -F"." '{print $1}'`
 latest_complete=`echo $line | awk '{print $3}'`
 latest_processing=`echo $line | awk '{print $4}'`
 
-last_check=`grep "$schema_id" /scripts/earliest_unprocessed_timestamps_last_check.tmp | awk '{print $2}'`
-echo "$schema_id $t_in" >> /scripts/earliest_unprocessed_timestamps.tmp
+last_check=`grep "$schema_id" ${OPDIR}earliest_unprocessed_timestamps_last_check.tmp | awk '{print $2}'`
+echo "$schema_id $t_in" >> ${OPDIR}earliest_unprocessed_timestamps.tmp
 
 t_out_1900=$(date '+%s' -d "$dt_now")
 t_in_1900=$(date '+%s' -d "$t_in")
@@ -195,9 +202,9 @@ else
 echo "$(date "+%d/%m/%Y %T"),AZDB001_update_processing_backlog,Check of Earliest Unprocessed vs. Latest Complete vs. Latest Processing,$schema_id,$earliest_unprocessed,$latest_complete,$latest_processing,ok" >> $OUTFILE
 fi
 
-done < /scripts/6AZUREDB_AMD_update_processing_backlog.csv
+done < ${OPDIR}6AZUREDB_AMD_update_processing_backlog.csv
 
-mv /scripts/earliest_unprocessed_timestamps.tmp /scripts/earliest_unprocessed_timestamps_last_check.tmp
+mv ${OPDIR}earliest_unprocessed_timestamps.tmp ${OPDIR}earliest_unprocessed_timestamps_last_check.tmp
 ####################################################### CHECK 7
 dt=$(date "+%d/%m/%Y %T")
 echo "[Check #7: Max Daily Update Counts by SchemaId]" >> $OUTFILE
@@ -221,7 +228,7 @@ else
 echo "dt,AZDB001_max_updates,Max Updates by SchemaId,$schema_id,$count_updates,$sum_number_of_table_updates,$max_number_of_table_updates,ok" >> $OUTFILE
 fi
 
-done < /scripts/7AZUREDB_AMD_max_daily_update_counts_by_schemaid.csv
+done < ${OPDIR}7AZUREDB_AMD_max_daily_update_counts_by_schemaid.csv
 ####################################################### CHECK 8
 dt=$(date "+%d/%m/%Y %T")
 echo "[Check #8: Today's Hourly Update Counts]" >> $OUTFILE
@@ -239,7 +246,7 @@ max_number_of_table_updates=`echo $line | awk '{print $4}'`
 
 echo "dt,AZDB001_hourly_updates,Today's Hourly Updates,$schema_id,$count_updates,$sum_number_of_table_updates,$max_number_of_table_updates,ok" >> $OUTFILE
 
-done < /scripts/8AZUREDB_AMD_todays_hourly_update_counts.csv
+done < ${OPDIR}8AZUREDB_AMD_todays_hourly_update_counts.csv
 ####################################################### CHECK 9
 dt=$(date "+%d/%m/%Y %T")
 echo "[Check #9: Azure Recon (ORA Recon check is on AMD Database INFO tab)]" >> $OUTFILE
@@ -247,15 +254,15 @@ echo "DateTime,CheckName,Description,Status,Result" >> $OUTFILE
 echo "$(date "+%d/%m/%Y %T") Starting Check #9a" >> $OUTFILE_LOG
 echo "$(date "+%d/%m/%Y %T") Connecting to $confiscation_db database" >> $OUTFILE_LOG
 psql "sslmode=require host=${confiscation_db} duser=${confiscation_username} port=5432 password=${confiscation_password}" --file=/sql/9aAZUREDB_AMD_confiscation_RRID.sql
-RR_ID=`cat /scripts/9aAZUREDB_AMD_confiscation_RRID.csv | awk '{print $1'}`
+RR_ID=`cat ${OPDIR}9aAZUREDB_AMD_confiscation_RRID.csv | awk '{print $1'}`
 echo "$(date "+%d/%m/%Y %T") Starting Check #9b" >> $OUTFILE_LOG
 echo "$(date "+%d/%m/%Y %T") Connecting to $confiscation_db database" >> $OUTFILE_LOG
 psql "sslmode=require host=${confiscation_db} user=${confiscation_username} port=5432 password=${confiscation_password}" --file=/sql/9bAZUREDB_AMD_confiscation_rundate.sql $RR_ID
-rundate=`head -1 /scripts/9bAZUREDB_AMD_confiscation_rundate.csv | awk '{print $1'}`
+rundate=`head -1 ${OPDIR}9bAZUREDB_AMD_confiscation_rundate.csv | awk '{print $1'}`
 echo "$(date "+%d/%m/%Y %T") Starting Check #9c" >> $OUTFILE_LOG
 echo "$(date "+%d/%m/%Y %T") Connecting to $confiscation_db database" >> $OUTFILE_LOG
 psql "sslmode=require host=${confiscation_db} user=${confiscation_username} port=5432 password=${confiscation_password}" --file=/sql/9cAZUREDB_AMD_confiscation_result.sql $RR_ID
-error_count=`head -1 /scripts/9cAZUREDB_AMD_confiscation_result.csv | awk '{print $1'} | wc -l | xargs`
+error_count=`head -1 ${OPDIR}9cAZUREDB_AMD_confiscation_result.csv | awk '{print $1'} | wc -l | xargs`
 
 if [[ grep "$dt_today" $rundate ]];then
 
@@ -277,7 +284,7 @@ feedback=`echo $line | awk '{print $5}'
 
 echo "$(date "+%d/%m/%Y %T"),AZDB001_maint_recon_$schema_id,Confiscation Recon,SchemaId $schema_id with $item is in $feedback,warn" >> $OUTFILE
 
-done < /scripts/9dAZUREDB_AMD_confiscation_ERRORS.csv
+done < ${OPDIR}9dAZUREDB_AMD_confiscation_ERRORS.csv
 
 else
 
@@ -291,15 +298,15 @@ dt=$(date "+%d/%m/%Y %T")
 echo "$(date "+%d/%m/%Y %T") Connecting to $fines_db database" >> $OUTFILE_LOG
 echo "$(date "+%d/%m/%Y %T") Starting Check #9e" >> $OUTFILE_LOG
 psql "sslmode=require host=${fines_db} duser=${fines_username} port=5432 password=${fines_password}" --file=/sql/9eAZUREDB_AMD_fines_RRID.sql
-RR_ID=`cat /scripts/9eAZUREDB_AMD_fines_RRID.csv | awk '{print $1'}`
+RR_ID=`cat ${OPDIR}9eAZUREDB_AMD_fines_RRID.csv | awk '{print $1'}`
 echo "$(date "+%d/%m/%Y %T") Connecting to $fines_db database" >> $OUTFILE_LOG
 echo "$(date "+%d/%m/%Y %T") Starting Check #9f" >> $OUTFILE_LOG
 psql "sslmode=require host=${fines_db} user=${fines_username} port=5432 password=${fines_password}" --file=/sql/9fAZUREDB_AMD_fines_rundate.sql $RR_ID
-rundate=`head -1 /scripts/9fAZUREDB_AMD_fines_rundate.csv | awk '{print $1'}`
+rundate=`head -1 ${OPDIR}9fAZUREDB_AMD_fines_rundate.csv | awk '{print $1'}`
 echo "$(date "+%d/%m/%Y %T") Connecting to $fines_db database" >> $OUTFILE_LOG
 echo "$(date "+%d/%m/%Y %T") Starting Check #9g" >> $OUTFILE_LOG
 psql "sslmode=require host=${fines_db} user=${fines_username} port=5432 password=${fines_password}" --file=/sql/9gAZUREDB_AMD_fines_result.sql $RR_ID
-error_count=`head -1 /scripts/9gAZUREDB_AMD_fines_result.csv | awk '{print $1'} | wc -l | xargs`
+error_count=`head -1 ${OPDIR}9gAZUREDB_AMD_fines_result.csv | awk '{print $1'} | wc -l | xargs`
 
 if [[ grep "$dt_today" $rundate ]];then
 
@@ -321,7 +328,7 @@ feedback=`echo $line | awk '{print $5}'
 
 echo "$(date "+%d/%m/%Y %T"),AZDB001_maint_recon_$schema_id,Fines Recon,SchemaId $schema_id with $item is in $feedback,warn" >> $OUTFILE
 
-done < /scripts/9hAZUREDB_AMD_fines_ERRORS.csv
+done < ${OPDIR}9hAZUREDB_AMD_fines_ERRORS.csv
 
 else
 
@@ -335,15 +342,15 @@ dt=$(date "+%d/%m/%Y %T")
 echo "$(date "+%d/%m/%Y %T") Connecting to $maintenance_db database" >> $OUTFILE_LOG
 echo "$(date "+%d/%m/%Y %T") Starting Check #9i" >> $OUTFILE_LOG
 psql "sslmode=require host=${maintenance_db} duser=${maintenance_username} port=5432 password=${maintenance_password}" --file=/sql/9iAZUREDB_AMD_maintenance_RRID.sql
-RR_ID=`cat /scripts/9iAZUREDB_AMD_confiscation_maintenance_RRID.csv | awk '{print $1'}`
+RR_ID=`cat ${OPDIR}9iAZUREDB_AMD_confiscation_maintenance_RRID.csv | awk '{print $1'}`
 echo "$(date "+%d/%m/%Y %T") Connecting to $maintenance_db database" >> $OUTFILE_LOG
 echo "$(date "+%d/%m/%Y %T") Starting Check #9j" >> $OUTFILE_LOG
 psql "sslmode=require host=${maintenance_db} user=${maintenance_username} port=5432 password=${maintenance_password}" --file=/sql/9jAZUREDB_AMD_maintenance_rundate.sql $RR_ID
-rundate=`head -1 /scripts/9jAZUREDB_AMD_confiscation_maintenance_rundate.csv | awk '{print $1'}`
+rundate=`head -1 ${OPDIR}9jAZUREDB_AMD_confiscation_maintenance_rundate.csv | awk '{print $1'}`
 echo "$(date "+%d/%m/%Y %T") Connecting to $maintenance_db database" >> $OUTFILE_LOG
 echo "$(date "+%d/%m/%Y %T") Starting Check #9k" >> $OUTFILE_LOG
 psql "sslmode=require host=${maintenance_db} user=${maintenance_username} port=5432 password=${maintenance_password}" --file=/sql/9kAZUREDB_AMD_maintenance_result.sql $RR_ID
-error_count=`head -1 /scripts/9kAZUREDB_AMD_confiscation_maintenance_result.csv | awk '{print $1'} | wc -l | xargs`
+error_count=`head -1 ${OPDIR}9kAZUREDB_AMD_confiscation_maintenance_result.csv | awk '{print $1'} | wc -l | xargs`
 
 if [[ grep "$dt_today" $rundate ]];then
 
@@ -365,7 +372,7 @@ feedback=`echo $line | awk '{print $5}'
 
 echo "$(date "+%d/%m/%Y %T"),AZDB001_maint_recon_$schema_id,Maintenance Recon,SchemaId $schema_id with $item is in $feedback,warn" >> $OUTFILE
 
-done < /scripts/9lAZUREDB_AMD_maintenance_ERRORS.csv
+done < ${OPDIR}9lAZUREDB_AMD_maintenance_ERRORS.csv
 
 else
 
@@ -399,11 +406,11 @@ psql "sslmode=require host=${postgres_db} user=${postgres_username} port=5432 pa
 echo "$(date "+%d/%m/%Y %T") Starting Check #11e" >> $OUTFILE_LOG
 echo "$(date "+%d/%m/%Y %T") Connecting to $postgres_db database" >> $OUTFILE_LOG
 psql "sslmode=require host=${postgres_db} user=${postgres_username} port=5432 password=${postgres_password}" --file=/sql/11eAZUREDB_AMD_row_counts_GW_message_audit.sql
-cat /scripts/11aAZUREDB_AMD_row_counts_update_requests.csv >> $OUTFILE
-cat /scripts/11bAZUREDB_AMD_row_counts_table_updates.csv >> $OUTFILE
-cat /scripts/11cAZUREDB_AMD_row_counts_message_log.csv >> $OUTFILE
-cat /scripts/11dAZUREDB_AMD_row_counts_DAC_message_audit.csv >> $OUTFILE
-cat /scripts/11eAZUREDB_AMD_row_counts_GW_message_audit.csv >> $OUTFILE
+cat ${OPDIR}11aAZUREDB_AMD_row_counts_update_requests.csv >> $OUTFILE
+cat ${OPDIR}11bAZUREDB_AMD_row_counts_table_updates.csv >> $OUTFILE
+cat ${OPDIR}11cAZUREDB_AMD_row_counts_message_log.csv >> $OUTFILE
+cat ${OPDIR}11dAZUREDB_AMD_row_counts_DAC_message_audit.csv >> $OUTFILE
+cat ${OPDIR}11eAZUREDB_AMD_row_counts_GW_message_audit.csv >> $OUTFILE
 ####################################################### CHECK 12
 dt=$(date "+%d/%m/%Y %T")
 echo "[Check #12a: Today's Latest 100 DACAudit DB Roundtrip Deltas Step 13-12]" >> $OUTFILE
@@ -420,7 +427,7 @@ roundtrip=`echo $line | awk '{print $3}'`
 
 echo "dt,AZDB001_dacaudit_db_100_proc_rates,Today's Latest 100 DACAudit DB Roundtrip Deltas Step 13-12,$updated_date,$uuid,$rountrip,ok" >> $OUTFILE
 
-done < /scripts/12aAZUREDB_AMD_dacaudit_DBstep13-12_latest100_processing_rates.csv
+done < ${OPDIR}12aAZUREDB_AMD_dacaudit_DBstep13-12_latest100_processing_rates.csv
 ######################################################################################################################################################################################################
 dt=$(date "+%d/%m/%Y %T")
 echo "[Check #12b: Today's Latest 100 DACAudit Full Roundtrip Deltas Step 10-1]" >> $OUTFILE
@@ -437,7 +444,7 @@ roundtrip=`echo $line | awk '{print $3}'`
 
 echo "dt,AZDB001_dacaudit_100_proc_rates,Today's Latest 100 DACAudit Full Roundtrip Deltas Step 10-1,$updated_date,$uuid,$rountrip,ok" >> $OUTFILE
 
-done < /scripts/12bAZUREDB_AMD_dacaudit_DBstep10-1_latest100_processing_rates.csv
+done < ${OPDIR}12bAZUREDB_AMD_dacaudit_DBstep10-1_latest100_processing_rates.csv
 ######################################################################################################################################################################################################
 dt=$(date "+%d/%m/%Y %T")
 echo "[Check #12c: Today's Latest 100 GatewayAudit Full Roundtrip Deltas Step 10-1]" >> $OUTFILE
@@ -454,7 +461,7 @@ roundtrip=`echo $line | awk '{print $3}'`
 
 echo "dt,AZDB001_gwaudit_100_proc_rates,Today's Latest 100 GatewayAudit Full Roundtrip Deltas Step 10-1,$updated_date,$uuid,$rountrip,ok" >> $OUTFILE
 
-done < /scripts/12cAZUREDB_AMD_gwaudit_step10-1_latest100_processing_rates.csv
+done < ${OPDIR}12cAZUREDB_AMD_gwaudit_step10-1_latest100_processing_rates.csv
 ######################################################################################################################################################################################################
 dt=$(date "+%d/%m/%Y %T")
 echo "[Check #12d: Daily AVG DACAudit DB Roundtrip Deltas Step 13-12]" >> $OUTFILE
@@ -472,7 +479,7 @@ records=`echo $line | awk '{print $4}'`
 
 echo "dt,AZDB001_dacaudit_db_avgDailyRT,Daily AVG DACAudit DB Roundtrip Deltas Step 13-12,$dateddmmyyyy,$avgDailyRT,$total_workload,$records,ok" >> $OUTFILE
 
-done < /scripts/12dAZUREDB_AMD_dacaudit_DBstep13-12_avgDailyRT.csv
+done < ${OPDIR}12dAZUREDB_AMD_dacaudit_DBstep13-12_avgDailyRT.csv
 ######################################################################################################################################################################################################
 dt=$(date "+%d/%m/%Y %T")
 echo "[Check #12e: Daily AVG DACAudit Full Roundtrip Deltas Step 10-1]" >> $OUTFILE
@@ -490,7 +497,7 @@ records=`echo $line | awk '{print $4}'`
 
 echo "dt,AZDB001_dacaudit_avgDailyRT,Daily AVG DACAudit Full Roundtrip Deltas Step 10-1,$dateddmmyyyy,$avgDailyRT,$total_workload,$records,ok" >> $OUTFILE
 
-done < /scripts/12eAZUREDB_AMD_dacaudit_step10-1_avgDailyRT.csv
+done < ${OPDIR}12eAZUREDB_AMD_dacaudit_step10-1_avgDailyRT.csv
 ######################################################################################################################################################################################################
 dt=$(date "+%d/%m/%Y %T")
 echo "[Check #12f: Daily AVG GatewayAudit Full Roundtrip Deltas Step 10-1]" >> $OUTFILE
@@ -508,7 +515,7 @@ records=`echo $line | awk '{print $4}'`
 
 echo "dt,AZDB001_gwaudit_avgDailyRT,Daily AVG GatewayAudit Full Roundtrip Deltas Step 10-1,$dateddmmyyyy,$avgDailyRT,$total_workload,$records,ok" >> $OUTFILE
 
-done < /scripts/12fAZUREDB_AMD_gwaudit_step10-1_avgDailyRT.csv
+done < ${OPDIR}12fAZUREDB_AMD_gwaudit_step10-1_avgDailyRT.csv
 ######################################################################################################################################################################################################
 dt=$(date "+%d/%m/%Y %T")
 echo "[Check #12g: 48 Hourly AVG DACAudit DB Roundtrip Deltas Step 13-12]" >> $OUTFILE
@@ -526,7 +533,7 @@ records=`echo $line | awk '{print $4}'`
 
 echo "dt,AZDB001_dacaudit_db_avgHourlyRT,48 Hourly AVG DACAudit DB Roundtrip Deltas Step 13-12,$dateddmmyyyy,$avgHourlyRT,$total_workload,$records,ok" >> $OUTFILE
 
-done < /scripts/12gAZUREDB_AMD_dacaudit_DBstep13-12_avgHourlyRT.csv
+done < ${OPDIR}12gAZUREDB_AMD_dacaudit_DBstep13-12_avgHourlyRT.csv
 ######################################################################################################################################################################################################
 dt=$(date "+%d/%m/%Y %T")
 echo "[Check #12h: 60 Minute AVG DACAudit DB Roundtrip Deltas Step 13-12]" >> $OUTFILE
@@ -544,7 +551,7 @@ records=`echo $line | awk '{print $4}'`
 
 echo "dt,AZDB001_dacaudit_db_avgMinuteRT,60 Minute AVG DACAudit DB Roundtrip Deltas Step 13-12,$dateddmmyyyy,$avgMinuteRT,$total_workload,$records,ok" >> $OUTFILE
 
-done < /scripts/12hAZUREDB_AMD_dacaudit_DBstep13-12_avgMinuteRT.csv
+done < ${OPDIR}12hAZUREDB_AMD_dacaudit_DBstep13-12_avgMinuteRT.csv
 ######################################################################################################################################################################################################
 dt=$(date "+%d/%m/%Y %T")
 echo "[Check #12i: 48 Hourly AVG DACAudit DB Roundtrip Deltas Step 10-1]" >> $OUTFILE
@@ -562,7 +569,7 @@ records=`echo $line | awk '{print $4}'`
 
 echo "dt,AZDB001_dacaudit_db_avgHourlyRT,48 Hourly AVG DACAudit DB Roundtrip Deltas Step 10-1,$dateddmmyyyy,$avgHourlyRT,$total_workload,$records,ok" >> $OUTFILE
 
-done < /scripts/12iAZUREDB_AMD_dacaudit_DBstep10-1_avgHourlyRT.csv
+done < ${OPDIR}12iAZUREDB_AMD_dacaudit_DBstep10-1_avgHourlyRT.csv
 ######################################################################################################################################################################################################
 dt=$(date "+%d/%m/%Y %T")
 echo "[Check #12j: 60 Minute AVG DACAudit DB Roundtrip Deltas Step 10-1]" >> $OUTFILE
@@ -580,7 +587,7 @@ records=`echo $line | awk '{print $4}'`
 
 echo "dt,AZDB001_dacaudit_db_avgMinuteRT,60 Minute AVG DACAudit DB Roundtrip Deltas Step 10-1,$dateddmmyyyy,$avgMinuteRT,$total_workload,$records,ok" >> $OUTFILE
 
-done < /scripts/12jAZUREDB_AMD_dacaudit_DBstep10-1_avgMinuteRT.csv
+done < ${OPDIR}12jAZUREDB_AMD_dacaudit_DBstep10-1_avgMinuteRT.csv
 ######################################################################################################################################################################################################
 dt=$(date "+%d/%m/%Y %T")
 echo "[Check #12k: 48 Hourly AVG GatewayAudit Full Roundtrip Deltas Step 10-1]" >> $OUTFILE
@@ -598,7 +605,7 @@ records=`echo $line | awk '{print $4}'`
 
 echo "dt,AZDB001_gwaudit_avgHourlyRT,48 Hourly AVG GatewayAudit Full Roundtrip Deltas Step 10-1,$dateddmmyyyy,$avgHourlyRT,$total_workload,$records,ok" >> $OUTFILE
 
-done < /scripts/12kAZUREDB_AMD_gwaudit_step10-1_avgHourlyRT.csv
+done < ${OPDIR}12kAZUREDB_AMD_gwaudit_step10-1_avgHourlyRT.csv
 ######################################################################################################################################################################################################
 dt=$(date "+%d/%m/%Y %T")
 echo "[Check #12l: 60 Minute AVG GatewayAudit Full Roundtrip Deltas Step 10-1]" >> $OUTFILE
@@ -616,7 +623,7 @@ records=`echo $line | awk '{print $4}'`
 
 echo "dt,AZDB001_gwaudit_avgMinuteRT,60 Minute AVG GatewayAudit Full Roundtrip Deltas Step 10-1,$dateddmmyyyy,$avgMinuteRT,$total_workload,$records,ok" >> $OUTFILE
 
-done < /scripts/12lAZUREDB_AMD_gwaudit_step10-1_avgMinuteRT.csv
+done < ${OPDIR}12lAZUREDB_AMD_gwaudit_step10-1_avgMinuteRT.csv
 ######################################################################################################################################################################################################
 dt=$(date "+%d/%m/%Y %T")
 echo "[Check #12m: Daily Completed UPDATE_REQUESTS Counts]" >> $OUTFILE
@@ -632,7 +639,7 @@ records=`echo $line | awk '{print $2}'`
 
 echo "dt,AZDB001_daily_completed_update_requests,Daily Completed UPDATE_REQUESTS Counts,$dateddmmyyyy,$records,ok" >> $OUTFILE
 
-done < /scripts/12mAZUREDB_AMD_daily_completed_update_request_counts.csv
+done < ${OPDIR}12mAZUREDB_AMD_daily_completed_update_request_counts.csv
 ######################################################################################################################################################################################################
 dt=$(date "+%d/%m/%Y %T")
 echo "[Check #12n: Daily Completed TABLE_UPDATES Counts]" >> $OUTFILE
@@ -648,7 +655,7 @@ records=`echo $line | awk '{print $2}'`
 
 echo "dt,AZDB001_daily_completed_table_updates,Daily Completed TABLE_UPDATES Counts,$dateddmmyyyy,$records,ok" >> $OUTFILE
 
-done < /scripts/12nAZUREDB_AMD_daily_completed_table_updates_counts.csv
+done < ${OPDIR}12nAZUREDB_AMD_daily_completed_table_updates_counts.csv
 ######################################################################################################################################################################################################
 dt=$(date "+%d/%m/%Y %T")
 echo "[Check #12o: Hourly Completed UPDATE_REQUESTS Counts]" >> $OUTFILE
@@ -664,7 +671,7 @@ records=`echo $line | awk '{print $2}'`
 
 echo "dt,AZDB001_hourly_completed_update_requests,Hourly Completed UPDATE_REQUESTS Counts,$dateddmmyyyy,$records,ok" >> $OUTFILE
 
-done < /scripts/12oAZUREDB_AMD_hourly_completed_update_request_counts.csv
+done < ${OPDIR}12oAZUREDB_AMD_hourly_completed_update_request_counts.csv
 ######################################################################################################################################################################################################
 dt=$(date "+%d/%m/%Y %T")
 echo "[Check #12p: Hourly Completed TABLE_UPDATES Counts]" >> $OUTFILE
@@ -680,7 +687,7 @@ records=`echo $line | awk '{print $2}'`
 
 echo "dt,AZDB001_hourly_completed_table_updates,Hourly Completed TABLE_UPDATES Counts,$dateddmmyyyy,$records,ok" >> $OUTFILE
 
-done < /scripts/12pAZUREDB_AMD_hourly_completed_table_updates_counts.csv
+done < ${OPDIR}12pAZUREDB_AMD_hourly_completed_table_updates_counts.csv
 ######################################################################################################################################################################################################
 dt=$(date "+%d/%m/%Y %T")
 echo "[Check #12q: Minute Completed UPDATE_REQUESTS Counts]" >> $OUTFILE
@@ -696,7 +703,7 @@ records=`echo $line | awk '{print $2}'`
 
 echo "dt,AZDB001_minute_completed_update_requests,Minute Completed UPDATE_REQUESTS Counts,$dateddmmyyyy,$records,ok" >> $OUTFILE
 
-done < /scripts/12qAZUREDB_AMD_minute_completed_update_request_counts.csv
+done < ${OPDIR}12qAZUREDB_AMD_minute_completed_update_request_counts.csv
 ######################################################################################################################################################################################################
 dt=$(date "+%d/%m/%Y %T")
 echo "[Check #12r: Minute Completed TABLE_UPDATES Counts]" >> $OUTFILE
@@ -712,7 +719,7 @@ records=`echo $line | awk '{print $2}'`
 
 echo "dt,AZDB001_minute_completed_table_updates,Minute Completed TABLE_UPDATES Counts,$dateddmmyyyy,$records,ok" >> $OUTFILE
 
-done < /scripts/12rAZUREDB_AMD_minute_completed_table_updates_counts.csv
+done < ${OPDIR}12rAZUREDB_AMD_minute_completed_table_updates_counts.csv
 ####################################################### CHECK 3
 dt=$(date "+%d/%m/%Y %T")
 echo "[Check #3: Message Backlogs]" >> $OUTFILE
@@ -742,9 +749,9 @@ status=`echo $line | awk '{print $2}'`
 count_updates=`echo $line | awk '{print $3}'`
 sum_number_of_table_updates=`echo $line | awk '{print $4}'`
 max_number_of_table_updates=`echo $line | awk '{print $5}'`
-db_dac_rate=`head -1 /scripts/12AZUREDB_AMD_dacaudit_DBstep13-12_latest100_processing_rates.csv | awk '{print $3}'`
-total_dac_rate=`head -1 /scripts/12AZUREDB_AMD_dacaudit_DBstep10-1_latest100_processing_rates.csv  | awk '{print $3}'`
-total_gw_rate=`head -1 /scripts/12AZUREDB_AMD_gwaudit_step10-1_latest100_processing_rates.csv  | awk '{print $3}'`
+db_dac_rate=`head -1 ${OPDIR}12AZUREDB_AMD_dacaudit_DBstep13-12_latest100_processing_rates.csv | awk '{print $3}'`
+total_dac_rate=`head -1 ${OPDIR}12AZUREDB_AMD_dacaudit_DBstep10-1_latest100_processing_rates.csv  | awk '{print $3}'`
+total_gw_rate=`head -1 ${OPDIR}12AZUREDB_AMD_gwaudit_step10-1_latest100_processing_rates.csv  | awk '{print $3}'`
 combined_rate_secs=$((($db_dac_rate+$total_dac_rate+$total_gw_rate)/1000))
 delivery_rate_secs=$(($sum_number_of_table_updates/$combined_rate))
 
@@ -767,7 +774,7 @@ else
 echo "$(date "+%d/%m/%Y %T"),AZDB001_msg_backlog,MessageBacklogCheck,$schema_id,$status,$count_updates,$max_number_of_table_updates,$sum_number_of_table_updates,$backlog_adaptive_threshold,$db_dac_rate,$total_dac_rate,$total_gw_rate,$combined_rate_secs,$roundtrip_threshold,$adj_delivery_rate_secs$eta_units,ok" >> $OUTFILE
 fi
 
-done < /scripts/3AZUREDB_AMD_message_backlogs.csv
+done < ${OPDIR}3AZUREDB_AMD_message_backlogs.csv
 ####################################################### CHECK 13
 dt=$(date "+%d/%m/%Y %T")
 echo "[Check #13: ora_rowscn SequenceNumber Bug]" >> $OUTFILE
@@ -790,4 +797,4 @@ else
 echo "$(date "+%d/%m/%Y %T"),AZDB001_ora_rowscn_bug,SequenceNumber Bug Check,$update_request_id,$schema_id,$sequence_number,$previous_sequence_number,ok" >> $OUTFILE
 fi
 
-done < /scripts/13AZUREDB_AMD_ora_rowscn_bug_seq_nums.csv
+done < ${OPDIR}13AZUREDB_AMD_ora_rowscn_bug_seq_nums.csv
