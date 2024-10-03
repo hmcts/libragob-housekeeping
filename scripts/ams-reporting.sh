@@ -112,6 +112,7 @@ fi
 
 ####################################################### CHECK 2
 if [[ 0 == 1 ]];then
+
 echo "[Check #2: Locked Instance Keys]" >> $OUTFILE
 echo "DateTime,CheckName,Description,Threshold,Status,Result" >> $OUTFILE
 echo "$(date "+%d/%m/%Y %T") Starting Check #2" >> $OUTFILE_LOG
