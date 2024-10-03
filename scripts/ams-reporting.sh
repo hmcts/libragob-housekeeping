@@ -71,7 +71,7 @@ cat $OUTFILE_LOG
 ############################################################################
 ### Push CSV file to BAIS so it can be ingested and displayed in the AMD ###
 ############################################################################
-if [ -f /mnt/secrets/$KV_NAME/sftp-endpoint ] && [ -f /mnt/secrets/$KV_NAME/sftp-username ] && [ -f /mnt/secrets/$KV_NAME/sftp-password ];then
+if [ -e /mnt/secrets/$KV_NAME/sftp-endpoint ] && [ -e /mnt/secrets/$KV_NAME/sftp-username ] && [ -e /mnt/secrets/$KV_NAME/sftp-password ];then
   stfp_endpoint=$(cat /mnt/secrets/$KV_NAME/sftp-endpoint)
   sftp_username=$(cat /mnt/secrets/$KV_NAME/sftp-username)
   sftp_password=$(cat /mnt/secrets/$KV_NAME/sftp-password)
