@@ -20,6 +20,9 @@ event_host=`echo $event_url | awk -F"\/\/" {'print $2'} | awk -F":" {'print $1'}
 event_port=`echo $event_url | awk -F":" {'print $4'} | awk -F"\/" {'print $1'}`
 event_db=`echo $event_url | awk -F":" {'print $4'} | awk -F"\/" {'print $2'}`
 
+ls -altr /mnt/secrets/$KV_NAME/ >> $OUTFILE_LOG 
+exit 0
+
 # PostgresDB connection variables
 #postgres_username=$(cat /mnt/secrets/$KV_NAME/themis-gateway-dbusername)
 #postgres_password=$(cat /mnt/secrets/$KV_NAME/themis-gateway-dbpassword)
@@ -30,8 +33,6 @@ postgres_url=$(cat /mnt/secrets/$KV_NAME/postgres-datasourceurl)
 postgres_host=`echo $postgres_url | awk -F"\/\/" {'print $2'} | awk -F":" {'print $1'}`
 postgres_port=`echo $postgres_url | awk -F":" {'print $4'} | awk -F"\/" {'print $1'}`
 postgres_db=`echo $postgres_url | awk -F":" {'print $4'} | awk -F"\/" {'print $2'}
-
-ls -altr /mnt/secrets/$KV_NAME/ >> $OUTFILE_LOG 
 
 # ConfiscationDB connection variables
 confiscation_username=$(cat /mnt/secrets/$KV_NAME/confiscation-datasource-username)
@@ -100,7 +101,7 @@ echo "[Check #2: Locked Instance Keys]" >> $OUTFILE
 echo "DateTime,CheckName,Description,Threshold,Status,Result" >> $OUTFILE
 echo "$(date "+%d/%m/%Y %T") Starting Check #2" >> $OUTFILE_LOG
 echo "$(date "+%d/%m/%Y %T") Connecting to $postgres_db database" >> $OUTFILE_LOG
-psql "sslmode=require host=${postgres_db} user=${postgres_username} port=5432 password=${postgres_password}" --file=/sql/2AZUREDB_AMD_locked_keys.sql
+psql "sslmode=require host=${postgres_host} dbname=${postgres_db} port=${postgres_port} user=${postgres_username} password=${postgres_password}" --file=/sql/2AZUREDB_AMD_locked_keys.sql
 
 while read -r line;do
 
