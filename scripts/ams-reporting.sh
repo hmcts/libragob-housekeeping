@@ -2,13 +2,16 @@
 ####################################################### This is the AMD AzureDB Healthcheck Script, and the associated documentation is in Ensemble under the "Libra System Admin Documents" area:
 ####################################################### "GoB Phase 1 - Oracle_Postgres DB Checks_v11.5_MAP.docx" is the latest version as of 01/08/2024
 dt_today=$(date "+%Y/%m/%D")
-echo "Script Version 2.4: enable BAIS upload"
+echo "Script Version 2.5: KV list"
 mkdir /tmp/ams-reporting/
 OPDIR="/tmp/ams-reporting/"
 OUTFILE="${OPDIR}AZURE_DB001_AMD.csv"
 OUTFILE_LOG="${OPDIR}AZURE_DB001_AMD.log"
 echo $(date "+%d/%m/%Y %T") > $OUTFILE
 
+###############################################################
+### Set-up DB connection variables, extracted from KeyVault ###
+###############################################################
 # EventDB connection variables
 event_username=$(cat /mnt/secrets/$KV_NAME/event-datasource-username)
 event_password=$(cat /mnt/secrets/$KV_NAME/event-datasource-password)
@@ -28,7 +31,7 @@ postgres_host=`echo $postgres_url | awk -F"\/\/" {'print $2'} | awk -F":" {'prin
 postgres_port=`echo $postgres_url | awk -F":" {'print $4'} | awk -F"\/" {'print $1'}`
 postgres_db=`echo $postgres_url | awk -F":" {'print $4'} | awk -F"\/" {'print $2'}
 
-ls -altr /mnt/secrets/$KV_NAME/
+ls -altr /mnt/secrets/$KV_NAME/ >> $OUTFILE_LOG 
 
 # ConfiscationDB connection variables
 confiscation_username=$(cat /mnt/secrets/$KV_NAME/confiscation-datasource-username)
