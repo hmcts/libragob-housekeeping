@@ -161,7 +161,7 @@ echo "$(date "+%d/%m/%Y %T") Starting Check #5" >> $OUTFILE_LOG
 echo "$(date "+%d/%m/%Y %T") Connecting to $event_db database" >> $OUTFILE_LOG
 psql "sslmode=require host=${event_db} user=${event_username} port=5432 password=${event_password}" --file=/sql/5AZUREDB_AMD_message_log_errors.sql
 
-# Put protection in to only work last 100 lines of errors
+# Put protection in to only work on the last 100 lines of errors
 if [[ `cat ${OPDIR}5AZUREDB_AMD_message_log_errors.csv | wc -l | xargs` -gt 100 ]];then
 tail -100 ${OPDIR}5AZUREDB_AMD_message_log_errors.csv > ${OPDIR}5AZUREDB_AMD_message_log_errors_100.csv
 fi
