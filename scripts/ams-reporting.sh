@@ -2,7 +2,7 @@
 ####################################################### This is the AMD AzureDB Healthcheck Script, and the associated documentation is in Ensemble under the "Libra System Admin Documents" area:
 ####################################################### "GoB Phase 1 - Oracle_Postgres DB Checks_v11.5_MAP.docx" is the latest version as of 01/08/2024
 dt_today=$(date "+%Y/%m/%D")
-echo "Script Version 2.5: cat line 162"
+echo "Script Version 2.5: Check 4"
 mkdir /tmp/ams-reporting/
 OPDIR="/tmp/ams-reporting/"
 OUTFILE="${OPDIR}AZURE_DB001_AMD.csv"
@@ -19,11 +19,6 @@ event_url=$(cat /mnt/secrets/$KV_NAME/event-datasource-url)
 event_host=`echo $event_url | awk -F"\/\/" {'print $2'} | awk -F":" {'print $1'}`
 event_port=`echo $event_url | awk -F":" {'print $4'} | awk -F"\/" {'print $1'}`
 event_db=`echo $event_url | awk -F":" {'print $4'} | awk -F"\/" {'print $2'}`
-
-ls -altr /mnt/secrets/$KV_NAME/ >> $OUTFILE_LOG
-echo "cat of OUTFILE_LOG:"
-cat $OUTFILE_LOG
-exit 0
 
 # PostgresDB connection variables
 #postgres_username=$(cat /mnt/secrets/$KV_NAME/themis-gateway-dbusername)
@@ -98,11 +93,6 @@ done < ${OPDIR}1AZUREDB_AMD_locked_schemas.csv
 
 echo "$(date "+%d/%m/%Y %T") Check #1 complete" >> $OUTFILE_LOG
 
-echo "cat of OUTFILE:"
-cat $OUTFILE
-echo "cat of OUTFILE_LOG:"
-cat $OUTFILE_LOG
-
 ############################################################################
 ### Push CSV file to BAIS so it can be ingested and displayed in the AMD ###
 ############################################################################
@@ -121,6 +111,7 @@ else
 fi
 
 ####################################################### CHECK 2
+if [[ 0 == 1 ]];then
 echo "[Check #2: Locked Instance Keys]" >> $OUTFILE
 echo "DateTime,CheckName,Description,Threshold,Status,Result" >> $OUTFILE
 echo "$(date "+%d/%m/%Y %T") Starting Check #2" >> $OUTFILE_LOG
@@ -139,14 +130,14 @@ fi
 
 done < ${OPDIR}2AZUREDB_AMD_locked_keys.csv
 
-exit 0
+fi
 ####################################################### CHECK 4
 dt=$(date "+%d/%m/%Y %T")
 echo "[Check #4: Thread Status Counts]" >> $OUTFILE
 echo "DateTime,CheckName,Description,State,Threshold,Count,Result" >> $OUTFILE
 echo "$(date "+%d/%m/%Y %T") Starting Check #4" >> $OUTFILE_LOG
 echo "$(date "+%d/%m/%Y %T") Connecting to $event_db database" >> $OUTFILE_LOG
-psql "sslmode=require host=${event_db} user=${event_username} port=5432 password=${event_password}" --file=/sql/4AZUREDB_AMD_thread_status_counts.sql
+psql "sslmode=require host=${event_host} dbname=${event_db} port=${event_port} user=${event_username} password=${event_password}" --file=/sql/4AZUREDB_AMD_thread_status_counts.sql
 
 idle_threshold=450
 nonidle_threshold=12
@@ -169,6 +160,13 @@ echo "$(date "+%d/%m/%Y %T"),AZDB001_db_threads,Thread Count Check,$state,$nonid
 fi
 
 done < ${OPDIR}4AZUREDB_AMD_thread_status_counts.csv
+
+echo "cat of OUTFILE:"
+cat $OUTFILE
+echo "cat of OUTFILE_LOG:"
+cat $OUTFILE_LOG
+
+exit 0
 ####################################################### CHECK 5
 dt=$(date "+%d/%m/%Y %T")
 echo "[Check #5: MESSAGE_LOG Errors]" >> $OUTFILE
