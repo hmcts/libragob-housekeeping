@@ -2,7 +2,7 @@
 ####################################################### This is the AMD AzureDB Healthcheck Script, and the associated documentation is in Ensemble under the "Libra System Admin Documents" area:
 ####################################################### "GoB Phase 1 - Oracle_Postgres DB Checks_v11.5_MAP.docx" is the latest version as of 01/08/2024
 dt_today=$(date "+%Y/%m/%D")
-echo "Script Version 2.3: Check #1 working"
+echo "Script Version 2.4: enable BAIS upload"
 mkdir /tmp/ams-reporting/
 OPDIR="/tmp/ams-reporting/"
 OUTFILE="${OPDIR}AZURE_DB001_AMD.csv"
@@ -68,7 +68,7 @@ cat $OUTFILE
 echo "cat of OUTFILE_LOG:"
 cat $OUTFILE_LOG
 
-exit 0
+if [[ 0 == 1 ]];then
 ####################################################### CHECK 2
 dt=$(date "+%d/%m/%Y %T")
 echo "[Check #2: Locked Instance Keys]" >> $OUTFILE
@@ -774,16 +774,21 @@ echo "$dt,AZDB001_ora_rowscn_bug,SequenceNumber Bug Check,$update_request_id,$sc
 fi
 
 done < /scripts/13AZUREDB_AMD_ora_rowscn_bug_seq_nums.csv
+
+fi
 ############################################################################
 ### Push CSV file to BAIS so it can be ingested and displayed in the AMD ###
 ############################################################################
-dt=$(date "+%d/%m/%Y %T")
-if [ -f /mnt/secrets/$KV_NAME/sftp-endpoint ] && [ -f /mnt/secrets/$KV_NAME/sftp-username ] && [ -f /mnt/secrets/$KV_NAME/sftp-password ]; then
+if [ -f /mnt/secrets/$KV_NAME/sftp-endpoint ] && [ -f /mnt/secrets/$KV_NAME/sftp-username ] && [ -f /mnt/secrets/$KV_NAME/sftp-password ];then
   stfp_endpoint=$(cat /mnt/secrets/$KV_NAME/sftp-endpoint)
   sftp_username=$(cat /mnt/secrets/$KV_NAME/sftp-username)
   sftp_password=$(cat /mnt/secrets/$KV_NAME/sftp-password)
-
-  echo "$dt Uploading the report to SFTP server $sftp_endpoint" >> $OUTFILE_LOG
-
-  sftp $sftp_username@$sftp_endpoint:/ <<< $'put $OUTFILE'
+echo "endpoint=$stfp_endpoint"
+echo "username=$stfp_username"
+echo "password=$stfp_password"
+  echo "$(date "+%d/%m/%Y %T") Uploading the report to SFTP server $sftp_endpoint" >> $OUTFILE_LOG
+  #sftp $sftp_username@$sftp_endpoint:/ <<< $'put $OUTFILE'
+  sshpass $stfp_password -e sftp $sftp_username@$sftp_endpoint:/ <<< $'put $OUTFILE'
+else
+  echo "Cannot access BAIS KeyVault connection variables" 
 fi
