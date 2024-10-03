@@ -20,37 +20,45 @@ event_host=`echo $event_url | awk -F"\/\/" {'print $2'} | awk -F":" {'print $1'}
 event_port=`echo $event_url | awk -F":" {'print $4'} | awk -F"\/" {'print $1'}`
 event_db=`echo $event_url | awk -F":" {'print $4'} | awk -F"\/" {'print $2'}`
 
-ls -altr /mnt/secrets/$KV_NAME/ >> $OUTFILE_LOG 
+ls -altr /mnt/secrets/$KV_NAME/ >> $OUTFILE_LOG
+echo "cat of OUTFILE_LOG:"
+cat $OUTFILE_LOG
 exit 0
 
 # PostgresDB connection variables
 #postgres_username=$(cat /mnt/secrets/$KV_NAME/themis-gateway-dbusername)
 #postgres_password=$(cat /mnt/secrets/$KV_NAME/themis-gateway-dbpassword)
 #postgres_url=$(cat /mnt/secrets/$KV_NAME/themis-gateway-datasourceurl)
-postgres_username=$(cat /mnt/secrets/$KV_NAME/postgres-dbusername)
-postgres_password=$(cat /mnt/secrets/$KV_NAME/postgres-dbpassword)
-postgres_url=$(cat /mnt/secrets/$KV_NAME/postgres-datasourceurl)
+postgres_username=$(cat /mnt/secrets/$KV_NAME/postgres-datasource-dbusername)
+postgres_password=$(cat /mnt/secrets/$KV_NAME/postgres-datasource-dbpassword)
+postgres_url=$(cat /mnt/secrets/$KV_NAME/postgres-datasource-datasourceurl)
 postgres_host=`echo $postgres_url | awk -F"\/\/" {'print $2'} | awk -F":" {'print $1'}`
 postgres_port=`echo $postgres_url | awk -F":" {'print $4'} | awk -F"\/" {'print $1'}`
 postgres_db=`echo $postgres_url | awk -F":" {'print $4'} | awk -F"\/" {'print $2'}
 
 # ConfiscationDB connection variables
-confiscation_username=$(cat /mnt/secrets/$KV_NAME/confiscation-datasource-username)
-confiscation_password=$(cat /mnt/secrets/$KV_NAME/confiscation-datasource-password)
-confiscation_url=$(cat /mnt/secrets/$KV_NAME/confiscation-datasource-url)
-confiscation_db=$(echo "$confiscation_url" | sed 's/jdbc:nm_confiscation_db:\/\///' | sed 's/:5432//' | sed 's/.*\///')
+confiscation_username=$(cat /mnt/secrets/$KV_NAME/confiscation-datasource-dbusername)
+confiscation_password=$(cat /mnt/secrets/$KV_NAME/confiscation-datasource-dbpassword)
+confiscation_url=$(cat /mnt/secrets/$KV_NAME/confiscation-datasource-datasourceurl)
+confiscation_host=`echo $confiscation_url | awk -F"\/\/" {'print $2'} | awk -F":" {'print $1'}`
+confiscation_port=`echo $confiscation_url | awk -F":" {'print $4'} | awk -F"\/" {'print $1'}`
+confiscation_db=`echo $confiscation_url | awk -F":" {'print $4'} | awk -F"\/" {'print $2'}
 
 # FinesDB connection variables
-fines_username=$(cat /mnt/secrets/$KV_NAME/fines-datasource-username)
-fines_password=$(cat /mnt/secrets/$KV_NAME/fines-datasource-password)
-fines_url=$(cat /mnt/secrets/$KV_NAME/fines-datasource-url)
-fines_db=$(echo "$fines_url" | sed 's/jdbc:nm_fines_db:\/\///' | sed 's/:5432//' | sed 's/.*\///')
+fines_username=$(cat /mnt/secrets/$KV_NAME/fines-datasource-dbusername)
+fines_password=$(cat /mnt/secrets/$KV_NAME/fines-datasource-dbpassword)
+fines_url=$(cat /mnt/secrets/$KV_NAME/fines-datasource-datasourceurl)
+fines_host=`echo $fines_url | awk -F"\/\/" {'print $2'} | awk -F":" {'print $1'}`
+fines_port=`echo $fines_url | awk -F":" {'print $4'} | awk -F"\/" {'print $1'}`
+fines_db=`echo $fines_url | awk -F":" {'print $4'} | awk -F"\/" {'print $2'}
 
 # MaintenanceDB connection variables
-maintenance_username=$(cat /mnt/secrets/$KV_NAME/maintenance-datasource-username)
-maintenance_password=$(cat /mnt/secrets/$KV_NAME/maintenance-datasource-password)
-maintenance_url=$(cat /mnt/secrets/$KV_NAME/maintenance-datasource-url)
-maintenance_db=$(echo "$maintenance_url" | sed 's/jdbc:nm_maintenance_db:\/\///' | sed 's/:5432//' | sed 's/.*\///')
+maintenance_username=$(cat /mnt/secrets/$KV_NAME/maintenance-datasource-dbusername)
+maintenance_password=$(cat /mnt/secrets/$KV_NAME/maintenance-datasource-dbpassword)
+maintenance_url=$(cat /mnt/secrets/$KV_NAME/maintenance-datasource-datasourceurl)
+maintenance_host=`echo $maintenance_url | awk -F"\/\/" {'print $2'} | awk -F":" {'print $1'}`
+maintenance_port=`echo $maintenance_url | awk -F":" {'print $4'} | awk -F"\/" {'print $1'}`
+maintenance_db=`echo $maintenance_url | awk -F":" {'print $4'} | awk -F"\/" {'print $2'}
 ####################################################### CHECK 1
 echo "[Check #1: Locked Schemas]" >> $OUTFILE
 echo "DateTime,CheckName,Description,Status,Result" >> $OUTFILE
