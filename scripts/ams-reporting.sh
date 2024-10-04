@@ -180,13 +180,13 @@ mv ${OPDIR}5AZUREDB_AMD_message_log_errors_100.tmp ${OPDIR}5AZUREDB_AMD_message_
 
 while read -r line;do
 
-message_log_id=`echo $line | awk '{print $1}'`
-message_uuid=`echo $line | awk '{print $2}'`
-created_date=`echo $line | awk '{print $3}'`
-procedure_name=`echo $line | awk '{print $4}'`
-error_message=`echo $line | awk '{print $5}'`
-update_request_id=`echo $line | awk '{print $6}'`
-schema_id=`echo $line | awk '{print $7}'`
+message_log_id=`echo $line | awk -F"," '{print $1}'`
+message_uuid=`echo $line | awk -F"," '{print $2}'`
+created_date=`echo $line | awk -F"," '{print $3}'`
+procedure_name=`echo $line | awk -F"," '{print $4}'`
+error_message=`echo $line | awk -F"," '{print $5}'`
+update_request_id=`echo $line | awk -F"," '{print $6}'`
+schema_id=`echo $line | awk -F"," '{print $7}'`
 
 if [ ! -z $message_log_id ];then
 echo "$(date "+%d/%m/%Y %T"),AZDB001_db_message_log_error,Message Log Error Check,$message_log_id,$message_uuid,$created_date,$procedure_name,$error_message,$update_request_id,$schema_id,warn" >> $OUTFILE
