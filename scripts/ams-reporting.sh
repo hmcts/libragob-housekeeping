@@ -157,16 +157,22 @@ echo "line=$line"
 echo "state=$state"
 echo "count=$count"
 
-if [[ $state == idle ]] && [[ $count -gt $idle_threshold ]];then
+if [[ $state == idle ]];then
+
+if [[ $count -gt $idle_threshold ]];then
 echo "$(date "+%d/%m/%Y %T"),AZDB001_db_threads,Thread Count Check,$state,$idle_threshold,$count,warn" >> $OUTFILE
 else
 echo "$(date "+%d/%m/%Y %T"),AZDB001_db_threads,Thread Count Check,$state,$idle_threshold,$count,ok" >> $OUTFILE
 fi
 
-if [[ $state != idle ]] && [[ $count -gt $nonidle_threshold ]];then
+else
+
+if [[ $count -gt $nonidle_threshold ]];then
 echo "$(date "+%d/%m/%Y %T"),AZDB001_db_threads,Thread Count Check,$state,$nonidle_threshold,$count,warn" >> $OUTFILE
 else
 echo "$(date "+%d/%m/%Y %T"),AZDB001_db_threads,Thread Count Check,$state,$nonidle_threshold,$count,ok" >> $OUTFILE
+fi
+
 fi
 
 done < ${OPDIR}4AZUREDB_AMD_thread_status_counts.csv
