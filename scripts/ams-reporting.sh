@@ -162,7 +162,7 @@ fi
 
 done < ${OPDIR}4AZUREDB_AMD_thread_status_counts.csv
 
-echo "$(date "+%d/%m/%Y %T") Check #3 complete" >> $OUTFILE_LOG
+echo "$(date "+%d/%m/%Y %T") Check #4 complete" >> $OUTFILE_LOG
 ####################################################### CHECK 5
 echo "[Check #5: MESSAGE_LOG Errors]" >> $OUTFILE
 echo "DateTime,CheckName,Description,message_log_id,message_uuid,created_date,procedure_name,error_message,update_request_id,schema_id,Result" >> $OUTFILE
