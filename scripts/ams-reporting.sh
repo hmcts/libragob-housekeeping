@@ -61,12 +61,12 @@ dac_port=`echo $dac_url | awk -F":" {'print $4'} | awk -F"\/" {'print $1'}`
 dac_db=`echo $dac_url | awk -F":" {'print $4'} | awk -F"\/" {'print $2'}
 
 # gw_auditDB connection variables
-themis-gateway_username=$(cat /mnt/secrets/$KV_NAME/themis-gateway-dbusername)
-themis-gateway_password=$(cat /mnt/secrets/$KV_NAME/themis-gateway-dbpassword)
-themis-gateway_url=$(cat /mnt/secrets/$KV_NAME/themis-gateway-datasourceurl)
-themis-gateway_host=`echo $themis-gateway_url | awk -F"\/\/" {'print $2'} | awk -F":" {'print $1'}`
-themis-gateway_port=`echo $themis-gateway_url | awk -F":" {'print $4'} | awk -F"\/" {'print $1'}`
-themis-gateway_db=`echo $themis-gateway_url | awk -F":" {'print $4'} | awk -F"\/" {'print $2'}
+#themis-gateway_username=$(cat /mnt/secrets/$KV_NAME/themis-gateway-dbusername)
+#themis-gateway_password=$(cat /mnt/secrets/$KV_NAME/themis-gateway-dbpassword)
+#themis-gateway_url=$(cat /mnt/secrets/$KV_NAME/themis-gateway-datasourceurl)
+#themis-gateway_host=`echo $themis-gateway_url | awk -F"\/\/" {'print $2'} | awk -F":" {'print $1'}`
+#themis-gateway_port=`echo $themis-gateway_url | awk -F":" {'print $4'} | awk -F"\/" {'print $1'}`
+#themis-gateway_db=`echo $themis-gateway_url | awk -F":" {'print $4'} | awk -F"\/" {'print $2'}
 ####################################################### CHECK 1
 echo "[Check #1: Locked Schemas]" >> $OUTFILE
 echo "DateTime,CheckName,Description,Status,Result" >> $OUTFILE
