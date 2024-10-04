@@ -8,7 +8,6 @@ OPDIR="/tmp/ams-reporting/"
 OUTFILE="${OPDIR}AZURE_DB001_AMD"
 OUTFILE_LOG="${OPDIR}AZURE_DB001_AMD.log"
 echo $(date "+%d/%m/%Y %T") > $OUTFILE
-ls -altr /mnt/secrets/$KV_NAME/
 
 ###############################################################
 ### Set-up DB connection variables, extracted from KeyVault ###
@@ -26,13 +25,6 @@ echo $event_password
 echo $event_url
 
 # PostgresDB connection variables
-cat /mnt/secrets/$KV_NAME/themis-gateway-dbusername
-printf "\n"
-cat /mnt/secrets/$KV_NAME/themis-gateway-dbpassword
-printf "\n"
-cat /mnt/secrets/$KV_NAME/themis-gateway-datasourceurl
-printf "\n"
-
 postgres_username=$(cat /mnt/secrets/$KV_NAME/themis-gateway-dbusername)
 postgres_password=$(cat /mnt/secrets/$KV_NAME/themis-gateway-dbpassword)
 postgres_url=$(cat /mnt/secrets/$KV_NAME/themis-gateway-datasourceurl)
