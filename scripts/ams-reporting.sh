@@ -8,6 +8,7 @@ OPDIR="/tmp/ams-reporting/"
 OUTFILE="${OPDIR}AZURE_DB001_AMD"
 OUTFILE_LOG="${OPDIR}AZURE_DB001_AMD.log"
 echo $(date "+%d/%m/%Y %T") > $OUTFILE
+ls -altr /mnt/secrets/$KV_NAME/
 
 ###############################################################
 ### Set-up DB connection variables, extracted from KeyVault ###
@@ -139,6 +140,8 @@ psql "sslmode=require host=${event_host} dbname=${event_db} port=${event_port} u
 
 idle_threshold=350
 nonidle_threshold=10
+idle_threshold=-2
+nonidle_threshold=0
 
 while read -r line;do
 
