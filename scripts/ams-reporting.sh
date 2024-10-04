@@ -26,9 +26,9 @@ echo $event_password
 echo $event_url
 
 # PostgresDB connection variables
-postgres_username=`$(cat /mnt/secrets/$KV_NAME/themis-gateway-dbusername) | awk -F"=" {'print $2'}`
-postgres_password=`$(cat /mnt/secrets/$KV_NAME/themis-gateway-dbpassword) | awk -F"=" {'print $2'}`
-postgres_url=`$(cat /mnt/secrets/$KV_NAME/themis-gateway-datasourceurl) | awk -F"=" {'print $2'}`
+postgres_username=`cat /mnt/secrets/$KV_NAME/themis-gateway-dbusername | awk -F"=" {'print $2'}`
+postgres_password=`cat /mnt/secrets/$KV_NAME/themis-gateway-dbpassword | awk -F"=" {'print $2'}`
+postgres_url=`cat /mnt/secrets/$KV_NAME/themis-gateway-datasourceurl | awk -F"=" {'print $2'}`
 postgres_host=`echo $postgres_url | awk -F"\/\/" {'print $2'} | awk -F":" {'print $1'}`
 postgres_port=`echo $postgres_url | awk -F":" {'print $4'} | awk -F"\/" {'print $1'}`
 postgres_db=`echo $postgres_url | awk -F":" {'print $4'} | awk -F"\/" {'print $2'}
