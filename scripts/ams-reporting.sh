@@ -2,7 +2,7 @@
 ####################################################### This is the AMD AzureDB Healthcheck Script, and the associated documentation is in Ensemble under the "Libra System Admin Documents" area:
 ####################################################### "GoB Phase 1 - Oracle_Postgres DB Checks_v11.5_MAP.docx" is the latest version as of 01/08/2024
 dt_today=$(date "+%Y/%m/%D")
-echo "Script Version 2.7: Check 4"
+echo "Script Version 2.8: Check 5"
 mkdir /tmp/ams-reporting/
 OPDIR="/tmp/ams-reporting/"
 OUTFILE="${OPDIR}AZURE_DB001_AMD"
@@ -140,8 +140,6 @@ psql "sslmode=require host=${event_host} dbname=${event_db} port=${event_port} u
 
 idle_threshold=350
 nonidle_threshold=10
-idle_threshold=-2
-nonidle_threshold=0
 
 while read -r line;do
 
@@ -176,13 +174,6 @@ fi
 fi
 
 done < ${OPDIR}4AZUREDB_AMD_thread_status_counts.csv
-
-echo "cat of OUTFILE:"
-cat $OUTFILE
-echo "cat of OUTFILE_LOG:"
-cat $OUTFILE_LOG
-
-exit 0
 ####################################################### CHECK 5
 dt=$(date "+%d/%m/%Y %T")
 echo "[Check #5: MESSAGE_LOG Errors]" >> $OUTFILE
@@ -213,6 +204,13 @@ echo "$(date "+%d/%m/%Y %T"),AZDB001_db_message_log_error,Message Log Error Chec
 fi
 
 done < ${OPDIR}5AZUREDB_AMD_message_log_errors_100.csv
+
+echo "cat of OUTFILE:"
+cat $OUTFILE
+echo "cat of OUTFILE_LOG:"
+cat $OUTFILE_LOG
+
+exit 0
 ####################################################### CHECK 6
 dt=$(date "+%d/%m/%Y %T")
 echo "[Check #6: Unprocessed, Complete & Processing Checks]" >> $OUTFILE
