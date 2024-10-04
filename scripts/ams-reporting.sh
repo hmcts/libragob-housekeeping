@@ -8,7 +8,7 @@ OPDIR="/tmp/ams-reporting/"
 OUTFILE="${OPDIR}AZURE_DB001_AMD"
 OUTFILE_LOG="${OPDIR}AZURE_DB001_AMD.log"
 echo $(date "+%d/%m/%Y %T") > $OUTFILE
-cat /mnt/secrets/$KV_NAME/
+ls -altr /mnt/secrets/$KV_NAME/
 
 ###############################################################
 ### Set-up DB connection variables, extracted from KeyVault ###
