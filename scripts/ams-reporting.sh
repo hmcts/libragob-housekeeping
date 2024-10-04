@@ -205,20 +205,37 @@ psql "sslmode=require host=${event_host} dbname=${event_db} port=${event_port} u
 
 while read -r line;do
 
-dt_now=$(date "+%Y-%m-%d %T")
-schema_id=`echo $line | awk '{print $1}'`
-earliest_unprocessed=`echo $line | awk '{print $2}'`
-t_in=`echo $earliest_unprocessed | awk -F"." '{print $1}'`
-latest_complete=`echo $line | awk '{print $3}'`
-latest_processing=`echo $line | awk '{print $4}'`
+echo "line=$line"
 
-last_check=`grep "$schema_id" ${OPDIR}earliest_unprocessed_timestamps_last_check.tmp | awk '{print $2}'`
-echo "$schema_id $t_in" >> ${OPDIR}earliest_unprocessed_timestamps.tmp
+dt_now=$(date "+%Y-%m-%d %T")
+schema_id=`echo $line | awk -D"," '{print $1}'`
+earliest_unprocessed=`echo $line | awk -F"," '{print $2}'`
+t_in=`echo $earliest_unprocessed | awk -F"." '{print $1}'`
+latest_complete=`echo $line | awk -F"," '{print $3}'`
+latest_processing=`echo $line | awk -F"," '{print $4}'`
+
+echo "dt_now=$dt_now"
+echo "schema_id=$schema_id"
+echo "earliest_unprocessed=$earliest_unprocessed"
+echo "latest_complete=$latest_complete"
+echo "latest_processing=$latest_processing"
+
+last_check=`grep "$schema_id" ${OPDIR}earliest_unprocessed_timestamps_last_check.tmp | awk -F"," '{print $2}'`
+echo "last_check=$last_check"
+echo "$schema_id,$t_in" >> ${OPDIR}earliest_unprocessed_timestamps.tmp
+
+echo "CAT of ${OPDIR}earliest_unprocessed_timestamps.tmp"
+cat ${OPDIR}earliest_unprocessed_timestamps.tmp
 
 t_out_1900=$(date '+%s' -d "$dt_now")
 t_in_1900=$(date '+%s' -d "$t_in")
 t_delta_secs=`expr $t_out_1900 - $t_in_1900`
 t_delta_threshold=$((90*60*60)) # 90mins is 324000secs
+
+echo "t_out_1900=$t_out_1900"
+echo "t_in_1900=$t_in_1900"
+echo "t_delta_secs=$t_delta_secs"
+echo "t_delta_threshold=$t_delta_threshold"
 
 if [[ $t_delta_secs -gt $t_delta_threshold ]] || [[ $last_check -gt $t_delta_threshold ]];then
 echo "$(date "+%d/%m/%Y %T"),AZDB001_update_processing_backlog,Check of Earliest Unprocessed vs. Latest Complete vs. Latest Processing,$schema_id,$earliest_unprocessed,$latest_complete,$latest_processing,warn" >> $OUTFILE
