@@ -195,13 +195,6 @@ echo "$(date "+%d/%m/%Y %T"),AZDB001_db_message_log_error,Message Log Error Chec
 fi
 
 done < ${OPDIR}5AZUREDB_AMD_message_log_errors_100.csv
-
-echo "cat of OUTFILE:"
-cat $OUTFILE
-echo "cat of OUTFILE_LOG:"
-cat $OUTFILE_LOG
-
-exit 0
 ####################################################### CHECK 6
 dt=$(date "+%d/%m/%Y %T")
 echo "[Check #6: Unprocessed, Complete & Processing Checks]" >> $OUTFILE
@@ -236,6 +229,13 @@ fi
 done < ${OPDIR}6AZUREDB_AMD_update_processing_backlog.csv
 
 mv ${OPDIR}earliest_unprocessed_timestamps.tmp ${OPDIR}earliest_unprocessed_timestamps_last_check.tmp
+
+echo "cat of OUTFILE:"
+cat $OUTFILE
+echo "cat of OUTFILE_LOG:"
+cat $OUTFILE_LOG
+
+exit 0
 ####################################################### CHECK 7
 dt=$(date "+%d/%m/%Y %T")
 echo "[Check #7: Max Daily Update Counts by SchemaId]" >> $OUTFILE
