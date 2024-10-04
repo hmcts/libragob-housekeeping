@@ -140,10 +140,6 @@ fi
 
 count=`echo $line | awk -F"," '{print $2}'`
 
-echo "line=$line"
-echo "state=$state"
-echo "count=$count"
-
 if [[ $state == idle ]];then
 
 if [[ $count -gt $idle_threshold ]];then
