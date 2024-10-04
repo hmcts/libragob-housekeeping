@@ -281,7 +281,7 @@ cat $OUTFILE
 echo "cat of OUTFILE_LOG:"
 cat $OUTFILE_LOG
 
-exit 0O
+exit 0
 ####################################################### CHECK 8
 echo "[Check #8: Today's Hourly Update Counts]" >> $OUTFILE
 echo "DateTime,CheckName,Description,schema_id,count_updates,sum_number_of_table_updates,max_number_of_table_updates,Result" >> $OUTFILE
