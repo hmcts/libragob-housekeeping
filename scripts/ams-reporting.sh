@@ -157,13 +157,13 @@ echo "line=$line"
 echo "state=$state"
 echo "count=$count"
 
-if [[ $state -eq idle ]] && [[ $count -gt $idle_threshold ]];then
+if [[ $state == idle ]] && [[ $count -gt $idle_threshold ]];then
 echo "$(date "+%d/%m/%Y %T"),AZDB001_db_threads,Thread Count Check,$state,$idle_threshold,$count,warn" >> $OUTFILE
 else
 echo "$(date "+%d/%m/%Y %T"),AZDB001_db_threads,Thread Count Check,$state,$idle_threshold,$count,ok" >> $OUTFILE
 fi
 
-if [[ $state -ne idle ]] && [[ $count -gt $nonidle_threshold ]];then
+if [[ $state != idle ]] && [[ $count -gt $nonidle_threshold ]];then
 echo "$(date "+%d/%m/%Y %T"),AZDB001_db_threads,Thread Count Check,$state,$nonidle_threshold,$count,warn" >> $OUTFILE
 else
 echo "$(date "+%d/%m/%Y %T"),AZDB001_db_threads,Thread Count Check,$state,$nonidle_threshold,$count,ok" >> $OUTFILE
