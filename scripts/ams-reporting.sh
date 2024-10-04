@@ -2,7 +2,7 @@
 ####################################################### This is the AMD AzureDB Healthcheck Script, and the associated documentation is in Ensemble under the "Libra System Admin Documents" area:
 ####################################################### "GoB Phase 1 - Oracle_Postgres DB Checks_v11.5_MAP.docx" is the latest version as of 01/08/2024
 dt_today=$(date "+%Y/%m/%D")
-echo "Script Version 2.9: Check 6"
+echo "Script Version 3.0: Check 7"
 mkdir /tmp/ams-reporting/
 OPDIR="/tmp/ams-reporting/"
 OUTFILE="${OPDIR}AZURE_DB001_AMD"
@@ -248,13 +248,6 @@ done < ${OPDIR}6AZUREDB_AMD_update_processing_backlog.csv
 mv ${OPDIR}earliest_unprocessed_timestamps.tmp ${OPDIR}earliest_unprocessed_timestamps_last_check.tmp
 
 echo "$(date "+%d/%m/%Y %T") Check #6 complete" >> $OUTFILE_LOG
-
-echo "cat of OUTFILE:"
-cat $OUTFILE
-echo "cat of OUTFILE_LOG:"
-cat $OUTFILE_LOG
-
-exit 0
 ####################################################### CHECK 7
 echo "[Check #7: Max Daily Update Counts by SchemaId]" >> $OUTFILE
 echo "DateTime,CheckName,Description,schema_id,count_updates,sum_number_of_table_updates,max_number_of_table_updates,Result" >> $OUTFILE
@@ -280,6 +273,13 @@ fi
 done < ${OPDIR}7AZUREDB_AMD_max_daily_update_counts_by_schemaid.csv
 
 echo "$(date "+%d/%m/%Y %T") Check #7 complete" >> $OUTFILE_LOG
+
+echo "cat of OUTFILE:"
+cat $OUTFILE
+echo "cat of OUTFILE_LOG:"
+cat $OUTFILE_LOG
+
+exit 0
 ####################################################### CHECK 8
 echo "[Check #8: Today's Hourly Update Counts]" >> $OUTFILE
 echo "DateTime,CheckName,Description,schema_id,count_updates,sum_number_of_table_updates,max_number_of_table_updates,Result" >> $OUTFILE
