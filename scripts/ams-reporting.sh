@@ -202,7 +202,7 @@ echo "DateTime,CheckName,Description,schema_id,earliest_unprocessed,latest_compl
 echo "$(date "+%d/%m/%Y %T") Starting Check #6" >> $OUTFILE_LOG
 echo "$(date "+%d/%m/%Y %T") Connecting to $event_db database" >> $OUTFILE_LOG
 psql "sslmode=require host=${event_host} dbname=${event_db} port=${event_port} user=${event_username} password=${event_password}" --file=/sql/6AZUREDB_AMD_update_processing_backlog.sql
-rm ${OPDIR}earliest_unprocessed_timestamps.tmp
+rm -f ${OPDIR}earliest_unprocessed_timestamps.tmp
 
 while read -r line;do
 
