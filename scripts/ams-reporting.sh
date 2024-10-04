@@ -2,7 +2,7 @@
 ####################################################### This is the AMD AzureDB Healthcheck Script, and the associated documentation is in Ensemble under the "Libra System Admin Documents" area:
 ####################################################### "GoB Phase 1 - Oracle_Postgres DB Checks_v11.5_MAP.docx" is the latest version as of 01/08/2024
 dt_today=$(date "+%Y/%m/%D")
-echo "Script Version 2.8: Check 5"
+echo "Script Version 2.9: Check 6"
 mkdir /tmp/ams-reporting/
 OPDIR="/tmp/ams-reporting/"
 OUTFILE="${OPDIR}AZURE_DB001_AMD"
@@ -119,6 +119,8 @@ echo "$(date "+%d/%m/%Y %T"),AZDB001_key_lock,Locked Instance Key Check,No Insta
 fi
 
 done < ${OPDIR}2AZUREDB_AMD_locked_keys.csv
+
+echo "$(date "+%d/%m/%Y %T") Check #2 complete" >> $OUTFILE_LOG
 ####################################################### CHECK 4
 echo "[Check #4: Thread Status Counts]" >> $OUTFILE
 echo "DateTime,CheckName,Description,State,Threshold,Count,Result" >> $OUTFILE
@@ -159,6 +161,8 @@ fi
 fi
 
 done < ${OPDIR}4AZUREDB_AMD_thread_status_counts.csv
+
+echo "$(date "+%d/%m/%Y %T") Check #3 complete" >> $OUTFILE_LOG
 ####################################################### CHECK 5
 echo "[Check #5: MESSAGE_LOG Errors]" >> $OUTFILE
 echo "DateTime,CheckName,Description,message_log_id,message_uuid,created_date,procedure_name,error_message,update_request_id,schema_id,Result" >> $OUTFILE
@@ -188,6 +192,8 @@ echo "$(date "+%d/%m/%Y %T"),AZDB001_db_message_log_error,Message Log Error Chec
 fi
 
 done < ${OPDIR}5AZUREDB_AMD_message_log_errors_100.csv
+
+echo "$(date "+%d/%m/%Y %T") Check #5 complete" >> $OUTFILE_LOG
 ####################################################### CHECK 6
 echo "[Check #6: Unprocessed, Complete & Processing Checks]" >> $OUTFILE
 echo "DateTime,CheckName,Description,schema_id,earliest_unprocessed,latest_complete,latest_processing,Result" >> $OUTFILE
@@ -241,6 +247,8 @@ done < ${OPDIR}6AZUREDB_AMD_update_processing_backlog.csv
 
 mv ${OPDIR}earliest_unprocessed_timestamps.tmp ${OPDIR}earliest_unprocessed_timestamps_last_check.tmp
 
+echo "$(date "+%d/%m/%Y %T") Check #6 complete" >> $OUTFILE_LOG
+
 echo "cat of OUTFILE:"
 cat $OUTFILE
 echo "cat of OUTFILE_LOG:"
@@ -270,6 +278,8 @@ echo "dt,AZDB001_max_updates,Max Updates by SchemaId,$schema_id,$count_updates,$
 fi
 
 done < ${OPDIR}7AZUREDB_AMD_max_daily_update_counts_by_schemaid.csv
+
+echo "$(date "+%d/%m/%Y %T") Check #7 complete" >> $OUTFILE_LOG
 ####################################################### CHECK 8
 echo "[Check #8: Today's Hourly Update Counts]" >> $OUTFILE
 echo "DateTime,CheckName,Description,schema_id,count_updates,sum_number_of_table_updates,max_number_of_table_updates,Result" >> $OUTFILE
@@ -288,6 +298,8 @@ max_number_of_table_updates=`echo $line | awk '{print $4}'`
 echo "dt,AZDB001_hourly_updates,Today's Hourly Updates,$schema_id,$count_updates,$sum_number_of_table_updates,$max_number_of_table_updates,ok" >> $OUTFILE
 
 done < ${OPDIR}8AZUREDB_AMD_todays_hourly_update_counts.csv
+
+echo "$(date "+%d/%m/%Y %T") Check #8 complete" >> $OUTFILE_LOG
 ####################################################### CHECK 9
 echo "[Check #9: Azure Recon (ORA Recon check is on AMD Database INFO tab)]" >> $OUTFILE
 echo "DateTime,CheckName,Description,Status,Result" >> $OUTFILE
@@ -438,6 +450,8 @@ echo "$(date "+%d/%m/%Y %T"),AZDB001_maint_recon_status,Maintenance Recon,RR_ID 
 fi
 
 fi
+
+echo "$(date "+%d/%m/%Y %T") Check #9 complete" >> $OUTFILE_LOG
 ####################################################### CHECK 10
 echo "[Check #10: Themis WebLogic]" >> $OUTFILE
 echo "Message" >> $OUTFILE
@@ -476,6 +490,8 @@ cat ${OPDIR}11bAZUREDB_AMD_row_counts_table_updates.csv >> $OUTFILE
 cat ${OPDIR}11cAZUREDB_AMD_row_counts_message_log.csv >> $OUTFILE
 cat ${OPDIR}11dAZUREDB_AMD_row_counts_DAC_message_audit.csv >> $OUTFILE
 cat ${OPDIR}11eAZUREDB_AMD_row_counts_GW_message_audit.csv >> $OUTFILE
+
+echo "$(date "+%d/%m/%Y %T") Check #11 complete" >> $OUTFILE_LOG
 ####################################################### CHECK 12
 echo "[Check #12a: Today's Latest 100 DACAudit DB Roundtrip Deltas Step 13-12]" >> $OUTFILE
 echo "DateTime,CheckName,Description,updated_date,uuid,Roundtrip in Millisecs,Result" >> $OUTFILE
@@ -785,7 +801,10 @@ records=`echo $line | awk '{print $2}'`
 echo "dt,AZDB001_minute_completed_table_updates,Minute Completed TABLE_UPDATES Counts,$dateddmmyyyy,$records,ok" >> $OUTFILE
 
 done < ${OPDIR}12rAZUREDB_AMD_minute_completed_table_updates_counts.csv
-####################################################### CHECK 3s]" >> $OUTFILE
+
+echo "$(date "+%d/%m/%Y %T") Check #12 complete" >> $OUTFILE_LOG
+####################################################### CHECK 3
+echo "[Check #3: Update Backlogs]" >> $OUTFILE
 echo "DateTime,CheckName,Description,SchemaId,Status,COUNTupdates,max_number_of_table_updates,sum_number_of_table_updates,AdaptiveBacklogThreshold,DBdacRate_inMS,TOTALdacRate_inMS,TOTALgwRate_inMS,Total Roundtrip in Millisecs,RoundtripThreshold,DeliveryETA,Result" >> $OUTFILE
 echo "$(date "+%d/%m/%Y %T") Starting Check #3" >> $OUTFILE_LOG
 echo "$(date "+%d/%m/%Y %T") Connecting to $event_db database" >> $OUTFILE_LOG
@@ -839,6 +858,8 @@ echo "$(date "+%d/%m/%Y %T"),AZDB001_msg_backlog,MessageBacklogCheck,$schema_id,
 fi
 
 done < ${OPDIR}3AZUREDB_AMD_message_backlogs.csv
+
+echo "$(date "+%d/%m/%Y %T") Check #3 complete" >> $OUTFILE_LOG
 ####################################################### CHECK 13
 echo "[Check #13: ora_rowscn SequenceNumber Bug]" >> $OUTFILE
 echo "DateTime,CheckName,Description,update_request_id,schema_id,sequence_number,previous_sequence_number,Result" >> $OUTFILE
@@ -864,3 +885,5 @@ fi
 done < ${OPDIR}13AZUREDB_AMD_ora_rowscn_bug_seq_nums.csv
 
 mv $OUTFILE $OUTFILE.csv
+
+echo "$(date "+%d/%m/%Y %T") Check #13 complete" >> $OUTFILE_LOG
