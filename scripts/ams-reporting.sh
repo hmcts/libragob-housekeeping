@@ -26,6 +26,14 @@ echo $event_password
 echo $event_url
 
 # PostgresDB connection variables
+
+cat /mnt/secrets/$KV_NAME/themis-gateway-dbusername
+printf "\n"
+cat /mnt/secrets/$KV_NAME/themis-gateway-dbpassword
+printf "\n"
+cat /mnt/secrets/$KV_NAME/themis-gateway-datasourceurl
+printf "\n"
+
 postgres_username=$(cat /mnt/secrets/$KV_NAME/themis-gateway-dbusername)
 postgres_password=$(cat /mnt/secrets/$KV_NAME/themis-gateway-dbpassword)
 postgres_url=$(cat /mnt/secrets/$KV_NAME/themis-gateway-datasourceurl)
@@ -60,7 +68,22 @@ maintenance_url=$(cat /mnt/secrets/$KV_NAME/maintenance-datasource-url)
 maintenance_host=`echo $maintenance_url | awk -F"\/\/" {'print $2'} | awk -F":" {'print $1'}`
 maintenance_port=`echo $maintenance_url | awk -F":" {'print $4'} | awk -F"\/" {'print $1'}`
 maintenance_db=`echo $maintenance_url | awk -F":" {'print $4'} | awk -F"\/" {'print $2'}
-
+############################################################################
+### Push CSV file to BAIS so it can be ingested and displayed in the AMD ###
+############################################################################
+if [ -e /mnt/secrets/$KV_NAME/sftp-endpoint ] && [ -e /mnt/secrets/$KV_NAME/sftp-username ] && [ -e /mnt/secrets/$KV_NAME/sftp-password ];then
+  stfp_endpoint=$(cat /mnt/secrets/$KV_NAME/sftp-endpoint)
+  sftp_username=$(cat /mnt/secrets/$KV_NAME/sftp-username)
+  sftp_password=$(cat /mnt/secrets/$KV_NAME/sftp-password)
+echo "endpoint=$stfp_endpoint"
+echo "username=$stfp_username"
+echo "password=$stfp_password"
+  echo "$(date "+%d/%m/%Y %T") Uploading the report to SFTP server $sftp_endpoint" >> $OUTFILE_LOG
+  #sftp $sftp_username@$sftp_endpoint:/ <<< $'put $OUTFILE'
+  sshpass $stfp_password -e sftp $sftp_username@$sftp_endpoint:/ <<< $'put $OUTFILE'
+else
+  echo "Cannot access BAIS KeyVault connection variables" 
+fi
 ####################################################### CHECK 1
 echo "[Check #1: Locked Schemas]" >> $OUTFILE
 echo "DateTime,CheckName,Description,Status,Result" >> $OUTFILE
@@ -83,24 +106,6 @@ fi
 done < ${OPDIR}1AZUREDB_AMD_locked_schemas.csv
 
 echo "$(date "+%d/%m/%Y %T") Check #1 complete" >> $OUTFILE_LOG
-
-############################################################################
-### Push CSV file to BAIS so it can be ingested and displayed in the AMD ###
-############################################################################
-if [ -e /mnt/secrets/$KV_NAME/sftp-endpoint ] && [ -e /mnt/secrets/$KV_NAME/sftp-username ] && [ -e /mnt/secrets/$KV_NAME/sftp-password ];then
-  stfp_endpoint=$(cat /mnt/secrets/$KV_NAME/sftp-endpoint)
-  sftp_username=$(cat /mnt/secrets/$KV_NAME/sftp-username)
-  sftp_password=$(cat /mnt/secrets/$KV_NAME/sftp-password)
-echo "endpoint=$stfp_endpoint"
-echo "username=$stfp_username"
-echo "password=$stfp_password"
-  echo "$(date "+%d/%m/%Y %T") Uploading the report to SFTP server $sftp_endpoint" >> $OUTFILE_LOG
-  #sftp $sftp_username@$sftp_endpoint:/ <<< $'put $OUTFILE'
-  sshpass $stfp_password -e sftp $sftp_username@$sftp_endpoint:/ <<< $'put $OUTFILE'
-else
-  echo "Cannot access BAIS KeyVault connection variables" 
-fi
-
 ####################################################### CHECK 2
 echo "[Check #2: Locked Instance Keys]" >> $OUTFILE
 echo "DateTime,CheckName,Description,Threshold,Status,Result" >> $OUTFILE
@@ -111,6 +116,7 @@ echo "$(date "+%d/%m/%Y %T") SQL for Check #2 has been run" >> $OUTFILE_LOG
 
 while read -r line;do
 
+key_lock=''
 key_lock=`echo $line | awk '{print $1}'`
 
 if [ ! -z $key_lock ];then
@@ -251,13 +257,12 @@ mv ${OPDIR}earliest_unprocessed_timestamps.tmp ${OPDIR}earliest_unprocessed_time
 echo "$(date "+%d/%m/%Y %T") Check #6 complete" >> $OUTFILE_LOG
 ####################################################### CHECK 7
 echo "[Check #7: Max Daily Update Counts by SchemaId]" >> $OUTFILE
-echo "DateTime,CheckName,Description,schema_id,count_updates,sum_number_of_table_updates,max_number_of_table_updates,Result" >> $OUTFILE
+echo "DateTime,CheckName,Description,schema_id,count_updates,sum_number_of_table_updates,max_number_of_table_updates,BundledPrintThreshold,Result" >> $OUTFILE
 echo "$(date "+%d/%m/%Y %T") Starting Check #7" >> $OUTFILE_LOG
 echo "$(date "+%d/%m/%Y %T") Connecting to $event_db database" >> $OUTFILE_LOG
 psql "sslmode=require host=${event_host} dbname=${event_db} port=${event_port} user=${event_username} password=${event_password}" --file=/sql/7AZUREDB_AMD_max_daily_update_counts_by_schemaid.sql
 echo "$(date "+%d/%m/%Y %T") SQL for Check #7 has been run" >> $OUTFILE_LOG
-bundled_print_threshold=50000
-bundled_print_threshold=30
+bundled_print_threshold=90000
 
 while read -r line;do
 
@@ -267,9 +272,9 @@ sum_number_of_table_updates=`echo $line | awk -F"," '{print $3}'`
 max_number_of_table_updates=`echo $line | awk -F"," '{print $4}'`
 
 if [[ $max_number_of_table_updates -gt $bundled_print_threshold ]];then
-echo "$(date "+%d/%m/%Y %T"),AZDB001_max_updates,Max Updates by SchemaId,$schema_id,$count_updates,$sum_number_of_table_updates,$max_number_of_table_updates,warn" >> $OUTFILE
+echo "$(date "+%d/%m/%Y %T"),AZDB001_max_updates,Max Updates by SchemaId,$schema_id,$count_updates,$sum_number_of_table_updates,$max_number_of_table_updates,$bundled_print_threshold,warn" >> $OUTFILE
 else
-echo "$(date "+%d/%m/%Y %T"),AZDB001_max_updates,Max Updates by SchemaId,$schema_id,$count_updates,$sum_number_of_table_updates,$max_number_of_table_updates,ok" >> $OUTFILE
+echo "$(date "+%d/%m/%Y %T"),AZDB001_max_updates,Max Updates by SchemaId,$schema_id,$count_updates,$sum_number_of_table_updates,$max_number_of_table_updates,$bundled_print_threshold,ok" >> $OUTFILE
 fi
 
 done < ${OPDIR}7AZUREDB_AMD_max_daily_update_counts_by_schemaid.csv
