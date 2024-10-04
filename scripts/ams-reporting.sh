@@ -166,7 +166,7 @@ done < ${OPDIR}4AZUREDB_AMD_thread_status_counts.csv
 ####################################################### CHECK 5
 dt=$(date "+%d/%m/%Y %T")
 echo "[Check #5: MESSAGE_LOG Errors]" >> $OUTFILE
-echo "DateTime,CheckName,Description,message_log_id,message_uuid,created_date,procedure_name,,error_message,update_request_id,schema_id,Result" >> $OUTFILE
+echo "DateTime,CheckName,Description,message_log_id,message_uuid,created_date,procedure_name,error_message,update_request_id,schema_id,Result" >> $OUTFILE
 echo "$(date "+%d/%m/%Y %T") Starting Check #5" >> $OUTFILE_LOG
 echo "$(date "+%d/%m/%Y %T") Connecting to $event_db database" >> $OUTFILE_LOG
 psql "sslmode=require host=${event_host} dbname=${event_db} port=${event_port} user=${event_username} password=${event_password}" --file=/sql/5AZUREDB_AMD_message_log_errors.sql
