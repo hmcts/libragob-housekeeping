@@ -2,12 +2,13 @@
 ####################################################### This is the AMD AzureDB Healthcheck Script, and the associated documentation is in Ensemble under the "Libra System Admin Documents" area:
 ####################################################### "GoB Phase 1 - Oracle_Postgres DB Checks_v11.5_MAP.docx" is the latest version as of 01/08/2024
 dt_today=$(date "+%Y/%m/%D")
-echo "Script Version 2.5: Check 4"
+echo "Script Version 2.6: Check 4"
 mkdir /tmp/ams-reporting/
 OPDIR="/tmp/ams-reporting/"
-OUTFILE="${OPDIR}AZURE_DB001_AMD.csv"
+OUTFILE="${OPDIR}AZURE_DB001_AMD"
 OUTFILE_LOG="${OPDIR}AZURE_DB001_AMD.log"
 echo $(date "+%d/%m/%Y %T") > $OUTFILE
+cat /mnt/secrets/$KV_NAME/
 
 ###############################################################
 ### Set-up DB connection variables, extracted from KeyVault ###
@@ -147,6 +148,9 @@ while read -r line;do
 
 state=`echo $line | awk '{print $1}'`
 count=`echo $line | awk '{print $2}'`
+
+echo "state=$state"
+echo "count=$count"
 
 if [[ $state -eq idle ]] && [[ $count -gt $idle_threshold ]];then
 echo "$(date "+%d/%m/%Y %T"),AZDB001_db_threads,Thread Count Check,$state,$idle_threshold,$count,warn" >> $OUTFILE
@@ -825,3 +829,5 @@ echo "$(date "+%d/%m/%Y %T"),AZDB001_ora_rowscn_bug,SequenceNumber Bug Check,$up
 fi
 
 done < ${OPDIR}13AZUREDB_AMD_ora_rowscn_bug_seq_nums.csv
+
+mv $OUTFILE $OUTFILE.csv
