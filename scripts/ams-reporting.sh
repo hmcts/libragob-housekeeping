@@ -2,7 +2,7 @@
 ####################################################### This is the AMD AzureDB Healthcheck Script, and the associated documentation is in Ensemble under the "Libra System Admin Documents" area:
 ####################################################### "GoB Phase 1 - Oracle_Postgres DB Checks_v11.5_MAP.docx" is the latest version as of 01/08/2024
 dt_today=$(date "+%Y/%m/%D")
-echo "Script Version 3.0: Check 7"
+echo "Script Version 3.1: Check 8"
 mkdir /tmp/ams-reporting/
 OPDIR="/tmp/ams-reporting/"
 OUTFILE="${OPDIR}AZURE_DB001_AMD"
@@ -34,9 +34,9 @@ printf "\n"
 cat /mnt/secrets/$KV_NAME/themis-gateway-datasourceurl
 printf "\n"
 
-postgres_username=$(cat /mnt/secrets/$KV_NAME/themis-gateway-dbusername)
-postgres_password=$(cat /mnt/secrets/$KV_NAME/themis-gateway-dbpassword)
-postgres_url=$(cat /mnt/secrets/$KV_NAME/themis-gateway-datasourceurl)
+postgres_username=`cat /mnt/secrets/$KV_NAME/themis-gateway-dbusername`
+postgres_password=`cat /mnt/secrets/$KV_NAME/themis-gateway-dbpassword`
+postgres_url=`cat /mnt/secrets/$KV_NAME/themis-gateway-datasourceurl`
 postgres_host=`echo $postgres_url | awk -F"\/\/" {'print $2'} | awk -F":" {'print $1'}`
 postgres_port=`echo $postgres_url | awk -F":" {'print $4'} | awk -F"\/" {'print $1'}`
 postgres_db=`echo $postgres_url | awk -F":" {'print $4'} | awk -F"\/" {'print $2'}
@@ -280,13 +280,6 @@ fi
 done < ${OPDIR}7AZUREDB_AMD_max_daily_update_counts_by_schemaid.csv
 
 echo "$(date "+%d/%m/%Y %T") Check #7 complete" >> $OUTFILE_LOG
-
-echo "cat of OUTFILE:"
-cat $OUTFILE
-echo "cat of OUTFILE_LOG:"
-cat $OUTFILE_LOG
-
-exit 0
 ####################################################### CHECK 8
 echo "[Check #8: Today's Hourly Update Counts]" >> $OUTFILE
 echo "DateTime,CheckName,Description,schema_id,count_updates,sum_number_of_table_updates,max_number_of_table_updates,Result" >> $OUTFILE
@@ -307,6 +300,13 @@ echo "dt,AZDB001_hourly_updates,Today's Hourly Updates,$schema_id,$count_updates
 done < ${OPDIR}8AZUREDB_AMD_todays_hourly_update_counts.csv
 
 echo "$(date "+%d/%m/%Y %T") Check #8 complete" >> $OUTFILE_LOG
+
+echo "cat of OUTFILE:"
+cat $OUTFILE
+echo "cat of OUTFILE_LOG:"
+cat $OUTFILE_LOG
+
+exit 0
 ####################################################### CHECK 9
 echo "[Check #9: Azure Recon (ORA Recon check is on AMD Database INFO tab)]" >> $OUTFILE
 echo "DateTime,CheckName,Description,Status,Result" >> $OUTFILE
