@@ -2,13 +2,12 @@
 ####################################################### This is the AMD AzureDB Healthcheck Script, and the associated documentation is in Ensemble under the "Libra System Admin Documents" area:
 ####################################################### "GoB Phase 1 - Oracle_Postgres DB Checks_v11.5_MAP.docx" is the latest version as of 01/08/2024
 dt_today=$(date "+%Y/%m/%D")
-echo "Script Version 2.6: Check 4"
+echo "Script Version 2.7: Check 4"
 mkdir /tmp/ams-reporting/
 OPDIR="/tmp/ams-reporting/"
 OUTFILE="${OPDIR}AZURE_DB001_AMD"
 OUTFILE_LOG="${OPDIR}AZURE_DB001_AMD.log"
 echo $(date "+%d/%m/%Y %T") > $OUTFILE
-ls -altr /mnt/secrets/$KV_NAME/
 
 ###############################################################
 ### Set-up DB connection variables, extracted from KeyVault ###
@@ -22,52 +21,49 @@ event_port=`echo $event_url | awk -F":" {'print $4'} | awk -F"\/" {'print $1'}`
 event_db=`echo $event_url | awk -F":" {'print $4'} | awk -F"\/" {'print $2'}`
 
 # PostgresDB connection variables
-#postgres_username=$(cat /mnt/secrets/$KV_NAME/themis-gateway-dbusername)
-#postgres_password=$(cat /mnt/secrets/$KV_NAME/themis-gateway-dbpassword)
-#postgres_url=$(cat /mnt/secrets/$KV_NAME/themis-gateway-datasourceurl)
-postgres_username=$(cat /mnt/secrets/$KV_NAME/postgres-datasource-dbusername)
-postgres_password=$(cat /mnt/secrets/$KV_NAME/postgres-datasource-dbpassword)
-postgres_url=$(cat /mnt/secrets/$KV_NAME/postgres-datasource-datasourceurl)
-postgres_host=`echo $postgres_url | awk -F"\/\/" {'print $2'} | awk -F":" {'print $1'}`
-postgres_port=`echo $postgres_url | awk -F":" {'print $4'} | awk -F"\/" {'print $1'}`
-postgres_db=`echo $postgres_url | awk -F":" {'print $4'} | awk -F"\/" {'print $2'}
+#postgres_username=$(cat /mnt/secrets/$KV_NAME/postgres-datasource-dbusername)
+#postgres_password=$(cat /mnt/secrets/$KV_NAME/postgres-datasource-dbpassword)
+#postgres_url=$(cat /mnt/secrets/$KV_NAME/postgres-datasource-datasourceurl)
+#postgres_host=`echo $postgres_url | awk -F"\/\/" {'print $2'} | awk -F":" {'print $1'}`
+#postgres_port=`echo $postgres_url | awk -F":" {'print $4'} | awk -F"\/" {'print $1'}`
+#postgres_db=`echo $postgres_url | awk -F":" {'print $4'} | awk -F"\/" {'print $2'}
 
 # ConfiscationDB connection variables
-confiscation_username=$(cat /mnt/secrets/$KV_NAME/confiscation-datasource-dbusername)
-confiscation_password=$(cat /mnt/secrets/$KV_NAME/confiscation-datasource-dbpassword)
-confiscation_url=$(cat /mnt/secrets/$KV_NAME/confiscation-datasource-datasourceurl)
+confiscation_username=$(cat /mnt/secrets/$KV_NAME/confiscation-datasource-username)
+confiscation_password=$(cat /mnt/secrets/$KV_NAME/confiscation-datasource-password)
+confiscation_url=$(cat /mnt/secrets/$KV_NAME/confiscation-datasource-url)
 confiscation_host=`echo $confiscation_url | awk -F"\/\/" {'print $2'} | awk -F":" {'print $1'}`
 confiscation_port=`echo $confiscation_url | awk -F":" {'print $4'} | awk -F"\/" {'print $1'}`
 confiscation_db=`echo $confiscation_url | awk -F":" {'print $4'} | awk -F"\/" {'print $2'}
 
 # FinesDB connection variables
-fines_username=$(cat /mnt/secrets/$KV_NAME/fines-datasource-dbusername)
-fines_password=$(cat /mnt/secrets/$KV_NAME/fines-datasource-dbpassword)
-fines_url=$(cat /mnt/secrets/$KV_NAME/fines-datasource-datasourceurl)
+fines_username=$(cat /mnt/secrets/$KV_NAME/fines-datasource-username)
+fines_password=$(cat /mnt/secrets/$KV_NAME/fines-datasource-password)
+fines_url=$(cat /mnt/secrets/$KV_NAME/fines-datasource-url)
 fines_host=`echo $fines_url | awk -F"\/\/" {'print $2'} | awk -F":" {'print $1'}`
 fines_port=`echo $fines_url | awk -F":" {'print $4'} | awk -F"\/" {'print $1'}`
 fines_db=`echo $fines_url | awk -F":" {'print $4'} | awk -F"\/" {'print $2'}
 
 # MaintenanceDB connection variables
-maintenance_username=$(cat /mnt/secrets/$KV_NAME/maintenance-datasource-dbusername)
-maintenance_password=$(cat /mnt/secrets/$KV_NAME/maintenance-datasource-dbpassword)
-maintenance_url=$(cat /mnt/secrets/$KV_NAME/maintenance-datasource-datasourceurl)
+maintenance_username=$(cat /mnt/secrets/$KV_NAME/maintenance-datasource-username)
+maintenance_password=$(cat /mnt/secrets/$KV_NAME/maintenance-datasource-password)
+maintenance_url=$(cat /mnt/secrets/$KV_NAME/maintenance-datasource-url)
 maintenance_host=`echo $maintenance_url | awk -F"\/\/" {'print $2'} | awk -F":" {'print $1'}`
 maintenance_port=`echo $maintenance_url | awk -F":" {'print $4'} | awk -F"\/" {'print $1'}`
 maintenance_db=`echo $maintenance_url | awk -F":" {'print $4'} | awk -F"\/" {'print $2'}
 
 # dac_auditDB connection variables
-dac_username=$(cat /mnt/secrets/$KV_NAME/dac-datasource-dbusername)
-dac_password=$(cat /mnt/secrets/$KV_NAME/dac-datasource-dbpassword)
-dac_url=$(cat /mnt/secrets/$KV_NAME/dac-datasource-datasourceurl)
+dac_username=$(cat /mnt/secrets/$KV_NAME/dac-datasource-username)
+dac_password=$(cat /mnt/secrets/$KV_NAME/dac-datasource-password)
+dac_url=$(cat /mnt/secrets/$KV_NAME/dac-datasource-url)
 dac_host=`echo $dac_url | awk -F"\/\/" {'print $2'} | awk -F":" {'print $1'}`
 dac_port=`echo $dac_url | awk -F":" {'print $4'} | awk -F"\/" {'print $1'}`
 dac_db=`echo $dac_url | awk -F":" {'print $4'} | awk -F"\/" {'print $2'}
 
 # gw_auditDB connection variables
-themis-gateway_username=$(cat /mnt/secrets/$KV_NAME/themis-gateway-datasource-dbusername)
-themis-gateway_password=$(cat /mnt/secrets/$KV_NAME/themis-gateway-datasource-dbpassword)
-themis-gateway_url=$(cat /mnt/secrets/$KV_NAME/themis-gateway-datasource-datasourceurl)
+themis-gateway_username=$(cat /mnt/secrets/$KV_NAME/themis-gateway-dbusername)
+themis-gateway_password=$(cat /mnt/secrets/$KV_NAME/themis-gateway-dbpassword)
+themis-gateway_url=$(cat /mnt/secrets/$KV_NAME/themis-gateway-datasourceurl)
 themis-gateway_host=`echo $themis-gateway_url | awk -F"\/\/" {'print $2'} | awk -F":" {'print $1'}`
 themis-gateway_port=`echo $themis-gateway_url | awk -F":" {'print $4'} | awk -F"\/" {'print $1'}`
 themis-gateway_db=`echo $themis-gateway_url | awk -F":" {'print $4'} | awk -F"\/" {'print $2'}
@@ -141,14 +137,15 @@ echo "$(date "+%d/%m/%Y %T") Starting Check #4" >> $OUTFILE_LOG
 echo "$(date "+%d/%m/%Y %T") Connecting to $event_db database" >> $OUTFILE_LOG
 psql "sslmode=require host=${event_host} dbname=${event_db} port=${event_port} user=${event_username} password=${event_password}" --file=/sql/4AZUREDB_AMD_thread_status_counts.sql
 
-idle_threshold=450
-nonidle_threshold=12
+idle_threshold=350
+nonidle_threshold=10
 
 while read -r line;do
 
-state=`echo $line | awk '{print $1}'`
-count=`echo $line | awk '{print $2}'`
+state=`echo $line | awk -F"," '{print $1}'`
+count=`echo $line | awk -F"," '{print $2}'`
 
+echo "line=$line"
 echo "state=$state"
 echo "count=$count"
 
