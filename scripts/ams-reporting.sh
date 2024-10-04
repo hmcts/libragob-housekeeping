@@ -290,10 +290,10 @@ echo "$(date "+%d/%m/%Y %T") SQL for Check #8 has been run" >> $OUTFILE_LOG
 
 while read -r line;do
 
-schema_id=`echo $line | awk '{print $1}'`
-count_updates=`echo $line | awk '{print $2}'`
-sum_number_of_table_updates=`echo $line | awk '{print $3}'`
-max_number_of_table_updates=`echo $line | awk '{print $4}'`
+schema_id=`echo $line | awk -F"," '{print $1}'`
+count_updates=`echo $line | awk -F"," '{print $2}'`
+sum_number_of_table_updates=`echo $line | awk -F"," '{print $3}'`
+max_number_of_table_updates=`echo $line | awk -F"," '{print $4}'`
 
 echo "dt,AZDB001_hourly_updates,Today's Hourly Updates,$schema_id,$count_updates,$sum_number_of_table_updates,$max_number_of_table_updates,ok" >> $OUTFILE
 
