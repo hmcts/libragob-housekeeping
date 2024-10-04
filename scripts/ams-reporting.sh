@@ -329,7 +329,7 @@ psql "sslmode=require host=${confiscation_host} dbname=${confiscation_db} port=$
 echo "$(date "+%d/%m/%Y %T") SQL for Check #9c has been run" >> $OUTFILE_LOG
 error_count=`head -1 ${OPDIR}9cAZUREDB_AMD_confiscation_result.csv | awk '{print $1'} | wc -l | xargs`
 
-if [[ grep "$dt_today" $rundate ]];then
+if [[ `grep "$dt_today" $rundate` ]];then
 
 echo "$(date "+%d/%m/%Y %T"),AZDB001_maint_recon_status,Confiscation Recon,Recon didn't run today,warn" >> $OUTFILE
 
@@ -378,7 +378,7 @@ psql "sslmode=require host=${fines_host} dbname=${fines_db} port=${fines_port} u
 echo "$(date "+%d/%m/%Y %T") SQL for Check #9g has been run" >> $OUTFILE_LOG
 error_count=`head -1 ${OPDIR}9gAZUREDB_AMD_fines_result.csv | awk '{print $1'} | wc -l | xargs`
 
-if [[ grep "$dt_today" $rundate ]];then
+if [[ `grep "$dt_today" $rundate` ]];then
 
 echo "$(date "+%d/%m/%Y %T"),AZDB001_maint_recon_status,Fines Recon,Recon didn't run today,warn" >> $OUTFILE
 
@@ -427,7 +427,7 @@ psql "sslmode=require host=${maintenance_host} dbname=${maintenance_db} port=${m
 echo "$(date "+%d/%m/%Y %T") SQL for Check #9k has been run" >> $OUTFILE_LOG
 error_count=`head -1 ${OPDIR}9kAZUREDB_AMD_confiscation_maintenance_result.csv | awk '{print $1'} | wc -l | xargs`
 
-if [[ grep "$dt_today" $rundate ]];then
+if [[ `grep "$dt_today" $rundate` ]];then
 
 echo "$(date "+%d/%m/%Y %T"),AZDB001_maint_recon_status,Maintenance Recon,Recon didn't run today,warn" >> $OUTFILE
 
