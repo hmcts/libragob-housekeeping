@@ -146,7 +146,7 @@ nonidle_threshold=0
 while read -r line;do
 
 if [[ `echo $line | grep "^,"` ]];then
-newline=`echo $line | awk -F"," '{print $1}'`
+newline=`echo $line | awk -F"," '{print $2}'`
 state="null,$newline"
 else
 state=`echo $line | awk -F"," '{print $1}'`
