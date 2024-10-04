@@ -265,9 +265,9 @@ sum_number_of_table_updates=`echo $line | awk '{print $3}'`
 max_number_of_table_updates=`echo $line | awk '{print $4}'`
 
 if [[ $max_number_of_table_updates -gt $bundled_print_threshold ]];then
-echo "dt,AZDB001_max_updates,Max Updates by SchemaId,$schema_id,$count_updates,$sum_number_of_table_updates,$max_number_of_table_updates,warn" >> $OUTFILE
+echo "$(date "+%d/%m/%Y %T"),AZDB001_max_updates,Max Updates by SchemaId,$schema_id,$count_updates,$sum_number_of_table_updates,$max_number_of_table_updates,warn" >> $OUTFILE
 else
-echo "dt,AZDB001_max_updates,Max Updates by SchemaId,$schema_id,$count_updates,$sum_number_of_table_updates,$max_number_of_table_updates,ok" >> $OUTFILE
+echo "$(date "+%d/%m/%Y %T"),AZDB001_max_updates,Max Updates by SchemaId,$schema_id,$count_updates,$sum_number_of_table_updates,$max_number_of_table_updates,ok" >> $OUTFILE
 fi
 
 done < ${OPDIR}7AZUREDB_AMD_max_daily_update_counts_by_schemaid.csv
