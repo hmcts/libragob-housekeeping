@@ -209,7 +209,7 @@ while read -r line;do
 echo "line=$line"
 
 dt_now=$(date "+%Y-%m-%d %T")
-schema_id=`echo $line | awk -D"," '{print $1}'`
+schema_id=`echo $line | awk -F"," '{print $1}'`
 earliest_unprocessed=`echo $line | awk -F"," '{print $2}'`
 t_in=`echo $earliest_unprocessed | awk -F"." '{print $1}'`
 latest_complete=`echo $line | awk -F"," '{print $3}'`
