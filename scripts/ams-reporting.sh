@@ -8,6 +8,7 @@ OPDIR="/tmp/ams-reporting/"
 OUTFILE="${OPDIR}AZURE_DB001_AMD"
 OUTFILE_LOG="${OPDIR}AZURE_DB001_AMD.log"
 echo $(date "+%d/%m/%Y %T") > $OUTFILE
+ls -altr /mnt/secrets/$KV_NAME/
 
 ###############################################################
 ### Set-up DB connection variables, extracted from KeyVault ###
@@ -256,6 +257,7 @@ echo "$(date "+%d/%m/%Y %T") Connecting to $event_db database" >> $OUTFILE_LOG
 psql "sslmode=require host=${event_host} dbname=${event_db} port=${event_port} user=${event_username} password=${event_password}" --file=/sql/7AZUREDB_AMD_max_daily_update_counts_by_schemaid.sql
 echo "$(date "+%d/%m/%Y %T") SQL for Check #7 has been run" >> $OUTFILE_LOG
 bundled_print_threshold=50000
+bundled_print_threshold=30
 
 while read -r line;do
 
@@ -279,7 +281,7 @@ cat $OUTFILE
 echo "cat of OUTFILE_LOG:"
 cat $OUTFILE_LOG
 
-exit 0
+exit 0O
 ####################################################### CHECK 8
 echo "[Check #8: Today's Hourly Update Counts]" >> $OUTFILE
 echo "DateTime,CheckName,Description,schema_id,count_updates,sum_number_of_table_updates,max_number_of_table_updates,Result" >> $OUTFILE
