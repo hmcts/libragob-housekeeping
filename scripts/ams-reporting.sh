@@ -340,10 +340,6 @@ cat ${OPDIR}9aAZUREDB_AMD_confiscation_recon_result.csv
 
 if [[ `grep "$dt_today" ${OPDIR}9aAZUREDB_AMD_confiscation_recon_result.csv` ]];then
 
-echo "$(date "+%d/%m/%Y %T"),AZDB001_maint_recon_status,Confiscation Recon,Recon didn't run today,warn" >> $OUTFILE
-
-else
-
 if [[ $error_count -gt 0 ]];then
 
 while read -r line;do
@@ -361,6 +357,10 @@ else
 echo "$(date "+%d/%m/%Y %T"),AZDB001_maint_recon_status,Confiscation Recon,Recon ran with no errors,ok" >> $OUTFILE
 
 fi
+
+else
+
+echo "$(date "+%d/%m/%Y %T"),AZDB001_maint_recon_status,Confiscation Recon,Recon didn't run today so check ORA recon ran ok,warn" >> $OUTFILE
 
 fi
 
