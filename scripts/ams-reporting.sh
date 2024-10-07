@@ -3,7 +3,7 @@
 ####################################################### "GoB Phase 1 - Oracle_Postgres DB Checks_v11.5_MAP.docx" is the latest version as of 01/08/2024
 rm -f $OUTFILE.csv
 dt_today=$(date "+%Y/%m/%D")
-echo "Script Version 3.2: Check 8"
+echo "Script Version 3.3: Check 8"
 mkdir /tmp/ams-reporting/
 OPDIR="/tmp/ams-reporting/"
 OUTFILE="${OPDIR}AZURE_DB001_AMD"
@@ -38,12 +38,12 @@ echo $event_db
 #cat /mnt/secrets/$KV_NAME/themis-gateway-datasourceurl
 #printf "\n"
 
-postgres_username=`cat /mnt/secrets/$KV_NAME/themis-gateway-dbusername`
-postgres_password=`cat /mnt/secrets/$KV_NAME/themis-gateway-dbpassword`
-postgres_url=`cat /mnt/secrets/$KV_NAME/themis-gateway-datasourceurl`
-postgres_host=`echo $postgres_url | awk -F"\/\/" {'print $2'} | awk -F":" {'print $1'}`
-postgres_port=`echo $postgres_url | awk -F":" {'print $4'} | awk -F"\/" {'print $1'}`
-postgres_db=`echo $postgres_url | awk -F":" {'print $4'} | awk -F"\/" {'print $2'}
+#postgres_username=`cat /mnt/secrets/$KV_NAME/themis-gateway-dbusername`
+#postgres_password=`cat /mnt/secrets/$KV_NAME/themis-gateway-dbpassword`
+#postgres_url=`cat /mnt/secrets/$KV_NAME/themis-gateway-datasourceurl`
+#postgres_host=`echo $postgres_url | awk -F"\/\/" {'print $2'} | awk -F":" {'print $1'}`
+#postgres_port=`echo $postgres_url | awk -F":" {'print $4'} | awk -F"\/" {'print $1'}`
+#postgres_db=`echo $postgres_url | awk -F":" {'print $4'} | awk -F"\/" {'print $2'}
 
 postgres_username=edb_amd
 postgres_password=edb_read_0nly
