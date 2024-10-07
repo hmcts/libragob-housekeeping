@@ -1,13 +1,13 @@
 #!/usr/bin/env bash
 ####################################################### This is the AMD AzureDB Healthcheck Script, and the associated documentation is in Ensemble under the "Libra System Admin Documents" area:
 ####################################################### "GoB Phase 1 - Oracle_Postgres DB Checks_v11.5_MAP.docx" is the latest version as of 01/08/2024
-rm -f $OUTFILE.csv
 dt_today=$(date "+%Y/%m/%D")
-echo "Script Version 3.3: Check 8"
+echo "Script Version 3.5: Check 8"
 mkdir /tmp/ams-reporting/
 OPDIR="/tmp/ams-reporting/"
 OUTFILE="${OPDIR}AZURE_DB001_AMD"
 OUTFILE_LOG="${OPDIR}AZURE_DB001_AMD.log"
+rm -f $OUTFILE $OUTFILE.csv $OUTFILE_LOG
 echo $(date "+%d/%m/%Y %T") > $OUTFILE
 #ls -altr /mnt/secrets/$KV_NAME/
 
