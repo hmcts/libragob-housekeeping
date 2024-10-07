@@ -335,6 +335,9 @@ echo "$(date "+%d/%m/%Y %T") SQL for Check #9a has been run" >> $OUTFILE_LOG
 error_count=`grep "1^" ${OPDIR}9aAZUREDB_AMD_confiscation_recon_result.csv | wc -l | xargs`
 dt_today=$(date "+%Y-%m-%D")
 
+echo "CAT of 9aAZUREDB_AMD_confiscation_recon_result.csv:"
+cat ${OPDIR}9aAZUREDB_AMD_confiscation_recon_result.csv
+
 if [[ `grep "$dt_today" ${OPDIR}9aAZUREDB_AMD_confiscation_recon_result.csv` ]];then
 
 echo "$(date "+%d/%m/%Y %T"),AZDB001_maint_recon_status,Confiscation Recon,Recon didn't run today,warn" >> $OUTFILE
