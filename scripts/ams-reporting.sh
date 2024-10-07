@@ -8,7 +8,7 @@ OPDIR="/tmp/ams-reporting/"
 OUTFILE="${OPDIR}AZURE_DB001_AMD"
 OUTFILE_LOG="${OPDIR}AZURE_DB001_AMD.log"
 echo $(date "+%d/%m/%Y %T") > $OUTFILE
-ls -altr /mnt/secrets/$KV_NAME/
+#ls -altr /mnt/secrets/$KV_NAME/
 
 ###############################################################
 ### Set-up DB connection variables, extracted from KeyVault ###
@@ -23,12 +23,12 @@ event_db=`echo $event_url | awk -F":" {'print $4'} | awk -F"\/" {'print $2'}`
 
 # PostgresDB connection variables
 
-cat /mnt/secrets/$KV_NAME/themis-gateway-dbusername
-printf "\n"
-cat /mnt/secrets/$KV_NAME/themis-gateway-dbpassword
-printf "\n"
-cat /mnt/secrets/$KV_NAME/themis-gateway-datasourceurl
-printf "\n"
+#cat /mnt/secrets/$KV_NAME/themis-gateway-dbusername
+#printf "\n"
+#cat /mnt/secrets/$KV_NAME/themis-gateway-dbpassword
+#printf "\n"
+#cat /mnt/secrets/$KV_NAME/themis-gateway-datasourceurl
+#printf "\n"
 
 postgres_username=`cat /mnt/secrets/$KV_NAME/themis-gateway-dbusername`
 postgres_password=`cat /mnt/secrets/$KV_NAME/themis-gateway-dbpassword`
@@ -46,6 +46,8 @@ echo $postgres_url
 echo $postgres_host
 echo $postgres_port
 echo $postgres_db
+
+exit 0
 
 # ConfiscationDB connection variables
 confiscation_username=$(cat /mnt/secrets/$KV_NAME/confiscation-datasource-username)
