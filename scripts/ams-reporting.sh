@@ -210,7 +210,7 @@ done < ${OPDIR}5AZUREDB_AMD_message_log_errors_100.csv
 echo "$(date "+%d/%m/%Y %T") Check #5 complete" >> $OUTFILE_LOG
 ####################################################### CHECK 6
 echo "[Check #6: Unprocessed, Complete & Processing Checks]" >> $OUTFILE
-echo "DateTime,CheckName,Description,schema_id,earliest_unprocessed,latest_complete,latest_processing,Result" >> $OUTFILE
+echo "DateTime,CheckName,Description,schema_id,Threshold,earliest_unprocessed,latest_complete,latest_processing,Result" >> $OUTFILE
 echo "$(date "+%d/%m/%Y %T") Starting Check #6" >> $OUTFILE_LOG
 echo "$(date "+%d/%m/%Y %T") Connecting to $event_db database" >> $OUTFILE_LOG
 psql "sslmode=require host=${event_host} dbname=${event_db} port=${event_port} user=${event_username} password=${event_password}" --file=/sql/6AZUREDB_AMD_update_processing_backlog.sql
@@ -252,9 +252,9 @@ echo "t_delta_secs=$t_delta_secs"
 echo "t_delta_threshold=$t_delta_threshold"
 
 if [[ $t_delta_secs -gt $t_delta_threshold ]] || [[ $last_check -gt $t_delta_threshold ]];then
-echo "$(date "+%d/%m/%Y %T"),AZDB001_update_processing_backlog,Check of Earliest Unprocessed vs. Latest Complete vs. Latest Processing,$schema_id,$earliest_unprocessed,$latest_complete,$latest_processing,warn" >> $OUTFILE
+echo "$(date "+%d/%m/%Y %T"),AZDB001_update_processing_backlog,Check of Earliest Unprocessed vs. Latest Complete vs. Latest Processing,$schema_id,$((t_delta_threshold/60/60)minsStaleness,$earliest_unprocessed,$latest_complete,$latest_processing,warn" >> $OUTFILE
 else
-echo "$(date "+%d/%m/%Y %T"),AZDB001_update_processing_backlog,Check of Earliest Unprocessed vs. Latest Complete vs. Latest Processing,$schema_id,$earliest_unprocessed,$latest_complete,$latest_processing,ok" >> $OUTFILE
+echo "$(date "+%d/%m/%Y %T"),AZDB001_update_processing_backlog,Check of Earliest Unprocessed vs. Latest Complete vs. Latest Processing,$schema_id,$((t_delta_threshold/60/60)minsStaleness,$earliest_unprocessed,$latest_complete,$latest_processing,ok" >> $OUTFILE
 fi
 
 done < ${OPDIR}6AZUREDB_AMD_update_processing_backlog.csv
