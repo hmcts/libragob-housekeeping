@@ -69,8 +69,8 @@ maintenance_host=`echo $maintenance_url | awk -F"\/\/" {'print $2'} | awk -F":" 
 maintenance_port=`echo $maintenance_url | awk -F":" {'print $4'} | awk -F"\/" {'print $1'}`
 maintenance_db=`echo $maintenance_url | awk -F":" {'print $4'} | awk -F"\/" {'print $2'}
 
-echo $confiscation_username
-echo $confiscation_password
+echo $maintenance_username
+echo $maintenance_password
 echo $maintenance_url
 echo $maintenance_host
 echo $maintenance_port
