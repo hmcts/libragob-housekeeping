@@ -48,8 +48,6 @@ echo $postgres_host
 echo $postgres_port
 echo $postgres_db
 
-exit 0
-
 # ConfiscationDB connection variables
 #confiscation_username=$(cat /mnt/secrets/$KV_NAME/confiscation-datasource-username)
 #confiscation_password=$(cat /mnt/secrets/$KV_NAME/confiscation-datasource-password)
@@ -133,6 +131,13 @@ fi
 done < ${OPDIR}2AZUREDB_AMD_locked_keys.csv
 
 echo "$(date "+%d/%m/%Y %T") Check #2 complete" >> $OUTFILE_LOG
+
+echo "cat of OUTFILE:"
+cat $OUTFILE
+echo "cat of OUTFILE_LOG:"
+cat $OUTFILE_LOG
+
+exit 0
 ####################################################### CHECK 4
 echo "[Check #4: Thread Status Counts]" >> $OUTFILE
 echo "DateTime,CheckName,Description,State,Threshold,Count,Result" >> $OUTFILE
@@ -309,13 +314,6 @@ echo "dt,AZDB001_hourly_updates,Today's Hourly Updates,$schema_id,$count_updates
 done < ${OPDIR}8AZUREDB_AMD_todays_hourly_update_counts.csv
 
 echo "$(date "+%d/%m/%Y %T") Check #8 complete" >> $OUTFILE_LOG
-
-echo "cat of OUTFILE:"
-cat $OUTFILE
-echo "cat of OUTFILE_LOG:"
-cat $OUTFILE_LOG
-
-exit 0
 ####################################################### CHECK 9
 echo "[Check #9: Azure Recon (ORA Recon check is on AMD Database INFO tab)]" >> $OUTFILE
 echo "DateTime,CheckName,Description,Status,Result" >> $OUTFILE
