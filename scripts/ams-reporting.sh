@@ -71,6 +71,24 @@ echo $postgres_db
 #maintenance_host=`echo $maintenance_url | awk -F"\/\/" {'print $2'} | awk -F":" {'print $1'}`
 #maintenance_port=`echo $maintenance_url | awk -F":" {'print $4'} | awk -F"\/" {'print $1'}`
 #maintenance_db=`echo $maintenance_url | awk -F":" {'print $4'} | awk -F"\/" {'print $2'}`
+
+confiscation_username=edb_amd
+confiscation_password=edb_read_0nly
+confiscation_host=libragob-test.postgres.database.azure.com
+confiscation_port=5432
+confiscation_db=nm_confiscation_db
+
+fines_username=edb_amd
+fines_password=edb_read_0nly
+fines_host=libragob-test.postgres.database.azure.com
+fines_port=5432
+fines_db=nm_fines_db
+
+maintenance_username=edb_amd
+maintenance_password=edb_read_0nly
+maintenance_host=libragob-test.postgres.database.azure.com
+maintenance_port=5432
+maintenance_db=nm_maintenance_db
 ############################################################################
 ### Push CSV file to BAIS so it can be ingested and displayed in the AMD ###
 ############################################################################
@@ -131,6 +149,8 @@ fi
 done < ${OPDIR}2AZUREDB_AMD_locked_keys.csv
 
 echo "$(date "+%d/%m/%Y %T") Check #2 complete" >> $OUTFILE_LOG
+
+exit 0
 ####################################################### CHECK 4
 echo "[Check #4: Thread Status Counts]" >> $OUTFILE
 echo "DateTime,CheckName,Description,State,Threshold,Count,Result" >> $OUTFILE
