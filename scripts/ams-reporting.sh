@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 ####################################################### This is the AMD AzureDB Healthcheck Script, and the associated documentation is in Ensemble under the "Libra System Admin Documents" area:
 ####################################################### "GoB Phase 1 - Oracle_Postgres DB Checks_v11.5_MAP.docx" is the latest version as of 01/08/2024
+rm -f $OUTFILE.csv
 dt_today=$(date "+%Y/%m/%D")
 echo "Script Version 3.1: Check 8"
 mkdir /tmp/ams-reporting/
@@ -46,6 +47,9 @@ postgres_db=`echo $postgres_url | awk -F":" {'print $4'} | awk -F"\/" {'print $2
 
 postgres_username=edb_amd
 postgres_password=edb_read_0nly
+postgres_host=libragob-test.postgres.database.azure.com
+postgres_port=5432
+postgres_db=postgres
 
 echo $postgres_username
 echo $postgres_password
@@ -98,7 +102,7 @@ fi
 ####################################################### CHECK 1
 echo "[Check #1: Locked Schemas]" >> $OUTFILE
 echo "DateTime,CheckName,Description,Status,Result" >> $OUTFILE
-echo "$(date "+%d/%m/%Y %T") Starting Check #1" >> $OUTFILE_LOG
+echo "$(date "+%d/%m/%Y %T") Starting Check #1" > $OUTFILE_LOG
 echo "$(date "+%d/%m/%Y %T") Connecting to $event_db database" >> $OUTFILE_LOG
 psql "sslmode=require host=${event_host} dbname=${event_db} port=${event_port} user=${event_username} password=${event_password}" --file=/sql/1AZUREDB_AMD_locked_schemas.sql
 echo "$(date "+%d/%m/%Y %T") SQL for Check #1 has been run" >> $OUTFILE_LOG
