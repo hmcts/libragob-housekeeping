@@ -252,9 +252,9 @@ echo "t_delta_secs=$t_delta_secs"
 echo "t_delta_threshold=$t_delta_threshold"
 
 if [[ $t_delta_secs -gt $t_delta_threshold ]] || [[ $last_check -gt $t_delta_threshold ]];then
-echo "$(date "+%d/%m/%Y %T"),AZDB001_update_processing_backlog,Check of Earliest Unprocessed vs. Latest Complete vs. Latest Processing,$schema_id,$((t_delta_threshold/60/60)minsStaleness,$earliest_unprocessed,$latest_complete,$latest_processing,warn" >> $OUTFILE
+echo "$(date "+%d/%m/%Y %T"),AZDB001_update_processing_backlog,Check of Earliest Unprocessed vs. Latest Complete vs. Latest Processing,$schema_id,${t_delta_threshold}minsStaleness,$earliest_unprocessed,$latest_complete,$latest_processing,warn" >> $OUTFILE
 else
-echo "$(date "+%d/%m/%Y %T"),AZDB001_update_processing_backlog,Check of Earliest Unprocessed vs. Latest Complete vs. Latest Processing,$schema_id,$((t_delta_threshold/60/60)minsStaleness,$earliest_unprocessed,$latest_complete,$latest_processing,ok" >> $OUTFILE
+echo "$(date "+%d/%m/%Y %T"),AZDB001_update_processing_backlog,Check of Earliest Unprocessed vs. Latest Complete vs. Latest Processing,$schema_id,${t_delta_threshold}minsStaleness,$earliest_unprocessed,$latest_complete,$latest_processing,ok" >> $OUTFILE
 fi
 
 done < ${OPDIR}6AZUREDB_AMD_update_processing_backlog.csv
