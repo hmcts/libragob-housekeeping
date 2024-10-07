@@ -243,17 +243,18 @@ cat ${OPDIR}earliest_unprocessed_timestamps.tmp
 t_out_1900=$(date '+%s' -d "$dt_now")
 t_in_1900=$(date '+%s' -d "$t_in")
 t_delta_secs=`expr $t_out_1900 - $t_in_1900`
-t_delta_threshold=$((90*60*60)) # 90mins is 324000secs
+t_delta_threshold_mins=90
+t_delta_threshold_secs=$(($t_delta_threshold_min*60*60)) # 90mins is 324000secs
 
 echo "t_out_1900=$t_out_1900"
 echo "t_in_1900=$t_in_1900"
 echo "t_delta_secs=$t_delta_secs"
-echo "t_delta_threshold=$t_delta_threshold"
+echo "t_delta_threshold_secs=$t_delta_threshold_secs"
 
-if [[ $t_delta_secs -gt $t_delta_threshold ]] || [[ $last_check -gt $t_delta_threshold ]];then
-echo "$(date "+%d/%m/%Y %T"),AZDB001_update_processing_backlog,Check of Earliest Unprocessed vs. Latest Complete vs. Latest Processing,$schema_id,90minsStaleness,$earliest_unprocessed,$latest_complete,$latest_processing,warn" >> $OUTFILE
+if [[ $t_delta_secs -gt $t_delta_threshold_secs ]] || [[ $last_check -gt $t_delta_threshold_secs ]];then
+echo "$(date "+%d/%m/%Y %T"),AZDB001_update_processing_backlog,Check of Earliest Unprocessed vs. Latest Complete vs. Latest Processing,$schema_id,${t_delta_threshold_mins}minsStaleness,$earliest_unprocessed,$latest_complete,$latest_processing,warn" >> $OUTFILE
 else
-echo "$(date "+%d/%m/%Y %T"),AZDB001_update_processing_backlog,Check of Earliest Unprocessed vs. Latest Complete vs. Latest Processing,$schema_id,90minsStaleness,$earliest_unprocessed,$latest_complete,$latest_processing,ok" >> $OUTFILE
+echo "$(date "+%d/%m/%Y %T"),AZDB001_update_processing_backlog,Check of Earliest Unprocessed vs. Latest Complete vs. Latest Processing,$schema_id,${t_delta_threshold_mins}minsStaleness,$earliest_unprocessed,$latest_complete,$latest_processing,ok" >> $OUTFILE
 fi
 
 done < ${OPDIR}6AZUREDB_AMD_update_processing_backlog.csv
