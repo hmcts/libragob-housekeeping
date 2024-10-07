@@ -353,7 +353,7 @@ echo "$(date "+%d/%m/%Y %T"),AZDB001_maint_recon_status,Confiscation Recon,Recon
 
 else
 
-if [[ $error_count -gt 0]];then
+if [[ $error_count -gt 0 ]];then
 
 echo "$(date "+%d/%m/%Y %T") Starting Check #9d" >> $OUTFILE_LOG
 echo "$(date "+%d/%m/%Y %T") Connecting to $confiscation_db database" >> $OUTFILE_LOG
@@ -402,7 +402,7 @@ echo "$(date "+%d/%m/%Y %T"),AZDB001_maint_recon_status,Fines Recon,Recon didn't
 
 else
 
-if [[ $error_count -gt 0]];then
+if [[ $error_count -gt 0 ]];then
 
 echo "$(date "+%d/%m/%Y %T") Connecting to $fines_db database" >> $OUTFILE_LOG
 echo "$(date "+%d/%m/%Y %T") Starting Check #9h" >> $OUTFILE_LOG
@@ -451,7 +451,7 @@ echo "$(date "+%d/%m/%Y %T"),AZDB001_maint_recon_status,Maintenance Recon,Recon 
 
 else
 
-if [[ $error_count -gt 0]];then
+if [[ $error_count -gt 0 ]];then
 
 echo "$(date "+%d/%m/%Y %T") Connecting to $maintenance_db database" >> $OUTFILE_LOG
 echo "$(date "+%d/%m/%Y %T") Starting Check #9l" >> $OUTFILE_LOG
