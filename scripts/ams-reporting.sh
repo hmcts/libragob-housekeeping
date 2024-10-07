@@ -331,19 +331,19 @@ echo "DateTime,CheckName,Description,Status,Result" >> $OUTFILE
 
 echo "$(date "+%d/%m/%Y %T") Starting Check #9a" >> $OUTFILE_LOG
 echo "$(date "+%d/%m/%Y %T") Connecting to $confiscation_db database" >> $OUTFILE_LOG
-psql "sslmode=require host=${confiscation_host} dbname=${confiscation_db} port=${confiscation_port} user=${confiscation_username} password=${confiscation_password}" --file=/sql/9aAZUREDB_AMD_confiscation_RRID.sql
+psql "sslmode=require host=${confiscation_host} dbname=${confiscation_db} port=${confiscation_port} user=${confiscation_username} password=${confiscation_password}" --file=/sql/9aAZUREDB_AMD_confiscation_recon_RRID.sql
 echo "$(date "+%d/%m/%Y %T") SQL for Check #9a has been run" >> $OUTFILE_LOG
 RR_ID=`cat ${OPDIR}9aAZUREDB_AMD_confiscation_RRID.csv | awk '{print $1'}`
 
 echo "$(date "+%d/%m/%Y %T") Starting Check #9b" >> $OUTFILE_LOG
 echo "$(date "+%d/%m/%Y %T") Connecting to $confiscation_db database" >> $OUTFILE_LOG
-psql "sslmode=require host=${confiscation_host} dbname=${confiscation_db} port=${confiscation_port} user=${confiscation_username} password=${confiscation_password}" --file=/sql/9bAZUREDB_AMD_confiscation_rundate.sql $RR_ID
+psql "sslmode=require host=${confiscation_host} dbname=${confiscation_db} port=${confiscation_port} user=${confiscation_username} password=${confiscation_password}" --file=/sql/9bAZUREDB_AMD_confiscation_recon_rundate.sql $RR_ID
 echo "$(date "+%d/%m/%Y %T") SQL for Check #9b has been run" >> $OUTFILE_LOG
 rundate=`head -1 ${OPDIR}9bAZUREDB_AMD_confiscation_rundate.csv | awk '{print $1'}`
 
 echo "$(date "+%d/%m/%Y %T") Starting Check #9c" >> $OUTFILE_LOG
 echo "$(date "+%d/%m/%Y %T") Connecting to $confiscation_db database" >> $OUTFILE_LOG
-psql "sslmode=require host=${confiscation_host} dbname=${confiscation_db} port=${confiscation_port} user=${confiscation_username} password=${confiscation_password}" --file=/sql/9cAZUREDB_AMD_confiscation_result.sql $RR_ID
+psql "sslmode=require host=${confiscation_host} dbname=${confiscation_db} port=${confiscation_port} user=${confiscation_username} password=${confiscation_password}" --file=/sql/9cAZUREDB_AMD_confiscation_recon_result.sql $RR_ID
 echo "$(date "+%d/%m/%Y %T") SQL for Check #9c has been run" >> $OUTFILE_LOG
 error_count=`head -1 ${OPDIR}9cAZUREDB_AMD_confiscation_result.csv | awk '{print $1'} | wc -l | xargs`
 
@@ -357,7 +357,7 @@ if [[ $error_count -gt 0]];then
 
 echo "$(date "+%d/%m/%Y %T") Starting Check #9d" >> $OUTFILE_LOG
 echo "$(date "+%d/%m/%Y %T") Connecting to $confiscation_db database" >> $OUTFILE_LOG
-psql "sslmode=require host=${confiscation_host} dbname=${confiscation_db} port=${confiscation_port} user=${confiscation_username} password=${confiscation_password}" --file=/sql/9dAZUREDB_AMD_confiscation_ERRORS.sql $RR_ID
+psql "sslmode=require host=${confiscation_host} dbname=${confiscation_db} port=${confiscation_port} user=${confiscation_username} password=${confiscation_password}" --file=/sql/9dAZUREDB_AMD_confiscation_recon_ERRORS.sql $RR_ID
 echo "$(date "+%d/%m/%Y %T") SQL for Check #9d has been run" >> $OUTFILE_LOG
 
 while read -r line;do
@@ -380,19 +380,19 @@ fi
 
 echo "$(date "+%d/%m/%Y %T") Connecting to $fines_db database" >> $OUTFILE_LOG
 echo "$(date "+%d/%m/%Y %T") Starting Check #9e" >> $OUTFILE_LOG
-psql "sslmode=require host=${fines_host} dbname=${fines_db} port=${fines_port} user=${fines_username} password=${fines_password}" --file=/sql/9eAZUREDB_AMD_fines_RRID.sql
+psql "sslmode=require host=${fines_host} dbname=${fines_db} port=${fines_port} user=${fines_username} password=${fines_password}" --file=/sql/9eAZUREDB_AMD_fines_recon_RRID.sql
 echo "$(date "+%d/%m/%Y %T") SQL for Check #9e has been run" >> $OUTFILE_LOG
 RR_ID=`cat ${OPDIR}9eAZUREDB_AMD_fines_RRID.csv | awk '{print $1'}`
 
 echo "$(date "+%d/%m/%Y %T") Connecting to $fines_db database" >> $OUTFILE_LOG
 echo "$(date "+%d/%m/%Y %T") Starting Check #9f" >> $OUTFILE_LOG
-psql "sslmode=require host=${fines_host} dbname=${fines_db} port=${fines_port} user=${fines_username} password=${fines_password}" --file=/sql/9fAZUREDB_AMD_fines_rundate.sql $RR_ID
+psql "sslmode=require host=${fines_host} dbname=${fines_db} port=${fines_port} user=${fines_username} password=${fines_password}" --file=/sql/9fAZUREDB_AMD_fines_recon_rundate.sql $RR_ID
 echo "$(date "+%d/%m/%Y %T") SQL for Check #9f has been run" >> $OUTFILE_LOG
 rundate=`head -1 ${OPDIR}9fAZUREDB_AMD_fines_rundate.csv | awk '{print $1'}`
 
 echo "$(date "+%d/%m/%Y %T") Connecting to $fines_db database" >> $OUTFILE_LOG
 echo "$(date "+%d/%m/%Y %T") Starting Check #9g" >> $OUTFILE_LOG
-psql "sslmode=require host=${fines_host} dbname=${fines_db} port=${fines_port} user=${fines_username} password=${fines_password}" --file=/sql/9gAZUREDB_AMD_fines_result.sql $RR_ID
+psql "sslmode=require host=${fines_host} dbname=${fines_db} port=${fines_port} user=${fines_username} password=${fines_password}" --file=/sql/9gAZUREDB_AMD_fines_recon_result.sql $RR_ID
 echo "$(date "+%d/%m/%Y %T") SQL for Check #9g has been run" >> $OUTFILE_LOG
 error_count=`head -1 ${OPDIR}9gAZUREDB_AMD_fines_result.csv | awk '{print $1'} | wc -l | xargs`
 
@@ -406,7 +406,7 @@ if [[ $error_count -gt 0]];then
 
 echo "$(date "+%d/%m/%Y %T") Connecting to $fines_db database" >> $OUTFILE_LOG
 echo "$(date "+%d/%m/%Y %T") Starting Check #9h" >> $OUTFILE_LOG
-psql "sslmode=require host=${fines_host} dbname=${fines_db} port=${fines_port} user=${fines_username} password=${fines_password}" --file=/sql/9hAZUREDB_AMD_fines_ERRORS.sql $RR_ID
+psql "sslmode=require host=${fines_host} dbname=${fines_db} port=${fines_port} user=${fines_username} password=${fines_password}" --file=/sql/9hAZUREDB_AMD_fines_recon_ERRORS.sql $RR_ID
 echo "$(date "+%d/%m/%Y %T") SQL for Check #9h has been run" >> $OUTFILE_LOG
 
 while read -r line;do
@@ -429,19 +429,19 @@ fi
 
 echo "$(date "+%d/%m/%Y %T") Connecting to $maintenance_db database" >> $OUTFILE_LOG
 echo "$(date "+%d/%m/%Y %T") Starting Check #9i" >> $OUTFILE_LOG
-psql "sslmode=require host=${maintenance_host} dbname=${maintenance_db} port=${maintenance_port} user=${maintenance_username} password=${maintenance_password}" --file=/sql/9iAZUREDB_AMD_maintenance_RRID.sql
+psql "sslmode=require host=${maintenance_host} dbname=${maintenance_db} port=${maintenance_port} user=${maintenance_username} password=${maintenance_password}" --file=/sql/9iAZUREDB_AMD_maintenance_recon_RRID.sql
 echo "$(date "+%d/%m/%Y %T") SQL for Check #9i has been run" >> $OUTFILE_LOG
 RR_ID=`cat ${OPDIR}9iAZUREDB_AMD_confiscation_maintenance_RRID.csv | awk '{print $1'}`
 
 echo "$(date "+%d/%m/%Y %T") Connecting to $maintenance_db database" >> $OUTFILE_LOG
 echo "$(date "+%d/%m/%Y %T") Starting Check #9j" >> $OUTFILE_LOG
-psql "sslmode=require host=${maintenance_host} dbname=${maintenance_db} port=${maintenance_port} user=${maintenance_username} password=${maintenance_password}" --file=/sql/9jAZUREDB_AMD_maintenance_rundate.sql $RR_ID
+psql "sslmode=require host=${maintenance_host} dbname=${maintenance_db} port=${maintenance_port} user=${maintenance_username} password=${maintenance_password}" --file=/sql/9jAZUREDB_AMD_maintenance_recon_rundate.sql $RR_ID
 echo "$(date "+%d/%m/%Y %T") SQL for Check #9j has been run" >> $OUTFILE_LOG
 rundate=`head -1 ${OPDIR}9jAZUREDB_AMD_confiscation_maintenance_rundate.csv | awk '{print $1'}`
 
 echo "$(date "+%d/%m/%Y %T") Connecting to $maintenance_db database" >> $OUTFILE_LOG
 echo "$(date "+%d/%m/%Y %T") Starting Check #9k" >> $OUTFILE_LOG
-psql "sslmode=require host=${maintenance_host} dbname=${maintenance_db} port=${maintenance_port} user=${maintenance_username} password=${maintenance_password}" --file=/sql/9kAZUREDB_AMD_maintenance_result.sql $RR_ID
+psql "sslmode=require host=${maintenance_host} dbname=${maintenance_db} port=${maintenance_port} user=${maintenance_username} password=${maintenance_password}" --file=/sql/9kAZUREDB_AMD_maintenance_recon_result.sql $RR_ID
 echo "$(date "+%d/%m/%Y %T") SQL for Check #9k has been run" >> $OUTFILE_LOG
 error_count=`head -1 ${OPDIR}9kAZUREDB_AMD_confiscation_maintenance_result.csv | awk '{print $1'} | wc -l | xargs`
 
@@ -455,7 +455,7 @@ if [[ $error_count -gt 0]];then
 
 echo "$(date "+%d/%m/%Y %T") Connecting to $maintenance_db database" >> $OUTFILE_LOG
 echo "$(date "+%d/%m/%Y %T") Starting Check #9l" >> $OUTFILE_LOG
-psql "sslmode=require host=${maintenance_host} dbname=${maintenance_db} port=${maintenance_port} user=${maintenance_username} password=${maintenance_password}" --file=/sql/9lAZUREDB_AMD_maintenance_ERRORS.sql $RR_ID
+psql "sslmode=require host=${maintenance_host} dbname=${maintenance_db} port=${maintenance_port} user=${maintenance_username} password=${maintenance_password}" --file=/sql/9lAZUREDB_AMD_maintenance_recon_ERRORS.sql $RR_ID
 echo "$(date "+%d/%m/%Y %T") SQL for Check #9l has been run" >> $OUTFILE_LOG
 
 while read -r line;do
