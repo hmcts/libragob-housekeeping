@@ -2,14 +2,13 @@
 ####################################################### This is the AMD AzureDB Healthcheck Script, and the associated documentation is in Ensemble under the "Libra System Admin Documents" area:
 ####################################################### "GoB Phase 1 - Oracle_Postgres DB Checks_v11.5_MAP.docx" is the latest version as of 01/08/2024
 dt_today=$(date "+%Y/%m/%D")
-echo "Script Version 3.6: Check 8"
+echo "Script Version 3.7: Check 2"
 mkdir /tmp/ams-reporting/
 OPDIR="/tmp/ams-reporting/"
 OUTFILE="${OPDIR}AZURE_DB001_AMD"
 OUTFILE_LOG="${OPDIR}AZURE_DB001_AMD.log"
 rm -f $OUTFILE $OUTFILE.csv $OUTFILE_LOG
 echo $(date "+%d/%m/%Y %T") > $OUTFILE
-#ls -altr /mnt/secrets/$KV_NAME/
 
 ###############################################################
 ### Set-up DB connection variables, extracted from KeyVault ###
@@ -30,14 +29,6 @@ echo $event_port
 echo $event_db
 
 # PostgresDB connection variables
-
-#cat /mnt/secrets/$KV_NAME/themis-gateway-dbusername
-#printf "\n"
-#cat /mnt/secrets/$KV_NAME/themis-gateway-dbpassword
-#printf "\n"
-#cat /mnt/secrets/$KV_NAME/themis-gateway-datasourceurl
-#printf "\n"
-
 #postgres_username=`cat /mnt/secrets/$KV_NAME/themis-gateway-dbusername`
 #postgres_password=`cat /mnt/secrets/$KV_NAME/themis-gateway-dbpassword`
 #postgres_url=`cat /mnt/secrets/$KV_NAME/themis-gateway-datasourceurl`
@@ -121,7 +112,6 @@ done < ${OPDIR}1AZUREDB_AMD_locked_schemas.csv
 
 echo "$(date "+%d/%m/%Y %T") Check #1 complete" >> $OUTFILE_LOG
 ####################################################### CHECK 2
-if [[ 0 == 1 ]];then
 echo "[Check #2: Locked Instance Keys]" >> $OUTFILE
 echo "DateTime,CheckName,Description,Threshold,Status,Result" >> $OUTFILE
 echo "$(date "+%d/%m/%Y %T") Starting Check #2" >> $OUTFILE_LOG
@@ -143,8 +133,6 @@ fi
 done < ${OPDIR}2AZUREDB_AMD_locked_keys.csv
 
 echo "$(date "+%d/%m/%Y %T") Check #2 complete" >> $OUTFILE_LOG
-
-fi
 ####################################################### CHECK 4
 echo "[Check #4: Thread Status Counts]" >> $OUTFILE
 echo "DateTime,CheckName,Description,State,Threshold,Count,Result" >> $OUTFILE
