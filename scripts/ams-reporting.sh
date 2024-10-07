@@ -21,10 +21,6 @@ event_host=`echo $event_url | awk -F"\/\/" {'print $2'} | awk -F":" {'print $1'}
 event_port=`echo $event_url | awk -F":" {'print $4'} | awk -F"\/" {'print $1'}`
 event_db=`echo $event_url | awk -F":" {'print $4'} | awk -F"\/" {'print $2'}`
 
-echo $event_username
-echo $event_password
-echo $event_url
-
 # PostgresDB connection variables
 
 cat /mnt/secrets/$KV_NAME/themis-gateway-dbusername
@@ -42,11 +38,14 @@ postgres_port=`echo $postgres_url | awk -F":" {'print $4'} | awk -F"\/" {'print 
 postgres_db=`echo $postgres_url | awk -F":" {'print $4'} | awk -F"\/" {'print $2'}
 
 postgres_username=edb
-postgres_password=edb
+postgres_password=edb_read_0nly
 
 echo $postgres_username
 echo $postgres_password
 echo $postgres_url
+echo $postgres_host
+echo $postgres_port
+echo $postgres_db
 
 # ConfiscationDB connection variables
 confiscation_username=$(cat /mnt/secrets/$KV_NAME/confiscation-datasource-username)
@@ -117,7 +116,6 @@ done < ${OPDIR}1AZUREDB_AMD_locked_schemas.csv
 
 echo "$(date "+%d/%m/%Y %T") Check #1 complete" >> $OUTFILE_LOG
 ####################################################### CHECK 2
-if [[ 0 == 1 ]];then
 echo "[Check #2: Locked Instance Keys]" >> $OUTFILE
 echo "DateTime,CheckName,Description,Threshold,Status,Result" >> $OUTFILE
 echo "$(date "+%d/%m/%Y %T") Starting Check #2" >> $OUTFILE_LOG
@@ -139,7 +137,6 @@ fi
 done < ${OPDIR}2AZUREDB_AMD_locked_keys.csv
 
 echo "$(date "+%d/%m/%Y %T") Check #2 complete" >> $OUTFILE_LOG
-fi
 ####################################################### CHECK 4
 echo "[Check #4: Thread Status Counts]" >> $OUTFILE
 echo "DateTime,CheckName,Description,State,Threshold,Count,Result" >> $OUTFILE
