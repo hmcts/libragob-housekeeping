@@ -364,6 +364,11 @@ fi
 
 fi
 
+echo "cat of OUTFILE:"
+cat $OUTFILE
+echo "cat of OUTFILE_LOG:"
+cat $OUTFILE_LOG
+
 exit 0
 
 echo "$(date "+%d/%m/%Y %T") Connecting to $fines_db database" >> $OUTFILE_LOG
@@ -441,13 +446,6 @@ fi
 fi
 
 echo "$(date "+%d/%m/%Y %T") Check #9 complete" >> $OUTFILE_LOG
-
-echo "cat of OUTFILE:"
-cat $OUTFILE
-echo "cat of OUTFILE_LOG:"
-cat $OUTFILE_LOG
-
-exit 0
 ####################################################### CHECK 10
 echo "[Check #10: Themis WebLogic]" >> $OUTFILE
 echo "Message" >> $OUTFILE
