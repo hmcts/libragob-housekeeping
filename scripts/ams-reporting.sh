@@ -37,7 +37,7 @@ postgres_host=`echo $postgres_url | awk -F"\/\/" {'print $2'} | awk -F":" {'prin
 postgres_port=`echo $postgres_url | awk -F":" {'print $4'} | awk -F"\/" {'print $1'}`
 postgres_db=`echo $postgres_url | awk -F":" {'print $4'} | awk -F"\/" {'print $2'}
 
-postgres_username=edb
+postgres_username=edb_amd
 postgres_password=edb_read_0nly
 
 echo $postgres_username
