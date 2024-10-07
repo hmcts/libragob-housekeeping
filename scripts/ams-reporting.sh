@@ -3,7 +3,7 @@
 ####################################################### "GoB Phase 1 - Oracle_Postgres DB Checks_v11.5_MAP.docx" is the latest version as of 01/08/2024
 rm -f $OUTFILE.csv
 dt_today=$(date "+%Y/%m/%D")
-echo "Script Version 3.1: Check 8"
+echo "Script Version 3.2: Check 8"
 mkdir /tmp/ams-reporting/
 OPDIR="/tmp/ams-reporting/"
 OUTFILE="${OPDIR}AZURE_DB001_AMD"
