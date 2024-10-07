@@ -1,1 +1,0 @@
-\copy (select * from RECONCILIATION_RUNS order by RR_ID desc limit 3;) To '/tmp/ams-reporting/9kAZUREDB_AMD_maintenance_recon_result.csv' With CSV DELIMITER ','
