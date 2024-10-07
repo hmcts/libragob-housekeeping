@@ -53,7 +53,6 @@ postgres_db=postgres
 
 echo $postgres_username
 echo $postgres_password
-echo $postgres_url
 echo $postgres_host
 echo $postgres_port
 echo $postgres_db
