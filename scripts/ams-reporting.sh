@@ -2,7 +2,7 @@
 ####################################################### This is the AMD AzureDB Healthcheck Script, and the associated documentation is in Ensemble under the "Libra System Admin Documents" area:
 ####################################################### "GoB Phase 1 - Oracle_Postgres DB Checks_v11.5_MAP.docx" is the latest version as of 01/08/2024
 dt_today=$(date "+%Y/%m/%D")
-echo "Script Version 3.5: Check 8"
+echo "Script Version 3.6: Check 8"
 mkdir /tmp/ams-reporting/
 OPDIR="/tmp/ams-reporting/"
 OUTFILE="${OPDIR}AZURE_DB001_AMD"
@@ -61,28 +61,28 @@ echo $postgres_db
 exit 0
 
 # ConfiscationDB connection variables
-confiscation_username=$(cat /mnt/secrets/$KV_NAME/confiscation-datasource-username)
-confiscation_password=$(cat /mnt/secrets/$KV_NAME/confiscation-datasource-password)
-confiscation_url=$(cat /mnt/secrets/$KV_NAME/confiscation-datasource-url)
-confiscation_host=`echo $confiscation_url | awk -F"\/\/" {'print $2'} | awk -F":" {'print $1'}`
-confiscation_port=`echo $confiscation_url | awk -F":" {'print $4'} | awk -F"\/" {'print $1'}`
-confiscation_db=`echo $confiscation_url | awk -F":" {'print $4'} | awk -F"\/" {'print $2'}
+#confiscation_username=$(cat /mnt/secrets/$KV_NAME/confiscation-datasource-username)
+#confiscation_password=$(cat /mnt/secrets/$KV_NAME/confiscation-datasource-password)
+#confiscation_url=$(cat /mnt/secrets/$KV_NAME/confiscation-datasource-url)
+#confiscation_host=`echo $confiscation_url | awk -F"\/\/" {'print $2'} | awk -F":" {'print $1'}`
+#confiscation_port=`echo $confiscation_url | awk -F":" {'print $4'} | awk -F"\/" {'print $1'}`
+#confiscation_db=`echo $confiscation_url | awk -F":" {'print $4'} | awk -F"\/" {'print $2'}`
 
 # FinesDB connection variables
-fines_username=$(cat /mnt/secrets/$KV_NAME/fines-datasource-username)
-fines_password=$(cat /mnt/secrets/$KV_NAME/fines-datasource-password)
-fines_url=$(cat /mnt/secrets/$KV_NAME/fines-datasource-url)
-fines_host=`echo $fines_url | awk -F"\/\/" {'print $2'} | awk -F":" {'print $1'}`
-fines_port=`echo $fines_url | awk -F":" {'print $4'} | awk -F"\/" {'print $1'}`
-fines_db=`echo $fines_url | awk -F":" {'print $4'} | awk -F"\/" {'print $2'}
+#fines_username=$(cat /mnt/secrets/$KV_NAME/fines-datasource-username)
+#fines_password=$(cat /mnt/secrets/$KV_NAME/fines-datasource-password)
+#fines_url=$(cat /mnt/secrets/$KV_NAME/fines-datasource-url)
+#fines_host=`echo $fines_url | awk -F"\/\/" {'print $2'} | awk -F":" {'print $1'}`
+#fines_port=`echo $fines_url | awk -F":" {'print $4'} | awk -F"\/" {'print $1'}`
+#fines_db=`echo $fines_url | awk -F":" {'print $4'} | awk -F"\/" {'print $2'}`
 
 # MaintenanceDB connection variables
-maintenance_username=$(cat /mnt/secrets/$KV_NAME/maintenance-datasource-username)
-maintenance_password=$(cat /mnt/secrets/$KV_NAME/maintenance-datasource-password)
-maintenance_url=$(cat /mnt/secrets/$KV_NAME/maintenance-datasource-url)
-maintenance_host=`echo $maintenance_url | awk -F"\/\/" {'print $2'} | awk -F":" {'print $1'}`
-maintenance_port=`echo $maintenance_url | awk -F":" {'print $4'} | awk -F"\/" {'print $1'}`
-maintenance_db=`echo $maintenance_url | awk -F":" {'print $4'} | awk -F"\/" {'print $2'}
+#maintenance_username=$(cat /mnt/secrets/$KV_NAME/maintenance-datasource-username)
+#maintenance_password=$(cat /mnt/secrets/$KV_NAME/maintenance-datasource-password)
+#maintenance_url=$(cat /mnt/secrets/$KV_NAME/maintenance-datasource-url)
+#maintenance_host=`echo $maintenance_url | awk -F"\/\/" {'print $2'} | awk -F":" {'print $1'}`
+#maintenance_port=`echo $maintenance_url | awk -F":" {'print $4'} | awk -F"\/" {'print $1'}`
+#maintenance_db=`echo $maintenance_url | awk -F":" {'print $4'} | awk -F"\/" {'print $2'}`
 ############################################################################
 ### Push CSV file to BAIS so it can be ingested and displayed in the AMD ###
 ############################################################################
