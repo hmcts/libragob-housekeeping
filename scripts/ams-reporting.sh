@@ -118,7 +118,7 @@ done < ${OPDIR}1AZUREDB_AMD_locked_schemas.csv
 
 echo "$(date "+%d/%m/%Y %T") Check #1 complete" >> $OUTFILE_LOG
 ####################################################### CHECK 2
-if [[ 0 == 1 ]];
+if [[ 0 == 1 ]];then
 echo "[Check #2: Locked Instance Keys]" >> $OUTFILE
 echo "DateTime,CheckName,Description,Threshold,Status,Result" >> $OUTFILE
 echo "$(date "+%d/%m/%Y %T") Starting Check #2" >> $OUTFILE_LOG
