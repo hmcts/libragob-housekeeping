@@ -405,16 +405,16 @@ rowcount_dac_audit=`cat ${OPDIR}11dAZUREDB_AMD_row_counts_DAC_message_audit.csv`
 rowcount_gateway_audit=`cat ${OPDIR}11eAZUREDB_AMD_row_counts_GW_message_audit.csv`
 
 threshold_count_update_requests=14000
-threshold_count_update_requests=120000
-threshold_count_update_requests=80000
-threshold_count_update_requests=123000000
-threshold_count_update_requests=50000
+threshold_count_table_updates=120000
+threshold_count_message_log=80000
+threshold_count_dac_audit=123000000
+threshold_count_gateway_audit=50000
 
 threshold_count_update_requests=9999
-threshold_count_update_requests=0
-threshold_count_update_requests=0
-threshold_count_update_requests=0
-threshold_count_update_requests=0
+threshold_count_table_updates=0
+threshold_count_message_log=0
+threshold_count_dac_audit=0
+threshold_count_gateway_audit=0
 
 echo "$(date "+%d/%m/%Y %T") Starting Check #11a" >> $OUTFILE_LOG
 echo "$(date "+%d/%m/%Y %T") Connecting to $event_db database" >> $OUTFILE_LOG
