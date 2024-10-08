@@ -398,12 +398,6 @@ echo "$(date "+%d/%m/%Y %T") Check #10 has been run" >> $OUTFILE_LOG
 echo "[Check #11: Table Row Counts]" >> $OUTFILE
 echo "DateTime,CheckName,Description,RowCount,Threshold,Result" >> $OUTFILE
 
-rowcount_update_requests=`cat ${OPDIR}11aAZUREDB_AMD_row_counts_update_requests.csv`
-rowcount_table_updates=`cat ${OPDIR}11bAZUREDB_AMD_row_counts_table_updates.csv`
-rowcount_message_log=`cat ${OPDIR}11cAZUREDB_AMD_row_counts_message_log.csv`
-rowcount_dac_audit=`cat ${OPDIR}11dAZUREDB_AMD_row_counts_DAC_message_audit.csv`
-rowcount_gateway_audit=`cat ${OPDIR}11eAZUREDB_AMD_row_counts_GW_message_audit.csv`
-
 threshold_count_update_requests=14000
 threshold_count_table_updates=120000
 threshold_count_message_log=80000
@@ -420,6 +414,12 @@ echo "$(date "+%d/%m/%Y %T") Starting Check #11a" >> $OUTFILE_LOG
 echo "$(date "+%d/%m/%Y %T") Connecting to $event_db database" >> $OUTFILE_LOG
 psql "sslmode=require host=${event_host} dbname=${event_db} port=${event_port} user=${event_username} password=${event_password}" --file=/sql/11aAZUREDB_AMD_row_counts_update_requests.sql
 echo "$(date "+%d/%m/%Y %T") SQL for Check #11a has been run" >> $OUTFILE_LOG
+
+rowcount_update_requests=`cat ${OPDIR}11aAZUREDB_AMD_row_counts_update_requests.csv`
+rowcount_table_updates=`cat ${OPDIR}11bAZUREDB_AMD_row_counts_table_updates.csv`
+rowcount_message_log=`cat ${OPDIR}11cAZUREDB_AMD_row_counts_message_log.csv`
+rowcount_dac_audit=`cat ${OPDIR}11dAZUREDB_AMD_row_counts_DAC_message_audit.csv`
+rowcount_gateway_audit=`cat ${OPDIR}11eAZUREDB_AMD_row_counts_GW_message_audit.csv`
 
 if [[ $rowcount_update_requests -gt $threshold_count_update_requests ]];then
 
