@@ -402,7 +402,7 @@ threshold_count_update_requests=14000
 threshold_count_update_requests=120000
 threshold_count_update_requests=80000
 threshold_count_update_requests=123000000
-threshold_count_update_requests=9999999999999999
+threshold_count_update_requests=50000
 
 threshold_count_update_requests=9999
 threshold_count_update_requests=0
