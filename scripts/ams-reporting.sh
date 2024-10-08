@@ -421,7 +421,7 @@ echo "$(date "+%d/%m/%Y %T") Connecting to $event_db database" >> $OUTFILE_LOG
 psql "sslmode=require host=${event_host} dbname=${event_db} port=${event_port} user=${event_username} password=${event_password}" --file=/sql/11aAZUREDB_AMD_row_counts_update_requests.sql
 echo "$(date "+%d/%m/%Y %T") SQL for Check #11a has been run" >> $OUTFILE_LOG
 
-if [[ $rowcount_update_requests -gt $threshold_count_update_request ]];then
+if [[ $rowcount_update_requests -gt $threshold_count_update_requests ]];then
 
 echo "$(date "+%d/%m/%Y %T"),AZDB001_update_request_row_count,UPDATE_REQUEST RowCount,$rowcount_update_requests,$threshold_count_update_requests,warn" >> $OUTFILE
 
