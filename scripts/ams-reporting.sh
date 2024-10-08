@@ -330,10 +330,11 @@ echo "DateTime,CheckName,Description,Status,Result" >> $OUTFILE
 
 echo "$(date "+%d/%m/%Y %T") Starting Check #9a" >> $OUTFILE_LOG
 echo "$(date "+%d/%m/%Y %T") Connecting to $confiscation_db database" >> $OUTFILE_LOG
-psql "sslmode=require host=${confiscation_host} dbname=${confiscation_db} port=${confiscation_port} user=${confiscation_username} password=${confiscation_password}" --file=/sql/9aAZUREDB_AMD_confiscation_recon_result.sql $RR_ID
+psql "sslmode=require host=${confiscation_host} dbname=${confiscation_db} port=${confiscation_port} user=${confiscation_username} password=${confiscation_password}" --file=/sql/9aAZUREDB_AMD_confiscation_recon_result.sql
 echo "$(date "+%d/%m/%Y %T") SQL for Check #9a has been run" >> $OUTFILE_LOG
-error_count=`grep "1^" ${OPDIR}9aAZUREDB_AMD_confiscation_recon_result.csv | wc -l | xargs`
+error_count=`grep "0$" ${OPDIR}9aAZUREDB_AMD_confiscation_recon_result.csv | wc -l | xargs`
 dt_today=$(date "+%Y-%m-%D")
+dt_today=2939994944444
 
 echo "CAT of 9aAZUREDB_AMD_confiscation_recon_result.csv:"
 cat ${OPDIR}9aAZUREDB_AMD_confiscation_recon_result.csv
@@ -342,15 +343,7 @@ if [[ `grep "$dt_today" ${OPDIR}9aAZUREDB_AMD_confiscation_recon_result.csv` ]];
 
 if [[ $error_count -gt 0 ]];then
 
-while read -r line;do
-
-schema_id=`echo $line | awk '{print $3}'`
-item=`echo $line | awk '{print $4}'
-feedback=`echo $line | awk '{print $5}'
-
-echo "$(date "+%d/%m/%Y %T"),AZDB001_maint_recon_$schema_id,Confiscation Recon,SchemaId $schema_id with $item is in $feedback,warn" >> $OUTFILE
-
-done < ${OPDIR}9aAZUREDB_AMD_confiscation_recon_result.csv
+echo "$(date "+%d/%m/%Y %T"),AZDB001_maint_recon_$schema_id,Confiscation Recon,Recon has errors so pls investigate,warn" >> $OUTFILE
 
 else
 
@@ -373,7 +366,7 @@ exit 0
 
 echo "$(date "+%d/%m/%Y %T") Connecting to $fines_db database" >> $OUTFILE_LOG
 echo "$(date "+%d/%m/%Y %T") Starting Check #9b" >> $OUTFILE_LOG
-psql "sslmode=require host=${fines_host} dbname=${fines_db} port=${fines_port} user=${fines_username} password=${fines_password}" --file=/sql/9bAZUREDB_AMD_fines_recon_result.sql $RR_ID
+psql "sslmode=require host=${fines_host} dbname=${fines_db} port=${fines_port} user=${fines_username} password=${fines_password}" --file=/sql/9bAZUREDB_AMD_fines_recon_result.sql
 echo "$(date "+%d/%m/%Y %T") SQL for Check #9b has been run" >> $OUTFILE_LOG
 error_count=`head -1 ${OPDIR}9gAZUREDB_AMD_fines_recon_result.csv | awk '{print $1'} | wc -l | xargs`
 
@@ -387,7 +380,7 @@ if [[ $error_count -gt 0 ]];then
 
 echo "$(date "+%d/%m/%Y %T") Connecting to $fines_db database" >> $OUTFILE_LOG
 echo "$(date "+%d/%m/%Y %T") Starting Check #9b" >> $OUTFILE_LOG
-psql "sslmode=require host=${fines_host} dbname=${fines_db} port=${fines_port} user=${fines_username} password=${fines_password}" --file=/sql/9bAZUREDB_AMD_fines_recon_ERRORS.sql $RR_ID
+psql "sslmode=require host=${fines_host} dbname=${fines_db} port=${fines_port} user=${fines_username} password=${fines_password}" --file=/sql/9bAZUREDB_AMD_fines_recon_ERRORS.sql
 echo "$(date "+%d/%m/%Y %T") SQL for Check #9b has been run" >> $OUTFILE_LOG
 
 while read -r line;do
