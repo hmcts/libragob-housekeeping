@@ -321,8 +321,6 @@ psql "sslmode=require host=${confiscation_host} dbname=${confiscation_db} port=$
 echo "$(date "+%d/%m/%Y %T") SQL for Check #9a has been run" >> $OUTFILE_LOG
 error_count=`grep "1$" ${OPDIR}9aAZUREDB_AMD_confiscation_recon_result.csv | wc -l | xargs`
 
-cat ${OPDIR}9aAZUREDB_AMD_confiscation_recon_result.csv
-
 if [[ `grep "$dt_today" ${OPDIR}9aAZUREDB_AMD_confiscation_recon_result.csv` ]];then
 
 if [[ $error_count -gt 0 ]];then
@@ -346,8 +344,6 @@ echo "$(date "+%d/%m/%Y %T") Starting Check #9b" >> $OUTFILE_LOG
 psql "sslmode=require host=${fines_host} dbname=${fines_db} port=${fines_port} user=${fines_username} password=${fines_password}" --file=/sql/9bAZUREDB_AMD_fines_recon_result.sql
 echo "$(date "+%d/%m/%Y %T") SQL for Check #9b has been run" >> $OUTFILE_LOG
 error_count=`grep "1$" ${OPDIR}9bAZUREDB_AMD_fines_recon_result.csv | wc -l | xargs`
-
-cat ${OPDIR}9bAZUREDB_AMD_fines_recon_result.csv
 
 if [[ `grep "$dt_today" ${OPDIR}9bAZUREDB_AMD_fines_recon_result.csv` ]];then
 
@@ -373,8 +369,6 @@ psql "sslmode=require host=${maintenance_host} dbname=${maintenance_db} port=${m
 echo "$(date "+%d/%m/%Y %T") SQL for Check #9c has been run" >> $OUTFILE_LOG
 error_count=`grep "1$" ${OPDIR}9cAZUREDB_AMD_maintenance_recon_result.csv | wc -l | xargs`
 
-cat ${OPDIR}9cAZUREDB_AMD_maintenance_recon_result.csv
-
 if [[ `grep "$dt_today" ${OPDIR}9cAZUREDB_AMD_maintenance_recon_result.csv` ]];then
 
 if [[ $error_count -gt 0 ]];then
@@ -398,7 +392,7 @@ echo "$(date "+%d/%m/%Y %T") Check #9 complete" >> $OUTFILE_LOG
 echo "[Check #10: Themis WebLogic]" >> $OUTFILE
 echo "$(date "+%d/%m/%Y %T") Starting Check #10" >> $OUTFILE_LOG
 echo "ReminderMessage" >> $OUTFILE
-echo "Remember to check Themis Process States & WL Backlogs on AMD LIBRA Web App ADMIN-1 server" >> $OUTFILE_LOG
+echo "Remember to check Themis Process States & WL Backlogs on AMD LIBRA Web App ADMIN-1 server" >> $OUTFILE
 echo "$(date "+%d/%m/%Y %T") Check #10 has been run" >> $OUTFILE_LOG
 ####################################################### CHECK 11
 echo "[Check #11: Table Row Counts]" >> $OUTFILE
