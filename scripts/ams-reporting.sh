@@ -427,7 +427,7 @@ echo "$(date "+%d/%m/%Y %T"),AZDB001_update_request_row_count,UPDATE_REQUEST Row
 
 else
 
-echo "$(date "+%d/%m/%Y %T"),AZDB001_update_request_row_counnt,UPDATE_REQUEST RowCount,,$rowcount_update_requests,$threshold_count_update_requests,ok" >> $OUTFILE
+echo "$(date "+%d/%m/%Y %T"),AZDB001_update_request_row_count,UPDATE_REQUEST RowCount,$rowcount_update_requests,$threshold_count_update_requests,ok" >> $OUTFILE
 
 fi
 
