@@ -321,6 +321,8 @@ psql "sslmode=require host=${confiscation_host} dbname=${confiscation_db} port=$
 echo "$(date "+%d/%m/%Y %T") SQL for Check #9a has been run" >> $OUTFILE_LOG
 error_count=`grep "0$" ${OPDIR}9aAZUREDB_AMD_confiscation_recon_result.csv | wc -l | xargs`
 
+cat ${OPDIR}9aAZUREDB_AMD_confiscation_recon_result.csv
+
 if [[ `grep "$dt_today" ${OPDIR}9aAZUREDB_AMD_confiscation_recon_result.csv` ]];then
 
 if [[ $error_count -gt 0 ]];then
@@ -345,6 +347,8 @@ psql "sslmode=require host=${fines_host} dbname=${fines_db} port=${fines_port} u
 echo "$(date "+%d/%m/%Y %T") SQL for Check #9b has been run" >> $OUTFILE_LOG
 error_count=`grep "0$" ${OPDIR}9bAZUREDB_AMD_fines_recon_result.csv | wc -l | xargs`
 
+cat ${OPDIR}9bAZUREDB_AMD_fines_recon_result.csv
+
 if [[ `grep "$dt_today" ${OPDIR}9bAZUREDB_AMD_fines_recon_result.csv` ]];then
 
 if [[ $error_count -gt 0 ]];then
@@ -368,6 +372,8 @@ echo "$(date "+%d/%m/%Y %T") Starting Check #9c" >> $OUTFILE_LOG
 psql "sslmode=require host=${maintenance_host} dbname=${maintenance_db} port=${maintenance_port} user=${maintenance_username} password=${maintenance_password}" --file=/sql/9cAZUREDB_AMD_maintenance_recon_result.sql
 echo "$(date "+%d/%m/%Y %T") SQL for Check #9c has been run" >> $OUTFILE_LOG
 error_count=`grep "0$" ${OPDIR}9cAZUREDB_AMD_maintenance_recon_result.csv | wc -l | xargs`
+
+cat ${OPDIR}9cAZUREDB_AMD_maintenance_recon_result.csv
 
 if [[ `grep "$dt_today" ${OPDIR}9cAZUREDB_AMD_maintenance_recon_result.csv` ]];then
 
