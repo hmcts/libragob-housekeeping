@@ -339,6 +339,10 @@ echo $dt_today
 echo "CAT of 9aAZUREDB_AMD_confiscation_recon_result.csv:"
 cat ${OPDIR}9aAZUREDB_AMD_confiscation_recon_result.csv
 
+echo "====================="
+grep "$dt_today" ${OPDIR}9aAZUREDB_AMD_confiscation_recon_result.csv
+echo "====================="
+
 if [[ `grep "$dt_today" ${OPDIR}9aAZUREDB_AMD_confiscation_recon_result.csv` ]];then
 
 if [[ $error_count -gt 0 ]];then
@@ -368,75 +372,13 @@ echo "$(date "+%d/%m/%Y %T") Connecting to $fines_db database" >> $OUTFILE_LOG
 echo "$(date "+%d/%m/%Y %T") Starting Check #9b" >> $OUTFILE_LOG
 psql "sslmode=require host=${fines_host} dbname=${fines_db} port=${fines_port} user=${fines_username} password=${fines_password}" --file=/sql/9bAZUREDB_AMD_fines_recon_result.sql
 echo "$(date "+%d/%m/%Y %T") SQL for Check #9b has been run" >> $OUTFILE_LOG
-error_count=`head -1 ${OPDIR}9gAZUREDB_AMD_fines_recon_result.csv | awk '{print $1'} | wc -l | xargs`
-
-if [[ `grep "$dt_today" $rundate` ]];then
-
-echo "$(date "+%d/%m/%Y %T"),AZDB001_maint_recon_status,Fines Recon,Recon didn't run today,warn" >> $OUTFILE
-
-else
-
-if [[ $error_count -gt 0 ]];then
-
-echo "$(date "+%d/%m/%Y %T") Connecting to $fines_db database" >> $OUTFILE_LOG
-echo "$(date "+%d/%m/%Y %T") Starting Check #9b" >> $OUTFILE_LOG
-psql "sslmode=require host=${fines_host} dbname=${fines_db} port=${fines_port} user=${fines_username} password=${fines_password}" --file=/sql/9bAZUREDB_AMD_fines_recon_ERRORS.sql
-echo "$(date "+%d/%m/%Y %T") SQL for Check #9b has been run" >> $OUTFILE_LOG
-
-while read -r line;do
-
-schema_id=`echo $line | awk '{print $3}'`
-item=`echo $line | awk '{print $4}'
-feedback=`echo $line | awk '{print $5}'
-
-echo "$(date "+%d/%m/%Y %T"),AZDB001_maint_recon_$schema_id,Fines Recon,SchemaId $schema_id with $item is in $feedback,warn" >> $OUTFILE
-
-done < ${OPDIR}9bAZUREDB_AMD_fines_recon_ERRORS.csv
-
-else
-
-echo "$(date "+%d/%m/%Y %T"),AZDB001_maint_recon_status,Fines Recon,RR_ID $RR_ID Recon ran with no errors,ok" >> $OUTFILE
-
-fi
-
-fi
+error_count=`head -1 ${OPDIR}9bAZUREDB_AMD_fines_recon_result.csv | awk '{print $1'} | wc -l | xargs`
 
 echo "$(date "+%d/%m/%Y %T") Connecting to $maintenance_db database" >> $OUTFILE_LOG
 echo "$(date "+%d/%m/%Y %T") Starting Check #9c" >> $OUTFILE_LOG
-psql "sslmode=require host=${maintenance_host} dbname=${maintenance_db} port=${maintenance_port} user=${maintenance_username} password=${maintenance_password}" --file=/sql/9cAZUREDB_AMD_maintenance_recon_result.sql $RR_ID
+psql "sslmode=require host=${maintenance_host} dbname=${maintenance_db} port=${maintenance_port} user=${maintenance_username} password=${maintenance_password}" --file=/sql/9cAZUREDB_AMD_maintenance_recon_result.sql
 echo "$(date "+%d/%m/%Y %T") SQL for Check #9c has been run" >> $OUTFILE_LOG
 error_count=`head -1 ${OPDIR}9cAZUREDB_AMD_maintenance_recon_result.csv | awk '{print $1'} | wc -l | xargs`
-
-if [[ `grep "$dt_today" $rundate` ]];then
-
-echo "$(date "+%d/%m/%Y %T"),AZDB001_maint_recon_status,Maintenance Recon,Recon didn't run today,warn" >> $OUTFILE
-
-else
-
-if [[ $error_count -gt 0 ]];then
-
-echo "$(date "+%d/%m/%Y %T") Connecting to $maintenance_db database" >> $OUTFILE_LOG
-echo "$(date "+%d/%m/%Y %T") Starting Check #9l" >> $OUTFILE_LOG
-psql "sslmode=require host=${maintenance_host} dbname=${maintenance_db} port=${maintenance_port} user=${maintenance_username} password=${maintenance_password}" --file=/sql/9lAZUREDB_AMD_maintenance_recon_ERRORS.sql $RR_ID
-echo "$(date "+%d/%m/%Y %T") SQL for Check #9l has been run" >> $OUTFILE_LOG
-
-while read -r line;do
-
-schema_id=`echo $line | awk '{print $3}'`
-item=`echo $line | awk '{print $4}'
-feedback=`echo $line | awk '{print $5}'
-
-echo "$(date "+%d/%m/%Y %T"),AZDB001_maint_recon_$schema_id,Maintenance Recon,SchemaId $schema_id with $item is in $feedback,warn" >> $OUTFILE
-
-done < ${OPDIR}9lAZUREDB_AMD_maintenance_recon_ERRORS.csv
-
-else
-
-echo "$(date "+%d/%m/%Y %T"),AZDB001_maint_recon_status,Maintenance Recon,RR_ID $RR_ID Recon ran with no errors,ok" >> $OUTFILE
-
-fi
-
-fi
 
 echo "$(date "+%d/%m/%Y %T") Check #9 complete" >> $OUTFILE_LOG
 ####################################################### CHECK 10
