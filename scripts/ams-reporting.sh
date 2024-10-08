@@ -396,7 +396,13 @@ echo "Remember to check Themis Process States & WL Backlogs on AMD LIBRA Web App
 echo "$(date "+%d/%m/%Y %T") Check #10 has been run" >> $OUTFILE_LOG
 ####################################################### CHECK 11
 echo "[Check #11: Table Row Counts]" >> $OUTFILE
-echo "DateTime,CheckName,Description,Threshold,Status,Result" >> $OUTFILE
+echo "DateTime,CheckName,Description,RowCount,Threshold,Result" >> $OUTFILE
+
+rowcount_update_requests=`cat ${OPDIR}11aAZUREDB_AMD_row_counts_update_requests.csv | awk {'print $1'} | xargs`
+rowcount_table_updates=`cat ${OPDIR}11aAZUREDB_AMD_row_counts_update_requests.csv | awk {'print $1'} | xargs`
+rowcount_message_log=`cat ${OPDIR}11aAZUREDB_AMD_row_counts_update_requests.csv | awk {'print $1'} | xargs`
+rowcount_dac_audit=`cat ${OPDIR}11aAZUREDB_AMD_row_counts_update_requests.csv | awk {'print $1'} | xargs`
+rowcount_gateway_audit=`cat ${OPDIR}11aAZUREDB_AMD_row_counts_update_requests.csv | awk {'print $1'} | xargs`
 
 threshold_count_update_requests=14000
 threshold_count_update_requests=120000
@@ -415,13 +421,13 @@ echo "$(date "+%d/%m/%Y %T") Connecting to $event_db database" >> $OUTFILE_LOG
 psql "sslmode=require host=${event_host} dbname=${event_db} port=${event_port} user=${event_username} password=${event_password}" --file=/sql/11aAZUREDB_AMD_row_counts_update_requests.sql
 echo "$(date "+%d/%m/%Y %T") SQL for Check #11a has been run" >> $OUTFILE_LOG
 
-if [[ `cat ${OPDIR}11aAZUREDB_AMD_row_counts_update_requests.csv | awk {'print $1'} | xargs` -gt $threshold_count_update_request ]];then
+if [[ $rowcount_update_requests -gt $threshold_count_update_request ]];then
 
-echo "$(date "+%d/%m/%Y %T"),AZDB001_update_request_row_count,UPDATE_REQUEST RowCount,Did table housekeeping run without error,warn" >> $OUTFILE
+echo "$(date "+%d/%m/%Y %T"),AZDB001_update_request_row_count,UPDATE_REQUEST RowCount,$rowcount_update_requests,$threshold_count_update_requests,warn" >> $OUTFILE
 
 else
 
-echo "$(date "+%d/%m/%Y %T"),AZDB001_update_request_row_counnt,UPDATE_REQUEST RowCount,Rowcount is good,ok" >> $OUTFILE
+echo "$(date "+%d/%m/%Y %T"),AZDB001_update_request_row_counnt,UPDATE_REQUEST RowCount,,$rowcount_update_requests,$threshold_count_update_requests,ok" >> $OUTFILE
 
 fi
 
