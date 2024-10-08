@@ -398,10 +398,32 @@ echo "$(date "+%d/%m/%Y %T") Check #10 has been run" >> $OUTFILE_LOG
 echo "[Check #11: Table Row Counts]" >> $OUTFILE
 echo "DateTime,CheckName,Description,Threshold,Status,Result" >> $OUTFILE
 
+threshold_count_update_requests=14000
+threshold_count_update_requests=120000
+threshold_count_update_requests=80000
+threshold_count_update_requests=123000000
+threshold_count_update_requests=9999999999999999
+
+threshold_count_update_requests=9999
+threshold_count_update_requests=0
+threshold_count_update_requests=0
+threshold_count_update_requests=0
+threshold_count_update_requests=0
+
 echo "$(date "+%d/%m/%Y %T") Starting Check #11a" >> $OUTFILE_LOG
 echo "$(date "+%d/%m/%Y %T") Connecting to $event_db database" >> $OUTFILE_LOG
 psql "sslmode=require host=${event_host} dbname=${event_db} port=${event_port} user=${event_username} password=${event_password}" --file=/sql/11aAZUREDB_AMD_row_counts_update_requests.sql
 echo "$(date "+%d/%m/%Y %T") SQL for Check #11a has been run" >> $OUTFILE_LOG
+
+if [[ `cat ${OPDIR}11aAZUREDB_AMD_row_counts_update_requests.csv | xargs` -gt $threshold_count_update_request ]];then
+
+echo "$(date "+%d/%m/%Y %T"),AZDB001_update_request_row_count,UPDATE_REQUEST RowCount,Did table housekeeping run without error,warn" >> $OUTFILE
+
+else
+
+echo "$(date "+%d/%m/%Y %T"),AZDB001_update_request_row_counnt,UPDATE_REQUEST RowCount,Rowcount is good,ok" >> $OUTFILE
+
+fi
 
 echo "$(date "+%d/%m/%Y %T") Starting Check #11b" >> $OUTFILE_LOG
 echo "$(date "+%d/%m/%Y %T") Connecting to $event_db database" >> $OUTFILE_LOG
