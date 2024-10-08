@@ -398,11 +398,11 @@ echo "$(date "+%d/%m/%Y %T") Check #10 has been run" >> $OUTFILE_LOG
 echo "[Check #11: Table Row Counts]" >> $OUTFILE
 echo "DateTime,CheckName,Description,RowCount,Threshold,Result" >> $OUTFILE
 
-rowcount_update_requests=`cat ${OPDIR}11aAZUREDB_AMD_row_counts_update_requests.csv | awk {'print $1'} | xargs`
-rowcount_table_updates=`cat ${OPDIR}11bAZUREDB_AMD_row_counts_table_updates.csv | awk {'print $1'} | xargs`
-rowcount_message_log=`cat ${OPDIR}11cAZUREDB_AMD_row_counts_message_log.csv | awk {'print $1'} | xargs`
-rowcount_dac_audit=`cat ${OPDIR}11dAZUREDB_AMD_row_counts_DAC_message_audit.csv | awk {'print $1'} | xargs`
-rowcount_gateway_audit=`cat ${OPDIR}11eAZUREDB_AMD_row_counts_GW_message_audit.csv | awk {'print $1'} | xargs`
+rowcount_update_requests=`cat ${OPDIR}11aAZUREDB_AMD_row_counts_update_requests.csv | xargs`
+rowcount_table_updates=`cat ${OPDIR}11bAZUREDB_AMD_row_counts_table_updates.csv | xargs`
+rowcount_message_log=`cat ${OPDIR}11cAZUREDB_AMD_row_counts_message_log.csv | xargs`
+rowcount_dac_audit=`cat ${OPDIR}11dAZUREDB_AMD_row_counts_DAC_message_audit.csv | xargs`
+rowcount_gateway_audit=`cat ${OPDIR}11eAZUREDB_AMD_row_counts_GW_message_audit.csv | xargs`
 
 threshold_count_update_requests=14000
 threshold_count_update_requests=120000
