@@ -333,7 +333,7 @@ echo "$(date "+%d/%m/%Y %T") Connecting to $confiscation_db database" >> $OUTFIL
 psql "sslmode=require host=${confiscation_host} dbname=${confiscation_db} port=${confiscation_port} user=${confiscation_username} password=${confiscation_password}" --file=/sql/9aAZUREDB_AMD_confiscation_recon_result.sql
 echo "$(date "+%d/%m/%Y %T") SQL for Check #9a has been run" >> $OUTFILE_LOG
 error_count=`grep "0$" ${OPDIR}9aAZUREDB_AMD_confiscation_recon_result.csv | wc -l | xargs`
-dt_today=$(date "+%Y-%m-%D")
+dt_today=$(date "+%Y-%m-%d")
 echo $dt_today
 echo $error_count
 echo "CAT of 9aAZUREDB_AMD_confiscation_recon_result.csv:"
@@ -365,7 +365,6 @@ echo "cat of OUTFILE:"
 cat $OUTFILE
 echo "cat of OUTFILE_LOG:"
 cat $OUTFILE_LOG
-
 exit 0
 
 echo "$(date "+%d/%m/%Y %T") Connecting to $fines_db database" >> $OUTFILE_LOG
