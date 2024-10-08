@@ -373,7 +373,7 @@ if [[ `grep "$dt_today" ${OPDIR}9cAZUREDB_AMD_maintenance_recon_result.csv` ]];t
 
 if [[ $error_count -gt 0 ]];then
 
-echo "$(date "+%d/%m/%Y %T"),AZDB001_maint_maintenance_recon_$schema_id,Maintenance Recon,Recon has errors so pls investigate,warn" >> $OUTFILE
+echo "$(date "+%d/%m/%Y %T"),AZDB001_maint_maintenance_recon,Maintenance Recon,Recon has errors so pls investigate,warn" >> $OUTFILE
 
 else
 
