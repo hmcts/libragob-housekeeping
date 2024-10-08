@@ -343,9 +343,9 @@ echo "$(date "+%d/%m/%Y %T") Connecting to $fines_db database" >> $OUTFILE_LOG
 echo "$(date "+%d/%m/%Y %T") Starting Check #9b" >> $OUTFILE_LOG
 psql "sslmode=require host=${fines_host} dbname=${fines_db} port=${fines_port} user=${fines_username} password=${fines_password}" --file=/sql/9bAZUREDB_AMD_fines_recon_result.sql
 echo "$(date "+%d/%m/%Y %T") SQL for Check #9b has been run" >> $OUTFILE_LOG
-error_count=`head -1 ${OPDIR}9bAZUREDB_AMD_fines_recon_result.csv | awk '{print $1'} | wc -l | xargs`
+error_count=`grep "0$" ${OPDIR}9bAZUREDB_AMD_fines_recon_result.csv | wc -l | xargs`
 
-if [[ `grep "$dt_today" ${OPDIR}9aAZUREDB_AMD_fines_recon_result.csv` ]];then
+if [[ `grep "$dt_today" ${OPDIR}9bAZUREDB_AMD_fines_recon_result.csv` ]];then
 
 if [[ $error_count -gt 0 ]];then
 
@@ -367,9 +367,9 @@ echo "$(date "+%d/%m/%Y %T") Connecting to $maintenance_db database" >> $OUTFILE
 echo "$(date "+%d/%m/%Y %T") Starting Check #9c" >> $OUTFILE_LOG
 psql "sslmode=require host=${maintenance_host} dbname=${maintenance_db} port=${maintenance_port} user=${maintenance_username} password=${maintenance_password}" --file=/sql/9cAZUREDB_AMD_maintenance_recon_result.sql
 echo "$(date "+%d/%m/%Y %T") SQL for Check #9c has been run" >> $OUTFILE_LOG
-error_count=`head -1 ${OPDIR}9cAZUREDB_AMD_maintenance_recon_result.csv | awk '{print $1'} | wc -l | xargs`
+error_count=`grep "0$" ${OPDIR}9cAZUREDB_AMD_maintenance_recon_result.csv | wc -l | xargs`
 
-if [[ `grep "$dt_today" ${OPDIR}9aAZUREDB_AMD_maintenance_recon_result.csv` ]];then
+if [[ `grep "$dt_today" ${OPDIR}9cAZUREDB_AMD_maintenance_recon_result.csv` ]];then
 
 if [[ $error_count -gt 0 ]];then
 
