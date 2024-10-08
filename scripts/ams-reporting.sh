@@ -20,13 +20,6 @@ event_host=`echo $event_url | awk -F"\/\/" {'print $2'} | awk -F":" {'print $1'}
 event_port=`echo $event_url | awk -F":" {'print $4'} | awk -F"\/" {'print $1'}`
 event_db=`echo $event_url | awk -F":" {'print $4'} | awk -F"\/" {'print $2'}`
 
-echo $event_username
-echo $event_password
-echo $event_url
-echo $event_host
-echo $event_port
-echo $event_db
-
 # PostgresDB connection variables
 #postgres_username=`cat /mnt/secrets/$KV_NAME/themis-gateway-dbusername`
 #postgres_password=`cat /mnt/secrets/$KV_NAME/themis-gateway-dbpassword`
@@ -40,12 +33,6 @@ postgres_password=edb_read_0nly
 postgres_host=libragob-test.postgres.database.azure.com
 postgres_port=5432
 postgres_db=postgres
-
-echo $postgres_username
-echo $postgres_password
-echo $postgres_host
-echo $postgres_port
-echo $postgres_db
 
 # ConfiscationDB connection variables
 #confiscation_username=$(cat /mnt/secrets/$KV_NAME/confiscation-datasource-username)
@@ -327,45 +314,30 @@ echo "$(date "+%d/%m/%Y %T") Check #8 complete" >> $OUTFILE_LOG
 ####################################################### CHECK 9
 echo "[Check #9: Azure Recon (ORA Recon check is on AMD Database INFO tab)]" >> $OUTFILE
 echo "DateTime,CheckName,Description,Status,Result" >> $OUTFILE
-
+dt_today=$(date "+%Y-%m-%d")
 echo "$(date "+%d/%m/%Y %T") Starting Check #9a" >> $OUTFILE_LOG
 echo "$(date "+%d/%m/%Y %T") Connecting to $confiscation_db database" >> $OUTFILE_LOG
 psql "sslmode=require host=${confiscation_host} dbname=${confiscation_db} port=${confiscation_port} user=${confiscation_username} password=${confiscation_password}" --file=/sql/9aAZUREDB_AMD_confiscation_recon_result.sql
 echo "$(date "+%d/%m/%Y %T") SQL for Check #9a has been run" >> $OUTFILE_LOG
-error_count=`grep "1$" ${OPDIR}9aAZUREDB_AMD_confiscation_recon_result.csv | wc -l | xargs`
-dt_today=$(date "+%Y-%m-%d")
-echo $dt_today
-echo $error_count
-echo "CAT of 9aAZUREDB_AMD_confiscation_recon_result.csv:"
-cat ${OPDIR}9aAZUREDB_AMD_confiscation_recon_result.csv
-
-echo "====================="
-grep "$dt_today" ${OPDIR}9aAZUREDB_AMD_confiscation_recon_result.csv
-echo "====================="
+error_count=`grep "0$" ${OPDIR}9aAZUREDB_AMD_confiscation_recon_result.csv | wc -l | xargs`
 
 if [[ `grep "$dt_today" ${OPDIR}9aAZUREDB_AMD_confiscation_recon_result.csv` ]];then
 
 if [[ $error_count -gt 0 ]];then
 
-echo "$(date "+%d/%m/%Y %T"),AZDB001_maint_recon_$schema_id,Confiscation Recon,Recon has errors so pls investigate,warn" >> $OUTFILE
+echo "$(date "+%d/%m/%Y %T"),AZDB001_maint_confiscation_recon,Confiscation Recon,Recon has errors so pls investigate,warn" >> $OUTFILE
 
 else
 
-echo "$(date "+%d/%m/%Y %T"),AZDB001_maint_recon_status,Confiscation Recon,Recon ran with no errors,ok" >> $OUTFILE
+echo "$(date "+%d/%m/%Y %T"),AZDB001_maint_confiscation_recon_status,Confiscation Recon,Recon ran with no errors,ok" >> $OUTFILE
 
 fi
 
 else
 
-echo "$(date "+%d/%m/%Y %T"),AZDB001_maint_recon_status,Confiscation Recon,Recon didn't run today so check ORA recon ran ok,warn" >> $OUTFILE
+echo "$(date "+%d/%m/%Y %T"),AZDB001_maint_confiscation_recon_status,Confiscation Recon,Recon didn't run today so check ORA recon ran ok,warn" >> $OUTFILE
 
 fi
-
-echo "cat of OUTFILE:"
-cat $OUTFILE
-echo "cat of OUTFILE_LOG:"
-cat $OUTFILE_LOG
-exit 0
 
 echo "$(date "+%d/%m/%Y %T") Connecting to $fines_db database" >> $OUTFILE_LOG
 echo "$(date "+%d/%m/%Y %T") Starting Check #9b" >> $OUTFILE_LOG
@@ -373,13 +345,55 @@ psql "sslmode=require host=${fines_host} dbname=${fines_db} port=${fines_port} u
 echo "$(date "+%d/%m/%Y %T") SQL for Check #9b has been run" >> $OUTFILE_LOG
 error_count=`head -1 ${OPDIR}9bAZUREDB_AMD_fines_recon_result.csv | awk '{print $1'} | wc -l | xargs`
 
+if [[ `grep "$dt_today" ${OPDIR}9aAZUREDB_AMD_fines_recon_result.csv` ]];then
+
+if [[ $error_count -gt 0 ]];then
+
+echo "$(date "+%d/%m/%Y %T"),AZDB001_maint_fines_recon,Fines Recon,Recon has errors so pls investigate,warn" >> $OUTFILE
+
+else
+
+echo "$(date "+%d/%m/%Y %T"),AZDB001_maint_fines_recon_status,Fines Recon,Recon ran with no errors,ok" >> $OUTFILE
+
+fi
+
+else
+
+echo "$(date "+%d/%m/%Y %T"),AZDB001_maint_fines_recon_status,Fines Recon,Recon didn't run today so check ORA recon ran ok,warn" >> $OUTFILE
+
+fi
+
 echo "$(date "+%d/%m/%Y %T") Connecting to $maintenance_db database" >> $OUTFILE_LOG
 echo "$(date "+%d/%m/%Y %T") Starting Check #9c" >> $OUTFILE_LOG
 psql "sslmode=require host=${maintenance_host} dbname=${maintenance_db} port=${maintenance_port} user=${maintenance_username} password=${maintenance_password}" --file=/sql/9cAZUREDB_AMD_maintenance_recon_result.sql
 echo "$(date "+%d/%m/%Y %T") SQL for Check #9c has been run" >> $OUTFILE_LOG
 error_count=`head -1 ${OPDIR}9cAZUREDB_AMD_maintenance_recon_result.csv | awk '{print $1'} | wc -l | xargs`
 
+if [[ `grep "$dt_today" ${OPDIR}9aAZUREDB_AMD_maintenance_recon_result.csv` ]];then
+
+if [[ $error_count -gt 0 ]];then
+
+echo "$(date "+%d/%m/%Y %T"),AZDB001_maint_maintenance_recon_$schema_id,Maintenance Recon,Recon has errors so pls investigate,warn" >> $OUTFILE
+
+else
+
+echo "$(date "+%d/%m/%Y %T"),AZDB001_maint_maintenance_recon_status,Maintenance Recon,Recon ran with no errors,ok" >> $OUTFILE
+
+fi
+
+else
+
+echo "$(date "+%d/%m/%Y %T"),AZDB001_maint_maintenance_recon_status,Maintenance Recon,Recon didn't run today so check ORA recon ran ok,warn" >> $OUTFILE
+
+fi
+
 echo "$(date "+%d/%m/%Y %T") Check #9 complete" >> $OUTFILE_LOG
+
+echo "cat of OUTFILE:"
+cat $OUTFILE
+echo "cat of OUTFILE_LOG:"
+cat $OUTFILE_LOG
+exit 0
 ####################################################### CHECK 10
 echo "[Check #10: Themis WebLogic]" >> $OUTFILE
 echo "Message" >> $OUTFILE
