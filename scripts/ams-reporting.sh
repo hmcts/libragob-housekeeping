@@ -4,9 +4,9 @@
 echo "Script Version 3.9: Check 9"
 mkdir /tmp/ams-reporting/
 OPDIR="/tmp/ams-reporting/"
-OUTFILE="${OPDIR}AZURE_DB001_AMD"
-OUTFILE_LOG="${OPDIR}AZURE_DB001_AMD.log"
-rm -f $OUTFILE $OUTFILE.csv $OUTFILE_LOG
+OUTFILE="${OPDIR}AZ_ThemisGOB_DB001_AMD"
+OUTFILE_LOG="${OPDIR}AZ_ThemisGOB_DB001_AMD.log"
+rm -f *.csv $OUTFILE $OUTFILE_LOG
 echo $(date "+%d/%m/%Y %T") > $OUTFILE
 
 ###############################################################
