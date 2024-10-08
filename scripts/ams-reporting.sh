@@ -335,6 +335,7 @@ echo "$(date "+%d/%m/%Y %T") SQL for Check #9a has been run" >> $OUTFILE_LOG
 error_count=`grep "0$" ${OPDIR}9aAZUREDB_AMD_confiscation_recon_result.csv | wc -l | xargs`
 dt_today=$(date "+%Y-%m-%D")
 dt_today=2939994944444
+echo $dt_today
 
 echo "CAT of 9aAZUREDB_AMD_confiscation_recon_result.csv:"
 cat ${OPDIR}9aAZUREDB_AMD_confiscation_recon_result.csv
