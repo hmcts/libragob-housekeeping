@@ -868,7 +868,7 @@ echo "====================================="
 db_dac_rate=`head -1 ${OPDIR}12AZUREDB_AMD_dacaudit_DBstep13-12_latest100_processing_rates.csv | awk '{print $3}'`
 total_dac_rate=`head -1 ${OPDIR}12AZUREDB_AMD_dacaudit_DBstep10-1_latest100_processing_rates.csv  | awk '{print $3}'`
 total_gw_rate=`head -1 ${OPDIR}12AZUREDB_AMD_gwaudit_step10-1_latest100_processing_rates.csv  | awk '{print $3}'`
-combined_rate_secs=$((($db_dac_rate+$total_dac_rate+$total_gw_rate)/1000))
+combined_rate_secs=$(((($db_dac_rate+$total_dac_rate+$total_gw_rate)/1000)))
 delivery_rate_secs=$(($sum_number_of_table_updates/$combined_rate))
 
 if [[ $delivery_rate_secs -lt 60 ]];then
