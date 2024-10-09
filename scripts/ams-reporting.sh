@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 ####################################################### This is the AMD AzureDB Healthcheck Script, and the associated documentation is in Ensemble under the "Libra System Admin Documents" area:
 ####################################################### "GoB Phase 1 - Oracle_Postgres DB Checks_v11.5_MAP.docx" is the latest version as of 01/08/2024
-echo "Script Version 4.1: error count"
+echo "Script Version 4.3: Check #3"
 mkdir /tmp/ams-reporting/
 OPDIR="/tmp/ams-reporting/"
 OUTFILE="${OPDIR}AZ_ThemisGOB_DB001_AMD"
@@ -500,13 +500,9 @@ cat ${OPDIR}11dAZUREDB_AMD_row_counts_DAC_message_audit.csv >> $OUTFILE
 cat ${OPDIR}11eAZUREDB_AMD_row_counts_GW_message_audit.csv >> $OUTFILE
 
 echo "$(date "+%d/%m/%Y %T") Check #11 complete" >> $OUTFILE_LOG
-
-echo "cat of OUTFILE:"
-cat $OUTFILE
-echo "cat of OUTFILE_LOG:"
-cat $OUTFILE_LOG
-exit 0
 ####################################################### CHECK 12
+if [[ 0 == 1 ]];then
+
 echo "[Check #12a: Today's Latest 100 DACAudit DB Roundtrip Deltas Step 13-12]" >> $OUTFILE
 echo "DateTime,CheckName,Description,updated_date,uuid,Roundtrip in Millisecs,Result" >> $OUTFILE
 echo "$(date "+%d/%m/%Y %T") Starting Check #12a" >> $OUTFILE_LOG
@@ -817,6 +813,8 @@ echo "dt,AZDB001_minute_completed_table_updates,Minute Completed TABLE_UPDATES C
 done < ${OPDIR}12rAZUREDB_AMD_minute_completed_table_updates_counts.csv
 
 echo "$(date "+%d/%m/%Y %T") Check #12 complete" >> $OUTFILE_LOG
+
+fi
 ####################################################### CHECK 3
 echo "[Check #3: Update Backlogs]" >> $OUTFILE
 echo "DateTime,CheckName,Description,SchemaId,Status,COUNTupdates,max_number_of_table_updates,sum_number_of_table_updates,AdaptiveBacklogThreshold,DBdacRate_inMS,TOTALdacRate_inMS,TOTALgwRate_inMS,Total Roundtrip in Millisecs,RoundtripThreshold,DeliveryETA,Result" >> $OUTFILE
@@ -874,6 +872,12 @@ fi
 done < ${OPDIR}3AZUREDB_AMD_message_backlogs.csv
 
 echo "$(date "+%d/%m/%Y %T") Check #3 complete" >> $OUTFILE_LOG
+
+echo "cat of OUTFILE:"
+cat $OUTFILE
+echo "cat of OUTFILE_LOG:"
+cat $OUTFILE_LOG
+exit 0
 ####################################################### CHECK 13
 echo "[Check #13: ora_rowscn SequenceNumber Bug]" >> $OUTFILE
 echo "DateTime,CheckName,Description,update_request_id,schema_id,sequence_number,previous_sequence_number,Result" >> $OUTFILE
