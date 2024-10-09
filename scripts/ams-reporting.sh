@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 ####################################################### This is the AMD AzureDB Healthcheck Script, and the associated documentation is in Ensemble under the "Libra System Admin Documents" area:
 ####################################################### "GoB Phase 1 - Oracle_Postgres DB Checks_v11.5_MAP.docx" is the latest version as of 01/08/2024
-echo "Script Version 4.4: Check #3"
+echo "Script Version 4.5: Check #3"
 mkdir /tmp/ams-reporting/
 OPDIR="/tmp/ams-reporting/"
 OUTFILE="${OPDIR}AZ_ThemisGOB_DB001_AMD"
@@ -869,7 +869,7 @@ db_dac_rate=`head -1 ${OPDIR}12AZUREDB_AMD_dacaudit_DBstep13-12_latest100_proces
 total_dac_rate=`head -1 ${OPDIR}12AZUREDB_AMD_dacaudit_DBstep10-1_latest100_processing_rates.csv  | awk '{print $3}'`
 total_gw_rate=`head -1 ${OPDIR}12AZUREDB_AMD_gwaudit_step10-1_latest100_processing_rates.csv  | awk '{print $3}'`
 combined_rate_secs=$((($db_dac_rate+$total_dac_rate+$total_gw_rate)/1000))
-delivery_rate_secs=$(($sum_number_of_table_updates/$combined_rate))
+delivery_rate_secs=$(($sum_number_of_table_updates/$combined_rate_secs))
 
 if [[ $delivery_rate_secs -lt 60 ]];then
 adj_delivery_rate_secs=delivery_rate_secs
