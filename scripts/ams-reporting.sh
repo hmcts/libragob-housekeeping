@@ -404,30 +404,20 @@ threshold_count_message_log=80000
 threshold_count_dac_audit=123000000
 threshold_count_gateway_audit=50000
 
-threshold_count_update_requests=9999
-threshold_count_table_updates=0
-threshold_count_message_log=0
-threshold_count_dac_audit=0
-threshold_count_gateway_audit=0
-
 echo "$(date "+%d/%m/%Y %T") Starting Check #11a" >> $OUTFILE_LOG
 echo "$(date "+%d/%m/%Y %T") Connecting to $event_db database" >> $OUTFILE_LOG
 psql "sslmode=require host=${event_host} dbname=${event_db} port=${event_port} user=${event_username} password=${event_password}" --file=/sql/11aAZUREDB_AMD_row_counts_update_requests.sql
 echo "$(date "+%d/%m/%Y %T") SQL for Check #11a has been run" >> $OUTFILE_LOG
 
 rowcount_update_requests=`cat ${OPDIR}11aAZUREDB_AMD_row_counts_update_requests.csv`
-rowcount_table_updates=`cat ${OPDIR}11bAZUREDB_AMD_row_counts_table_updates.csv`
-rowcount_message_log=`cat ${OPDIR}11cAZUREDB_AMD_row_counts_message_log.csv`
-rowcount_dac_audit=`cat ${OPDIR}11dAZUREDB_AMD_row_counts_DAC_message_audit.csv`
-rowcount_gateway_audit=`cat ${OPDIR}11eAZUREDB_AMD_row_counts_GW_message_audit.csv`
 
 if [[ $rowcount_update_requests -gt $threshold_count_update_requests ]];then
 
-echo "$(date "+%d/%m/%Y %T"),AZDB001_update_request_row_count,UPDATE_REQUEST RowCount,$rowcount_update_requests,$threshold_count_update_requests,warn" >> $OUTFILE
+echo "$(date "+%d/%m/%Y %T"),AZDB001_update_requests_row_count,UPDATE_REQUEST RowCount,$rowcount_update_requests,$threshold_count_update_requests,warn" >> $OUTFILE
 
 else
 
-echo "$(date "+%d/%m/%Y %T"),AZDB001_update_request_row_count,UPDATE_REQUEST RowCount,$rowcount_update_requests,$threshold_count_update_requests,ok" >> $OUTFILE
+echo "$(date "+%d/%m/%Y %T"),AZDB001_update_requests_row_count,UPDATE_REQUEST RowCount,$rowcount_update_requests,$threshold_count_update_requests,ok" >> $OUTFILE
 
 fi
 
@@ -436,10 +426,34 @@ echo "$(date "+%d/%m/%Y %T") Connecting to $event_db database" >> $OUTFILE_LOG
 psql "sslmode=require host=${event_host} dbname=${event_db} port=${event_port} user=${event_username} password=${event_password}" --file=/sql/11bAZUREDB_AMD_row_counts_table_updates.sql
 echo "$(date "+%d/%m/%Y %T") SQL for Check #11b has been run" >> $OUTFILE_LOG
 
+rowcount_table_updates=`cat ${OPDIR}11bAZUREDB_AMD_row_counts_table_updates.csv`
+
+if [[ $rowcount_table_updates -gt $threshold_count_table_updates ]];then
+
+echo "$(date "+%d/%m/%Y %T"),AZDB001_table_updates_row_count,TABLE_UPDATES RowCount,$rowcount_table_updates,$threshold_count_table_updates,warn" >> $OUTFILE
+
+else
+
+echo "$(date "+%d/%m/%Y %T"),AZDB001_table_updates_row_count,TABLE_UPDATES RowCount,$rowcount_table_updates,$threshold_count_table_updates,ok" >> $OUTFILE
+
+fi
+
 echo "$(date "+%d/%m/%Y %T") Starting Check #11c" >> $OUTFILE_LOG
 echo "$(date "+%d/%m/%Y %T") Connecting to $event_db database" >> $OUTFILE_LOG
 psql "sslmode=require host=${event_host} dbname=${event_db} port=${event_port} user=${event_username} password=${event_password}" --file=/sql/11cAZUREDB_AMD_row_counts_message_log.sql
 echo "$(date "+%d/%m/%Y %T") SQL for Check #11c has been run" >> $OUTFILE_LOG
+
+rowcount_message_log=`cat ${OPDIR}11cAZUREDB_AMD_row_counts_message_log.csv`
+
+if [[ $rowcount_message_log -gt $threshold_count_message_log ]];then
+
+echo "$(date "+%d/%m/%Y %T"),AZDB001_message_log_row_count,MESSAGE_LOG RowCount,$rowcount_message_log,$threshold_count_message_log,warn" >> $OUTFILE
+
+else
+
+echo "$(date "+%d/%m/%Y %T"),AZDB001_message_log_row_count,MESSAGE_LOG RowCount,$rowcount_message_log,$threshold_count_message_log,ok" >> $OUTFILE
+
+fi
 
 if [[ 0 == 1 ]];then
 
@@ -448,12 +462,36 @@ echo "$(date "+%d/%m/%Y %T") Connecting to $postgres_db database" >> $OUTFILE_LO
 psql "sslmode=require host=${postgres_host} dbname=${postgres_db} port=${postgres_port} user=${postgres_username} password=${postgres_password}" --file=/sql/11dAZUREDB_AMD_row_counts_DAC_message_audit.sql
 echo "$(date "+%d/%m/%Y %T") SQL for Check #11d has been run" >> $OUTFILE_LOG
 
+rowcount_dac_audit=`cat ${OPDIR}11dAZUREDB_AMD_row_counts_DAC_message_audit.csv`
+
+if [[ $rowcount_dac_audit -gt $threshold_count_dac_audit ]];then
+
+echo "$(date "+%d/%m/%Y %T"),AZDB001_dac_audit_row_count,DAC_AUDIT RowCount,$rowcount_dac_audit,$threshold_count_dac_audit,warn" >> $OUTFILE
+
+else
+
+echo "$(date "+%d/%m/%Y %T"),AZDB001_dac_audit_row_count,DAC_AUDIT RowCount,$rowcount_dac_audit,$threshold_count_dac_audit,ok" >> $OUTFILE
+
+fi
+
 fi
 
 echo "$(date "+%d/%m/%Y %T") Starting Check #11e" >> $OUTFILE_LOG
 echo "$(date "+%d/%m/%Y %T") Connecting to $postgres_db database" >> $OUTFILE_LOG
 psql "sslmode=require host=${postgres_host} dbname=${postgres_db} port=${postgres_port} user=${postgres_username} password=${postgres_password}" --file=/sql/11eAZUREDB_AMD_row_counts_GW_message_audit.sql
 echo "$(date "+%d/%m/%Y %T") SQL for Check #11e has been run" >> $OUTFILE_LOG
+
+rowcount_gateway_audit=`cat ${OPDIR}11eAZUREDB_AMD_row_counts_GW_message_audit.csv`
+
+if [[ $rowcount_gateway_audit -gt $threshold_count_gateway_audit ]];then
+
+echo "$(date "+%d/%m/%Y %T"),AZDB001_gateway_audit_row_count,GATEWAY_AUDIT RowCount,$rowcount_gateway_audit,$threshold_count_gateway_audit,warn" >> $OUTFILE
+
+else
+
+echo "$(date "+%d/%m/%Y %T"),AZDB001_gateway_audit_row_count,GATEWAY_AUDIT RowCount,$rowcount_gateway_audit,$threshold_count_gateway_audit,ok" >> $OUTFILE
+
+fi
 
 cat ${OPDIR}11aAZUREDB_AMD_row_counts_update_requests.csv >> $OUTFILE
 cat ${OPDIR}11bAZUREDB_AMD_row_counts_table_updates.csv >> $OUTFILE
