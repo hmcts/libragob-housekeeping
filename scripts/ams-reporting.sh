@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 ####################################################### This is the AMD AzureDB Healthcheck Script, and the associated documentation is in Ensemble under the "Libra System Admin Documents" area:
 ####################################################### "GoB Phase 1 - Oracle_Postgres DB Checks_v11.5_MAP.docx" is the latest version as of 01/08/2024
-echo "Script Version 4.6: Check #3"
+echo "Script Version 4.7: Check #3"
 mkdir /tmp/ams-reporting/
 OPDIR="/tmp/ams-reporting/"
 OUTFILE="${OPDIR}AZ_ThemisGOB_DB001_AMD"
@@ -838,11 +838,11 @@ echo $dt_hr2
 echo "====================================="
 
 if [[ $dt_hr == 00 ]];then
-backlog_adaptive_threshold = $backlog_threshold
+backlog_adaptive_threshold=$backlog_threshold
 elif [[ $dt_hr1 == 0 ]];then
-backlog_adaptive_threshold = $(($backlog_threshold/$dt_hr2))
+backlog_adaptive_threshold=$(($backlog_threshold/$dt_hr2))
 else
-backlog_adaptive_threshold = $(($backlog_threshold/$dt_hr))
+backlog_adaptive_threshold=$(($backlog_threshold/$dt_hr))
 fi
 
 echo "====================================="
@@ -861,7 +861,7 @@ echo "====================================="
 echo $schema_id
 echo $status
 echo $count_updates
-echo $sum_number_of_table_update
+echo $sum_number_of_table_updates
 echo $max_number_of_table_updates
 echo "====================================="
 
