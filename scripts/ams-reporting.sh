@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 ####################################################### This is the AMD AzureDB Healthcheck Script, and the associated documentation is in Ensemble under the "Libra System Admin Documents" area:
 ####################################################### "GoB Phase 1 - Oracle_Postgres DB Checks_v11.5_MAP.docx" is the latest version as of 01/08/2024
-echo "Script Version 5.0: Check #6"
+echo "Script Version 5.1: Check #6"
 mkdir /tmp/ams-reporting/
 OPDIR="/tmp/ams-reporting/"
 OUTFILE="${OPDIR}AZ_ThemisGOB_DB001_AMD"
@@ -230,8 +230,10 @@ dt_latest_processing=`echo $latest_processing | awk -F"." '{print $1}'`
 
 echo "schema_id=$schema_id"
 echo "earliest_unprocessed=$earliest_unprocessed"
+echo "dt_earliest_unprocessed=$dt_earliest_unprocessed"
 echo "latest_complete=$latest_complete"
 echo "latest_processing=$latest_processing"
+echo "dt_earliest_processing=$dt_earliest_processing"
 
 last_check_unprocessed=`grep "$schema_id" ${OPDIR}earliest_unprocessed_timestamps_last_check.tmp | awk -F"," '{print $2}'`
 echo "last_check_unprocessed=$last_check_unprocessed"
@@ -281,6 +283,7 @@ fi
 done < ${OPDIR}6AZUREDB_AMD_update_processing_backlog.csv
 
 mv ${OPDIR}earliest_unprocessed_timestamps.tmp ${OPDIR}earliest_unprocessed_timestamps_last_check.tmp
+mv ${OPDIR}earliest_processing_timestamps.tmp ${OPDIR}earliest_processing_timestamps_last_check.tmp
 
 echo "$(date "+%d/%m/%Y %T") Check #6 complete" >> $OUTFILE_LOG
 ####################################################### CHECK 7
