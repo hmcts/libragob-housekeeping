@@ -209,51 +209,70 @@ done < ${OPDIR}5AZUREDB_AMD_message_log_errors_100.csv
 
 echo "$(date "+%d/%m/%Y %T") Check #5 complete" >> $OUTFILE_LOG
 ####################################################### CHECK 6
-if [[ 0 == 1 ]];then
 echo "[Check #6: Unprocessed, Complete & Processing Checks]" >> $OUTFILE
 echo "DateTime,CheckName,Description,schema_id,Threshold,earliest_unprocessed,latest_complete,latest_processing,Result" >> $OUTFILE
 echo "$(date "+%d/%m/%Y %T") Starting Check #6" >> $OUTFILE_LOG
 echo "$(date "+%d/%m/%Y %T") Connecting to $event_db database" >> $OUTFILE_LOG
 psql "sslmode=require host=${event_host} dbname=${event_db} port=${event_port} user=${event_username} password=${event_password}" --file=/sql/6AZUREDB_AMD_update_processing_backlog.sql
 echo "$(date "+%d/%m/%Y %T") SQL for Check #6 has been run" >> $OUTFILE_LOG
-rm -f ${OPDIR}earliest_unprocessed_timestamps.tmp
+rm -f ${OPDIR}earliest_unprocessed_timestamps.tmp ${OPDIR}earliest_processing_timestamps.tmp
 
 while read -r line;do
 
 echo "line=$line"
 
-dt_now=$(date "+%Y-%m-%d %T")
 schema_id=`echo $line | awk -F"," '{print $1}'`
 earliest_unprocessed=`echo $line | awk -F"," '{print $2}'`
-t_in=`echo $earliest_unprocessed | awk -F"." '{print $1}'`
+dt_earliest_unprocessed=`echo $earliest_unprocessed | awk -F"." '{print $1}'`
 latest_complete=`echo $line | awk -F"," '{print $3}'`
 latest_processing=`echo $line | awk -F"," '{print $4}'`
+dt_latest_processing=`echo $latest_processing | awk -F"." '{print $1}'`
 
-echo "dt_now=$dt_now"
 echo "schema_id=$schema_id"
 echo "earliest_unprocessed=$earliest_unprocessed"
 echo "latest_complete=$latest_complete"
 echo "latest_processing=$latest_processing"
 
-last_check=`grep "$schema_id" ${OPDIR}earliest_unprocessed_timestamps_last_check.tmp | awk -F"," '{print $2}'`
-echo "last_check=$last_check"
-echo "$schema_id,$t_in" >> ${OPDIR}earliest_unprocessed_timestamps.tmp
+last_check_unprocessed=`grep "$schema_id" ${OPDIR}earliest_unprocessed_timestamps_last_check.tmp | awk -F"," '{print $2}'`
+echo "last_check_unprocessed=$last_check_unprocessed"
+echo "$schema_id,$dt_earliest_unprocessed" >> ${OPDIR}earliest_unprocessed_timestamps.tmp
+
+last_check_processing=`grep "$schema_id" ${OPDIR}earliest_processing_timestamps_last_check.tmp | awk -F"," '{print $2}'`
+echo "last_check_processing=$last_check_processing"
+echo "$schema_id,$dt_earliest_processing" >> ${OPDIR}earliest_processing_timestamps.tmp
 
 echo "CAT of ${OPDIR}earliest_unprocessed_timestamps.tmp"
 cat ${OPDIR}earliest_unprocessed_timestamps.tmp
 
-t_out_1900=$(date '+%s' -d "$dt_now")
-t_in_1900=$(date '+%s' -d "$t_in")
-t_delta_secs=`expr $t_out_1900 - $t_in_1900`
+echo "CAT of ${OPDIR}earliest_processing_timestamps.tmp"
+cat ${OPDIR}earliest_processing_timestamps.tmp
+
 t_delta_threshold_mins=90
 t_delta_threshold_secs=$(($t_delta_threshold_min*60*60)) # 90mins is 324000secs
 
+dt_now=$(date "+%Y-%m-%d %T")
+
+t_out_1900=$(date '+%s' -d "$dt_now")
+t_in_1900_unprocessed=$(date '+%s' -d "$dt_earliest_unprocessed")
+t_delta_secs_unprocessed=`expr $t_out_1900 - $t_in_1900_unprocessed`
+
+echo "dt_now=$dt_now"
 echo "t_out_1900=$t_out_1900"
-echo "t_in_1900=$t_in_1900"
+echo "t_in_1900=$t_in_1900_unprocessed"
 echo "t_delta_secs=$t_delta_secs"
 echo "t_delta_threshold_secs=$t_delta_threshold_secs"
 
-if [[ $t_delta_secs -gt $t_delta_threshold_secs ]] || [[ $last_check -gt $t_delta_threshold_secs ]];then
+t_out_1900=$(date '+%s' -d "$dt_now")
+t_in_1900_processing=$(date '+%s' -d "$dt_earliest_processing")
+t_delta_secs_processing=`expr $t_out_1900 - $t_in_1900_processing`
+
+echo "dt_now=$dt_now"
+echo "t_out_1900=$t_out_1900"
+echo "t_in_1900=$t_in_1900_processing"
+echo "t_delta_secs=$t_delta_secs"
+echo "t_delta_threshold_secs=$t_delta_threshold_secs"
+
+if [[ $t_delta_secs_unprocessed -gt $t_delta_threshold_secs ]] || [[ $last_check_unprocessed -gt $t_delta_threshold_secs ]] || [[ $t_delta_secs_processing -gt $t_delta_threshold_secs ]] || [[ $last_check_processing -gt $t_delta_threshold_secs ]];then
 echo "$(date "+%d/%m/%Y %T"),AZDB001_update_processing_backlog,Check of Earliest Unprocessed vs. Latest Complete vs. Latest Processing,$schema_id,${t_delta_threshold_mins}minsStaleness,$earliest_unprocessed,$latest_complete,$latest_processing,warn" >> $OUTFILE
 else
 echo "$(date "+%d/%m/%Y %T"),AZDB001_update_processing_backlog,Check of Earliest Unprocessed vs. Latest Complete vs. Latest Processing,$schema_id,${t_delta_threshold_mins}minsStaleness,$earliest_unprocessed,$latest_complete,$latest_processing,ok" >> $OUTFILE
@@ -264,8 +283,6 @@ done < ${OPDIR}6AZUREDB_AMD_update_processing_backlog.csv
 mv ${OPDIR}earliest_unprocessed_timestamps.tmp ${OPDIR}earliest_unprocessed_timestamps_last_check.tmp
 
 echo "$(date "+%d/%m/%Y %T") Check #6 complete" >> $OUTFILE_LOG
-
-fi
 ####################################################### CHECK 7
 echo "[Check #7: Max Daily Update Counts by SchemaId]" >> $OUTFILE
 echo "DateTime,CheckName,Description,schema_id,count_updates,sum_number_of_table_updates,max_number_of_table_updates,BundledPrintThreshold,Result" >> $OUTFILE
