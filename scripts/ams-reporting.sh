@@ -879,6 +879,8 @@ echo "cat of OUTFILE_LOG:"
 cat $OUTFILE_LOG
 exit 0
 ####################################################### CHECK 13
+if [[ 0 == 1 ]];then # disabled permanently as it's since been realised its not always a hard break when sequence_number = previous_sequence_number
+
 echo "[Check #13: ora_rowscn SequenceNumber Bug]" >> $OUTFILE
 echo "DateTime,CheckName,Description,update_request_id,schema_id,sequence_number,previous_sequence_number,Result" >> $OUTFILE
 echo "$(date "+%d/%m/%Y %T") Starting Check #13" >> $OUTFILE_LOG
@@ -901,6 +903,8 @@ echo "$(date "+%d/%m/%Y %T"),AZDB001_ora_rowscn_bug,SequenceNumber Bug Check,$up
 fi
 
 done < ${OPDIR}13AZUREDB_AMD_ora_rowscn_bug_seq_nums.csv
+
+fi
 
 mv $OUTFILE $OUTFILE.csv
 
