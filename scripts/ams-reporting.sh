@@ -837,9 +837,9 @@ echo $dt_hr1
 echo $dt_hr2
 echo "====================================="
 
-if [[ $dt_hr -eq 00 ]];then
+if [[ $dt_hr == 00 ]];then
 backlog_adaptive_threshold = $backlog_threshold
-elif [[ $dt_hr1 -eq 0 ]];then
+elif [[ $dt_hr1 = 0 ]];then
 backlog_adaptive_threshold = $(($backlog_threshold/$dt_hr2))
 else
 backlog_adaptive_threshold = $(($backlog_threshold/$dt_hr))
@@ -851,11 +851,11 @@ echo "====================================="
 
 while read -r line;do
 
-schema_id=`echo $line | awk '{print $1}'`
-status=`echo $line | awk '{print $2}'`
-count_updates=`echo $line | awk '{print $3}'`
-sum_number_of_table_updates=`echo $line | awk '{print $4}'`
-max_number_of_table_updates=`echo $line | awk '{print $5}'`
+schema_id=`echo $line | awk -F"," '{print $1}'`
+status=`echo $line | awk -F"," '{print $2}'`
+count_updates=`echo $line | awk -F"," '{print $3}'`
+sum_number_of_table_updates=`echo $line | awk -F"," '{print $4}'`
+max_number_of_table_updates=`echo $line | awk -F"," '{print $5}'`
 
 echo "====================================="
 echo $schema_id
@@ -911,11 +911,11 @@ echo "$(date "+%d/%m/%Y %T") SQL for Check #13 has been run" >> $OUTFILE_LOG
 
 while read -r line;do
 
-update_request_id=`echo $line | awk '{print $1}'`
-schema_id=`echo $line | awk '{print $2}'`
-sequence_number=`echo $line | awk '{print $3}'`
-previous_sequence_number=`echo $line | awk '{print $4}'`
-insert_type=`echo $line | awk '{print $5}'`
+update_request_id=`echo $line | awk -F"," '{print $1}'`
+schema_id=`echo $line | awk -F"," '{print $2}'`
+sequence_number=`echo $line | awk -F"," '{print $3}'`
+previous_sequence_number=`echo $line | awk -F"," '{print $4}'`
+insert_type=`echo $line | awk -F"," '{print $5}'`
 
 if [[ $sequence_number -eq $previous_sequence_number ]] && [[ $insert_type = I ]];then
 echo "$(date "+%d/%m/%Y %T"),AZDB001_ora_rowscn_bug,SequenceNumber Bug Check,$update_request_id,$schema_id,$sequence_number,$previous_sequence_number,warn" >> $OUTFILE
