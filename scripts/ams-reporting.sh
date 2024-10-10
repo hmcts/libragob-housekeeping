@@ -513,12 +513,6 @@ echo "$(date "+%d/%m/%Y %T"),AZDB001_gateway_audit_row_count,GATEWAY_AUDIT RowCo
 
 fi
 
-cat ${OPDIR}11aAZUREDB_AMD_row_counts_update_requests.csv >> $OUTFILE
-cat ${OPDIR}11bAZUREDB_AMD_row_counts_table_updates.csv >> $OUTFILE
-cat ${OPDIR}11cAZUREDB_AMD_row_counts_message_log.csv >> $OUTFILE
-cat ${OPDIR}11dAZUREDB_AMD_row_counts_DAC_message_audit.csv >> $OUTFILE
-cat ${OPDIR}11eAZUREDB_AMD_row_counts_GW_message_audit.csv >> $OUTFILE
-
 echo "$(date "+%d/%m/%Y %T") Check #11 complete" >> $OUTFILE_LOG
 ####################################################### CHECK 12
 echo "[Check #12a: Today's Latest 100 DACAudit DB Roundtrip Deltas Step 13-12]" >> $OUTFILE
