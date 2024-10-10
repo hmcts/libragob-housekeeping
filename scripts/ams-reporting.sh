@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 ####################################################### This is the AMD AzureDB Healthcheck Script, and the associated documentation is in Ensemble under the "Libra System Admin Documents" area:
 ####################################################### "GoB Phase 1 - Oracle_Postgres DB Checks_v11.5_MAP.docx" is the latest version as of 01/08/2024
-echo "Script Version 6.5: Check #6"
+echo "Script Version 6.6: Check #6"
 mkdir /tmp/ams-reporting/
 OPDIR="/tmp/ams-reporting/"
 OUTFILE="${OPDIR}AZ_ThemisGOB_DB001_AMD"
@@ -903,10 +903,10 @@ if [[ $delivery_rate_secs -lt 60 ]];then
 adj_delivery_rate=$delivery_rate_secs
 eta_units=secs
 elif [[ $delivery_rate_secs -lt $((60*60)) ]];then
-adj_delivery_rate=$(($delivery_rate_secs/(60*60)))
+adj_delivery_rate=$(($delivery_rate_secs/$((60*60))))
 eta_units=mins
 elif [[ $delivery_rate_secs -lt $((60*60*24)) ]];then
-adj_delivery_rate=$(($delivery_rate_secs/(60*60*24)))
+adj_delivery_rate=$(($delivery_rate_secs/$((60*60*24))))
 eta_units=hrs
 else
 eta_units=days
