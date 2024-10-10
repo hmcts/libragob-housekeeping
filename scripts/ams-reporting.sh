@@ -853,14 +853,6 @@ dt_hr=$(date "+%H")
 dt_hr1=`echo $dt_hr | cut -b 1`
 dt_hr2=`echo $dt_hr | cut -b 2`
 
-echo "====================================="
-cat ${OPDIR}3AZUREDB_AMD_message_backlogs.csv
-echo "====================================="
-echo $dt_hr
-echo $dt_hr1
-echo $dt_hr2
-echo "====================================="
-
 if [[ $dt_hr == 00 ]];then
 backlog_adaptive_threshold=$backlog_threshold
 elif [[ $dt_hr1 == 0 ]];then
@@ -869,10 +861,6 @@ else
 backlog_adaptive_threshold=$(($backlog_threshold/$dt_hr))
 fi
 
-echo "====================================="
-echo $backlog_adaptive_threshold
-echo "====================================="
-
 while read -r line;do
 
 schema_id=`echo $line | awk -F"," '{print $1}'`
@@ -880,14 +868,6 @@ status=`echo $line | awk -F"," '{print $2}'`
 count_updates=`echo $line | awk -F"," '{print $3}'`
 sum_number_of_table_updates=`echo $line | awk -F"," '{print $4}'`
 max_number_of_table_updates=`echo $line | awk -F"," '{print $5}'`
-
-echo "====================================="
-echo $schema_id
-echo $status
-echo $count_updates
-echo $sum_number_of_table_updates
-echo $max_number_of_table_updates
-echo "====================================="
 
 #db_dac_rate=`head -1 ${OPDIR}12AZUREDB_AMD_dacaudit_DBstep13-12_latest100_processing_rates.csv | awk -F"," '{print $3}'`
 #total_dac_rate=`head -1 ${OPDIR}12AZUREDB_AMD_dacaudit_DBstep10-1_latest100_processing_rates.csv  | awk -F"," '{print $3}'`
@@ -911,17 +891,6 @@ eta_units=hrs
 else
 eta_units=days
 fi
-
-echo "--------------------------------------------------------------"
-echo $db_dacRT
-echo $total_dacRT
-echo $total_gwRT
-echo $total_roundtrip
-echo $total_roundtrip_secs
-echo $delivery_rate_secs
-echo $adj_delivery_rate
-echo $eta_units
-echo "--------------------------------------------------------------"
 
 if [[ $status != ERROR ]];then
 
