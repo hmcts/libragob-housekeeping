@@ -896,7 +896,7 @@ db_dacRT=589
 total_dacRT=1101
 total_gwRT=799
 total_roundtrip=$(($db_dacRT+$total_dacRT+$total_gwRT))
-total_roundtrip_secs=$((($db_dac_rate+$total_dac_rate+$total_gw_rate)/1000))
+total_roundtrip_secs=$(($total_roundtrip/1000))
 delivery_rate=$(($sum_number_of_table_updates/$total_roundtrip_secs))
 
 if [[ $delivery_rate -lt 60 ]];then
