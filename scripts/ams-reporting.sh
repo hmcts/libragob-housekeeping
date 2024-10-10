@@ -209,8 +209,6 @@ done < ${OPDIR}5AZUREDB_AMD_message_log_errors_100.csv
 
 echo "$(date "+%d/%m/%Y %T") Check #5 complete" >> $OUTFILE_LOG
 ####################################################### CHECK 6
-if [[ 0 == 1 ]];then
-
 echo "[Check #6: Unprocessed, Complete & Processing Checks]" >> $OUTFILE
 echo "DateTime,CheckName,Description,schema_id,Threshold,earliest_unprocessed,latest_complete,latest_processing,Result" >> $OUTFILE
 echo "$(date "+%d/%m/%Y %T") Starting Check #6" >> $OUTFILE_LOG
@@ -288,8 +286,6 @@ mv ${OPDIR}earliest_unprocessed_timestamps.tmp ${OPDIR}earliest_unprocessed_time
 mv ${OPDIR}earliest_processing_timestamps.tmp ${OPDIR}earliest_processing_timestamps_last_check.tmp
 
 echo "$(date "+%d/%m/%Y %T") Check #6 complete" >> $OUTFILE_LOG
-
-fi
 ####################################################### CHECK 7
 echo "[Check #7: Max Daily Update Counts by SchemaId]" >> $OUTFILE
 echo "DateTime,CheckName,Description,schema_id,count_updates,sum_number_of_table_updates,max_number_of_table_updates,BundledPrintThreshold,Result" >> $OUTFILE
