@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 ####################################################### This is the AMD AzureDB Healthcheck Script, and the associated documentation is in Ensemble under the "Libra System Admin Documents" area:
 ####################################################### "GoB Phase 1 - Oracle_Postgres DB Checks_v11.5_MAP.docx" is the latest version as of 01/08/2024
-echo "Script Version 6.8: Check #12"
+echo "Script Version 6.9: Check #12a"
 mkdir /tmp/ams-reporting/
 OPDIR="/tmp/ams-reporting/"
 OUTFILE="${OPDIR}AZ_ThemisGOB_DB001_AMD"
@@ -859,10 +859,10 @@ count_updates=`echo $line | awk -F"," '{print $3}'`
 sum_number_of_table_updates=`echo $line | awk -F"," '{print $4}'`
 max_number_of_table_updates=`echo $line | awk -F"," '{print $5}'`
 
-#db_dac_rate=`head -1 ${OPDIR}12AZUREDB_AMD_dacaudit_DBstep13-12_latest100_processing_rates.csv | awk -F"," '{print $3}'`
-#total_dac_rate=`head -1 ${OPDIR}12AZUREDB_AMD_dacaudit_DBstep10-1_latest100_processing_rates.csv  | awk -F"," '{print $3}'`
-#total_gw_rate=`head -1 ${OPDIR}12AZUREDB_AMD_gwaudit_step10-1_latest100_processing_rates.csv  | awk -F"," '{print $3}'`
-db_dacRT=589
+db_dac_rate=`head -1 ${OPDIR}12aAZUREDB_AMD_dacaudit_DBstep13-12_latest100_processing_rates.csv | awk -F"," '{print $3}'`
+#total_dac_rate=`head -1 ${OPDIR}12bAZUREDB_AMD_dacaudit_DBstep10-1_latest100_processing_rates.csv  | awk -F"," '{print $3}'`
+#total_gw_rate=`head -1 ${OPDIR}12cAZUREDB_AMD_gwaudit_step10-1_latest100_processing_rates.csv  | awk -F"," '{print $3}'`
+#db_dacRT=589
 total_dacRT=1101
 total_gwRT=799
 total_roundtrip=$(($db_dacRT+$total_dacRT+$total_gwRT))
