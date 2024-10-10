@@ -841,7 +841,7 @@ echo "$(date "+%d/%m/%Y %T") Check #12 complete" >> $OUTFILE_LOG
 fi
 ####################################################### CHECK 3
 echo "[Check #3: Update Backlogs]" >> $OUTFILE
-echo "DateTime,CheckName,Description,SchemaId,Status,COUNTupdates,max_number_of_table_updates,sum_number_of_table_updates,AdaptiveBacklogThreshold,DBdacRate_inMS,TOTALdacRate_inMS,TOTALgwRate_inMS,Total Roundtrip in Millisecs,RoundtripThreshold,DeliveryETA,Result" >> $OUTFILE
+echo "DateTime,CheckName,Description,SchemaId,Status,COUNTupdates,max_number_of_table_updates,sum_number_of_table_updates,AdaptiveBacklogThreshold,DBdacRate_inMS,TOTALdacRate_inMS,TOTALgwRate_inMS,Total Roundtrip in Millisecs,UpdatesPerMin,RoundtripThreshold,DeliveryETA,Result" >> $OUTFILE
 echo "$(date "+%d/%m/%Y %T") Starting Check #3" >> $OUTFILE_LOG
 echo "$(date "+%d/%m/%Y %T") Connecting to $event_db database" >> $OUTFILE_LOG
 psql "sslmode=require host=${event_host} dbname=${event_db} port=${event_port} user=${event_username} password=${event_password}" --file=/sql/3AZUREDB_AMD_message_backlogs.sql
@@ -892,42 +892,44 @@ echo "====================================="
 #db_dac_rate=`head -1 ${OPDIR}12AZUREDB_AMD_dacaudit_DBstep13-12_latest100_processing_rates.csv | awk -F"," '{print $3}'`
 #total_dac_rate=`head -1 ${OPDIR}12AZUREDB_AMD_dacaudit_DBstep10-1_latest100_processing_rates.csv  | awk -F"," '{print $3}'`
 #total_gw_rate=`head -1 ${OPDIR}12AZUREDB_AMD_gwaudit_step10-1_latest100_processing_rates.csv  | awk -F"," '{print $3}'`
-db_dac_rate=589
-total_dac_rate=1101
-total_gw_rate=799
-total_roundtrip=$(($db_dac_rate+$total_dac_rate+$total_gw_rate))
-combined_rate_secs=$((($db_dac_rate+$total_dac_rate+$total_gw_rate)/1000))
-delivery_rate_secs=$(($sum_number_of_table_updates/$combined_rate_secs))
+db_dacRT=589
+total_dacRT=1101
+total_gwRT=799
+total_roundtrip=$(($db_dacRT+$total_dacRT+$total_gwRT))
+total_roundtrip_secs=$((($db_dac_rate+$total_dac_rate+$total_gw_rate)/1000))
+updates_per_min=$((60/$total_roundtrip_secs))
+delivery_rate=$(($sum_number_of_table_updates/$updates_per_min))
 
-if [[ $delivery_rate_secs -lt 60 ]];then
-adj_delivery_rate_secs=delivery_rate_secs
+if [[ $delivery_rate -lt 60 ]];then
+adj_delivery_rate=$delivery_rate
 eta_units=secs
-elif [[ $delivery_rate_secs -lt $((60*60)) ]];then
-adj_delivery_rate_secs=$(($delivery_rate_secs/60))
+elif [[ $delivery_rate -lt $((60*60)) ]];then
+adj_delivery_rate=$(($delivery_rate/60))
 eta_units=mins
 elif [[ $delivery_rate_secs -lt $((60*60*24)) ]];then
-adj_delivery_rate_secs=$(($delivery_rate_secs/(60*60)))
+adj_delivery_rate=$(($delivery_rate/(60*60)))
 eta_units=hrs
 else
 eta_units=days
 fi
 
 echo "--------------------------------------------------------------"
-echo $db_dac_rate
-echo $total_dac_rate
-echo $total_gw_rate
+echo $db_dacRT
+echo $total_dacRT
+echo $total_gwRT
 echo $total_roundtrip
-echo $combined_rate_secs
-echo $delivery_rate_secs
+echo $total_roundtrip_secs
+echo $updates_per_min
+echo $delivery_rate
 echo $eta_units
 echo "--------------------------------------------------------------"
 
 if [[ $status != ERROR ]];then
 
 if [[ $sum_number_of_table_updates -gt $backlog_adaptive_threshold ]] || [[ $total_roundtrip -gt $roundtrip_threshold ]];then
-echo "$(date "+%d/%m/%Y %T"),AZDB001_msg_backlog,MessageBacklogCheck,$schema_id,$status,$count_updates,$max_number_of_table_updates,$sum_number_of_table_updates,$backlog_adaptive_threshold,$db_dac_rate,$total_dac_rate,$total_gw_rate,$combined_rate_secs,$roundtrip_threshold,${adj_delivery_rate_secs}${eta_units},warn" >> $OUTFILE
+echo "$(date "+%d/%m/%Y %T"),AZDB001_msg_backlog,MessageBacklogCheck,$schema_id,$status,$count_updates,$max_number_of_table_updates,$sum_number_of_table_updates,$backlog_adaptive_threshold,$db_dacRT,$total_dacRT,$total_gwRT,$total_roundtrip,$updates_per_min,$roundtrip_threshold,${adj_delivery_rate}${eta_units},warn" >> $OUTFILE
 else
-echo "$(date "+%d/%m/%Y %T"),AZDB001_msg_backlog,MessageBacklogCheck,$schema_id,$status,$count_updates,$max_number_of_table_updates,$sum_number_of_table_updates,$backlog_adaptive_threshold,$db_dac_rate,$total_dac_rate,$total_gw_rate,$combined_rate_secs,$roundtrip_threshold,${adj_delivery_rate_secs}${eta_units},ok" >> $OUTFILE
+echo "$(date "+%d/%m/%Y %T"),AZDB001_msg_backlog,MessageBacklogCheck,$schema_id,$status,$count_updates,$max_number_of_table_updates,$sum_number_of_table_updates,$backlog_adaptive_threshold,$db_dacRT,$total_dacRT,$total_gwRT,$total_roundtrip,$updates_per_min,$roundtrip_threshold,${adj_delivery_rate}${eta_units},ok" >> $OUTFILE
 fi
 
 fi
