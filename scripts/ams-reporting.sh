@@ -929,11 +929,11 @@ done < ${OPDIR}13AZUREDB_AMD_ora_rowscn_bug_seq_nums.csv
 
 fi
 
+echo "$(date "+%d/%m/%Y %T") Check #13 complete" >> $OUTFILE_LOG
+
 echo "cat of OUTFILE:"
 cat $OUTFILE
 echo "cat of OUTFILE_LOG:"
 cat $OUTFILE_LOG
 
 mv $OUTFILE $OUTFILE.csv
-
-echo "$(date "+%d/%m/%Y %T") Check #13 complete" >> $OUTFILE_LOG
