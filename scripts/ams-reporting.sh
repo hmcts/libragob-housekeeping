@@ -841,7 +841,7 @@ echo "$(date "+%d/%m/%Y %T") Check #12 complete" >> $OUTFILE_LOG
 fi
 ####################################################### CHECK 3
 echo "[Check #3: Update Backlogs]" >> $OUTFILE
-echo "DateTime,CheckName,Description,SchemaId,Status,COUNTupdates,max_number_of_table_updates,sum_number_of_table_updates,AdaptiveBacklogThreshold,DBdacRate_inMS,TOTALdacRate_inMS,TOTALgwRate_inMS,Total Roundtrip in Millisecs,UpdatesPerMin,RoundtripThreshold,DeliveryETA,Result" >> $OUTFILE
+echo "DateTime,CheckName,Description,SchemaId,Status,COUNTupdates,max_number_of_table_updates,sum_number_of_table_updates,AdaptiveBacklogThreshold,DBdacRate_inMS,TOTALdacRate_inMS,TOTALgwRate_inMS,Total Roundtrip in Millisecs,RoundtripThreshold,DeliveryETA,Result" >> $OUTFILE
 echo "$(date "+%d/%m/%Y %T") Starting Check #3" >> $OUTFILE_LOG
 echo "$(date "+%d/%m/%Y %T") Connecting to $event_db database" >> $OUTFILE_LOG
 psql "sslmode=require host=${event_host} dbname=${event_db} port=${event_port} user=${event_username} password=${event_password}" --file=/sql/3AZUREDB_AMD_message_backlogs.sql
@@ -897,8 +897,7 @@ total_dacRT=1101
 total_gwRT=799
 total_roundtrip=$(($db_dacRT+$total_dacRT+$total_gwRT))
 total_roundtrip_secs=$((($db_dac_rate+$total_dac_rate+$total_gw_rate)/1000))
-updates_per_min=$((60/$total_roundtrip_secs))
-delivery_rate=$(($sum_number_of_table_updates/$updates_per_min))
+delivery_rate=$(($sum_number_of_table_updates/$total_roundtrip_secs))
 
 if [[ $delivery_rate -lt 60 ]];then
 adj_delivery_rate=$delivery_rate
@@ -919,7 +918,6 @@ echo $total_dacRT
 echo $total_gwRT
 echo $total_roundtrip
 echo $total_roundtrip_secs
-echo $updates_per_min
 echo $delivery_rate
 echo $eta_units
 echo "--------------------------------------------------------------"
