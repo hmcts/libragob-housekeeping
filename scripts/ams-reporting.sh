@@ -330,7 +330,7 @@ count_updates=`echo $line | awk -F"," '{print $2}'`
 sum_number_of_table_updates=`echo $line | awk -F"," '{print $3}'`
 max_number_of_table_updates=`echo $line | awk -F"," '{print $4}'`
 
-echo "dt,AZDB001_hourly_updates,Today's Hourly Updates,$schema_id,$count_updates,$sum_number_of_table_updates,$max_number_of_table_updates,ok" >> $OUTFILE
+echo "$(date "+%d/%m/%Y %T"),AZDB001_hourly_updates,Today's Hourly Updates,$schema_id,$count_updates,$sum_number_of_table_updates,$max_number_of_table_updates,ok" >> $OUTFILE
 
 done < ${OPDIR}8AZUREDB_AMD_todays_hourly_update_counts.csv
 
