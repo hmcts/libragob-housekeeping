@@ -848,7 +848,7 @@ psql "sslmode=require host=${event_host} dbname=${event_db} port=${event_port} u
 echo "$(date "+%d/%m/%Y %T") SQL for Check #3 has been run" >> $OUTFILE_LOG
 
 backlog_threshold=850000 # 30K allowable back at 17:xx
-roundtrip_threshold=2000
+roundtrip_threshold=3000
 dt_hr=$(date "+%H")
 dt_hr1=`echo $dt_hr | cut -b 1`
 dt_hr2=`echo $dt_hr | cut -b 2`
