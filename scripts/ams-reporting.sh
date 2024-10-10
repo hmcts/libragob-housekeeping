@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 ####################################################### This is the AMD AzureDB Healthcheck Script, and the associated documentation is in Ensemble under the "Libra System Admin Documents" area:
 ####################################################### "GoB Phase 1 - Oracle_Postgres DB Checks_v11.5_MAP.docx" is the latest version as of 01/08/2024
-echo "Script Version 6.0: Check #6"
+echo "Script Version 6.1: Check #6"
 mkdir /tmp/ams-reporting/
 OPDIR="/tmp/ams-reporting/"
 OUTFILE="${OPDIR}AZ_ThemisGOB_DB001_AMD"
@@ -895,9 +895,12 @@ echo "====================================="
 db_dacRT=589
 total_dacRT=1101
 total_gwRT=799
-total_roundtrip=`echo "$db_dacRT+$total_dacRT+$total_gwRT" | bc`
-total_roundtrip_secs=`echo "scale=3;$total_roundtrip/1000" | bc`
-delivery_rate_secs=`echo "scale=1;$sum_number_of_table_updates/$total_roundtrip_secs" | bc`
+#total_roundtrip=`echo "$db_dacRT+$total_dacRT+$total_gwRT" | bc`
+#total_roundtrip_secs=`echo "scale=3;$total_roundtrip/1000" | bc`
+#delivery_rate_secs=`echo "scale=1;$sum_number_of_table_updates/$total_roundtrip_secs" | bc`
+total_roundtrip=$(($db_dacRT+$total_dacRT+$total_gwRT))
+total_roundtrip_secs=`awk -v var="$total_roundtrip" 'BEGIN {printf \"%.3f\", var/1000}'`
+delivery_rate_secs=`awk -v var1="$sum_number_of_table_updates" var2="$total_roundtrip_secs" 'BEGIN {printf \"%.1f\", var1/var2}'`
 
 if [[ $delivery_rate_secs -lt 60 ]];then
 adj_delivery_rate=$delivery_rate_secs
