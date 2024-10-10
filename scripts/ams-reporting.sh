@@ -896,17 +896,16 @@ db_dacRT=589
 total_dacRT=1101
 total_gwRT=799
 total_roundtrip=$(($db_dacRT+$total_dacRT+$total_gwRT))
-total_roundtrip_secs=$(($total_roundtrip/1000))
-delivery_rate=$(($sum_number_of_table_updates/$total_roundtrip_secs))
+delivery_rate_ms=$(($sum_number_of_table_updates/$total_roundtrip))
 
-if [[ $delivery_rate -lt 60 ]];then
-adj_delivery_rate=$delivery_rate
+if [[ $delivery_rate_ms -lt $((60/1000)) ]];then
+adj_delivery_rate=$(($delivery_rate_ms/1000))
 eta_units=secs
-elif [[ $delivery_rate -lt $((60*60)) ]];then
-adj_delivery_rate=$(($delivery_rate/60))
+elif [[ $delivery_rate_ms -lt $((60*60/1000)) ]];then
+adj_delivery_rate=$(($delivery_rate_ms/$((60*1000))))
 eta_units=mins
-elif [[ $delivery_rate_secs -lt $((60*60*24)) ]];then
-adj_delivery_rate=$(($delivery_rate/(60*60)))
+elif [[ $delivery_rate_ms -lt $((60*60*24/1000)) ]];then
+adj_delivery_rate=$(($delivery_rate_ms/$((60*60*1000))))
 eta_units=hrs
 else
 eta_units=days
