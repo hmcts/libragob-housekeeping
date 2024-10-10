@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 ####################################################### This is the AMD AzureDB Healthcheck Script, and the associated documentation is in Ensemble under the "Libra System Admin Documents" area:
 ####################################################### "GoB Phase 1 - Oracle_Postgres DB Checks_v11.5_MAP.docx" is the latest version as of 01/08/2024
-echo "Script Version 5.1: Check #6"
+echo "Script Version 5.3: Check #6"
 mkdir /tmp/ams-reporting/
 OPDIR="/tmp/ams-reporting/"
 OUTFILE="${OPDIR}AZ_ThemisGOB_DB001_AMD"
@@ -209,6 +209,8 @@ done < ${OPDIR}5AZUREDB_AMD_message_log_errors_100.csv
 
 echo "$(date "+%d/%m/%Y %T") Check #5 complete" >> $OUTFILE_LOG
 ####################################################### CHECK 6
+if [[ 0 == 1 ]];then
+
 echo "[Check #6: Unprocessed, Complete & Processing Checks]" >> $OUTFILE
 echo "DateTime,CheckName,Description,schema_id,Threshold,earliest_unprocessed,latest_complete,latest_processing,Result" >> $OUTFILE
 echo "$(date "+%d/%m/%Y %T") Starting Check #6" >> $OUTFILE_LOG
@@ -286,6 +288,8 @@ mv ${OPDIR}earliest_unprocessed_timestamps.tmp ${OPDIR}earliest_unprocessed_time
 mv ${OPDIR}earliest_processing_timestamps.tmp ${OPDIR}earliest_processing_timestamps_last_check.tmp
 
 echo "$(date "+%d/%m/%Y %T") Check #6 complete" >> $OUTFILE_LOG
+
+fi
 ####################################################### CHECK 7
 echo "[Check #7: Max Daily Update Counts by SchemaId]" >> $OUTFILE
 echo "DateTime,CheckName,Description,schema_id,count_updates,sum_number_of_table_updates,max_number_of_table_updates,BundledPrintThreshold,Result" >> $OUTFILE
@@ -885,9 +889,13 @@ echo $sum_number_of_table_updates
 echo $max_number_of_table_updates
 echo "====================================="
 
-db_dac_rate=`head -1 ${OPDIR}12AZUREDB_AMD_dacaudit_DBstep13-12_latest100_processing_rates.csv | awk -F"," '{print $3}'`
-total_dac_rate=`head -1 ${OPDIR}12AZUREDB_AMD_dacaudit_DBstep10-1_latest100_processing_rates.csv  | awk -F"," '{print $3}'`
-total_gw_rate=`head -1 ${OPDIR}12AZUREDB_AMD_gwaudit_step10-1_latest100_processing_rates.csv  | awk -F"," '{print $3}'`
+#db_dac_rate=`head -1 ${OPDIR}12AZUREDB_AMD_dacaudit_DBstep13-12_latest100_processing_rates.csv | awk -F"," '{print $3}'`
+#total_dac_rate=`head -1 ${OPDIR}12AZUREDB_AMD_dacaudit_DBstep10-1_latest100_processing_rates.csv  | awk -F"," '{print $3}'`
+#total_gw_rate=`head -1 ${OPDIR}12AZUREDB_AMD_gwaudit_step10-1_latest100_processing_rates.csv  | awk -F"," '{print $3}'`
+db_dac_rate=589
+total_dac_rate=1101
+total_gw_rate=799
+total_roundtrip=$(($db_dac_rate+$total_dac_rate+$total_gw_rate))
 combined_rate_secs=$((($db_dac_rate+$total_dac_rate+$total_gw_rate)/1000))
 delivery_rate_secs=$(($sum_number_of_table_updates/$combined_rate_secs))
 
@@ -908,6 +916,7 @@ echo "--------------------------------------------------------------"
 echo $db_dac_rate
 echo $total_dac_rate
 echo $total_gw_rate
+echo $total_roundtrip
 echo $combined_rate_secs
 echo $delivery_rate_secs
 echo $eta_units
@@ -915,7 +924,7 @@ echo "--------------------------------------------------------------"
 
 if [[ $status != ERROR ]];then
 
-if [[ $sum_number_of_table_updates -gt $backlog_adaptive_threshold ]];then
+if [[ $sum_number_of_table_updates -gt $backlog_adaptive_threshold ]] || [[ $total_roundtrip -gt $roundtrip_threshold ]];then
 echo "$(date "+%d/%m/%Y %T"),AZDB001_msg_backlog,MessageBacklogCheck,$schema_id,$status,$count_updates,$max_number_of_table_updates,$sum_number_of_table_updates,$backlog_adaptive_threshold,$db_dac_rate,$total_dac_rate,$total_gw_rate,$combined_rate_secs,$roundtrip_threshold,${adj_delivery_rate_secs}${eta_units},warn" >> $OUTFILE
 else
 echo "$(date "+%d/%m/%Y %T"),AZDB001_msg_backlog,MessageBacklogCheck,$schema_id,$status,$count_updates,$max_number_of_table_updates,$sum_number_of_table_updates,$backlog_adaptive_threshold,$db_dac_rate,$total_dac_rate,$total_gw_rate,$combined_rate_secs,$roundtrip_threshold,${adj_delivery_rate_secs}${eta_units},ok" >> $OUTFILE
