@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 ####################################################### This is the AMD AzureDB Healthcheck Script, and the associated documentation is in Ensemble under the "Libra System Admin Documents" area:
 ####################################################### "GoB Phase 1 - Oracle_Postgres DB Checks_v11.5_MAP.docx" is the latest version as of 01/08/2024
-echo "Script Version 5.4: Check #6"
+echo "Script Version 5.5: Check #6"
 mkdir /tmp/ams-reporting/
 OPDIR="/tmp/ams-reporting/"
 OUTFILE="${OPDIR}AZ_ThemisGOB_DB001_AMD"
@@ -917,8 +917,8 @@ echo $db_dacRT
 echo $total_dacRT
 echo $total_gwRT
 echo $total_roundtrip
-echo $total_roundtrip_secs
-echo $delivery_rate
+echo $delivery_rate_ms
+echo $delivery_rate_secs
 echo $eta_units
 echo "--------------------------------------------------------------"
 
