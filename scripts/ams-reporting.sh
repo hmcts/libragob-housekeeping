@@ -317,7 +317,7 @@ done < ${OPDIR}7AZUREDB_AMD_max_daily_update_counts_by_schemaid.csv
 echo "$(date "+%d/%m/%Y %T") Check #7 complete" >> $OUTFILE_LOG
 ####################################################### CHECK 8
 echo "[Check #8: Today's Hourly Update Counts]" >> $OUTFILE
-echo "DateTime,CheckName,Description,schema_id,count_updates,sum_number_of_table_updates,max_number_of_table_updates,Result" >> $OUTFILE
+echo "DateTime,CheckName,Description,TimeBucket,count_updates,sum_number_of_table_updates,max_number_of_table_updates,Result" >> $OUTFILE
 echo "$(date "+%d/%m/%Y %T") Starting Check #8" >> $OUTFILE_LOG
 echo "$(date "+%d/%m/%Y %T") Connecting to $event_db database" >> $OUTFILE_LOG
 psql "sslmode=require host=${event_host} dbname=${event_db} port=${event_port} user=${event_username} password=${event_password}" --file=/sql/8AZUREDB_AMD_todays_hourly_update_counts.sql
@@ -848,7 +848,7 @@ psql "sslmode=require host=${event_host} dbname=${event_db} port=${event_port} u
 echo "$(date "+%d/%m/%Y %T") SQL for Check #3 has been run" >> $OUTFILE_LOG
 
 backlog_threshold=850000 # 30K allowable back at 17:xx
-roundtrip_threshold=3000
+roundtrip_threshold=2000
 dt_hr=$(date "+%H")
 dt_hr1=`echo $dt_hr | cut -b 1`
 dt_hr2=`echo $dt_hr | cut -b 2`
