@@ -925,9 +925,9 @@ echo "--------------------------------------------------------------"
 if [[ $status != ERROR ]];then
 
 if [[ $sum_number_of_table_updates -gt $backlog_adaptive_threshold ]] || [[ $total_roundtrip -gt $roundtrip_threshold ]];then
-echo "$(date "+%d/%m/%Y %T"),AZDB001_msg_backlog,MessageBacklogCheck,$schema_id,$status,$count_updates,$max_number_of_table_updates,$sum_number_of_table_updates,$backlog_adaptive_threshold,$db_dacRT,$total_dacRT,$total_gwRT,$total_roundtrip,$updates_per_min,$roundtrip_threshold,${adj_delivery_rate}${eta_units},warn" >> $OUTFILE
+echo "$(date "+%d/%m/%Y %T"),AZDB001_msg_backlog,MessageBacklogCheck,$schema_id,$status,$count_updates,$max_number_of_table_updates,$sum_number_of_table_updates,$backlog_adaptive_threshold,$db_dacRT,$total_dacRT,$total_gwRT,$total_roundtrip,$roundtrip_threshold,${adj_delivery_rate}${eta_units},warn" >> $OUTFILE
 else
-echo "$(date "+%d/%m/%Y %T"),AZDB001_msg_backlog,MessageBacklogCheck,$schema_id,$status,$count_updates,$max_number_of_table_updates,$sum_number_of_table_updates,$backlog_adaptive_threshold,$db_dacRT,$total_dacRT,$total_gwRT,$total_roundtrip,$updates_per_min,$roundtrip_threshold,${adj_delivery_rate}${eta_units},ok" >> $OUTFILE
+echo "$(date "+%d/%m/%Y %T"),AZDB001_msg_backlog,MessageBacklogCheck,$schema_id,$status,$count_updates,$max_number_of_table_updates,$sum_number_of_table_updates,$backlog_adaptive_threshold,$db_dacRT,$total_dacRT,$total_gwRT,$total_roundtrip,$roundtrip_threshold,${adj_delivery_rate}${eta_units},ok" >> $OUTFILE
 fi
 
 fi
