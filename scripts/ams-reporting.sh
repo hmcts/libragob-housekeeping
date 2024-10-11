@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 ####################################################### This is the AMD AzureDB Healthcheck Script, and the associated documentation is in Ensemble under the "Libra System Admin Documents" area:
 ####################################################### "GoB Phase 1 - Oracle_Postgres DB Checks_v11.5_MAP.docx" is the latest version as of 01/08/2024
-echo "Script Version 7.1: sFTP"
+echo "Script Version 7.2: Check 12c onwards"
 echo "Designed by Mark A. Porter"
 mkdir /tmp/ams-reporting/
 OPDIR="/tmp/ams-reporting/"
@@ -558,8 +558,6 @@ echo "dt,AZDB001_gwaudit_10_proc_rates,Today's Latest 10 GatewayAudit Full Round
 
 done < ${OPDIR}12cAZUREDB_AMD_gwaudit_step10-1_latest10_processing_rates.csv
 ######################################################################################################################################################################################################
-if [[ 0 == 1 ]];then
-
 echo "[Check #12d: Daily AVG DACAudit DB Roundtrip Deltas Step 13-12]" >> $OUTFILE
 echo "DateTime,CheckName,Description,avgDailyRT in Millisecs,TotalWorkload in Hours,RecordCount,Result" >> $OUTFILE
 echo "$(date "+%d/%m/%Y %T") Starting Check #12d" >> $OUTFILE_LOG
@@ -819,8 +817,6 @@ echo "dt,AZDB001_minute_completed_table_updates,Minute Completed TABLE_UPDATES C
 done < ${OPDIR}12rAZUREDB_AMD_minute_completed_table_updates_counts.csv
 
 echo "$(date "+%d/%m/%Y %T") Check #12 complete" >> $OUTFILE_LOG
-
-fi
 ####################################################### CHECK 3
 echo "[Check #3: Update Backlogs]" >> $OUTFILE
 echo "DateTime,CheckName,Description,SchemaId,Status,COUNTupdates,max_number_of_table_updates,sum_number_of_table_updates,AdaptiveBacklogThreshold,DBdacRate_inMS,TOTALdacRate_inMS,TOTALgwRate_inMS,Total Roundtrip in Millisecs,RoundtripThreshold,DeliveryETA,Result" >> $OUTFILE
