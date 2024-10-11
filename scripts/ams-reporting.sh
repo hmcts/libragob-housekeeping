@@ -861,7 +861,7 @@ total_dacRT=`head -1 ${OPDIR}12bAZUREDB_AMD_dacaudit_DBstep10-1_latest100_proces
 total_gwRT=`head -1 ${OPDIR}12cAZUREDB_AMD_gwaudit_step10-1_latest100_processing_rates.csv  | awk -F"," '{print $3}' | awk -F"." '{print $1}'`
 total_roundtrip=$(($db_dacRT+$total_dacRT+$total_gwRT))
 total_roundtrip_secs=$(($total_roundtrip/1000))
-delivery_rate_secs=$(($sum_number_of_table_updates/$total_roundtrip_secs))
+delivery_rate_secs=$(($sum_number_of_table_updates*$total_roundtrip_secs))
 
 if [[ $delivery_rate_secs -lt 60 ]];then
 adj_delivery_rate=$delivery_rate_secs
