@@ -170,23 +170,20 @@ psql "sslmode=require host=${event_host} dbname=${event_db} port=${event_port} u
 echo "$(date "+%d/%m/%Y %T") SQL for Check #5 has been run" >> $OUTFILE_LOG
 
 # Put protection in to only work on the last 100 lines of errors
-tail -100 ${OPDIR}5AZUREDB_AMD_message_log_errors.csv > ${OPDIR}5AZUREDB_AMD_message_log_errors_100.tmp
+head -100 ${OPDIR}5AZUREDB_AMD_message_log_errors.csv > ${OPDIR}5AZUREDB_AMD_message_log_errors_100.tmp
 mv ${OPDIR}5AZUREDB_AMD_message_log_errors_100.tmp ${OPDIR}5AZUREDB_AMD_message_log_errors_100.csv
 
 while read -r line;do
 
-message_log_id=`echo $line | awk -F"," '{print $1}'`
-message_uuid=`echo $line | awk -F"," '{print $2}'`
+schema_id=`echo $line | awk -F"," '{print $1}'`
+message_log_id=`echo $line | awk -F"," '{print $2}'`
 created_date=`echo $line | awk -F"," '{print $3}'`
-procedure_name=`echo $line | awk -F"," '{print $4}'`
-error_message=`echo $line | awk -F"," '{print $5}'`
-update_request_id=`echo $line | awk -F"," '{print $6}'`
-schema_id=`echo $line | awk -F"," '{print $7}'`
+error_message=`echo $line | awk -F"," '{print $4}'`
 
 if [ ! -z $message_log_id ];then
-echo "$(date "+%d/%m/%Y %T"),AZDB001_db_message_log_error,Message Log Error Check,$message_log_id,$message_uuid,$created_date,$procedure_name,$error_message,$update_request_id,$schema_id,warn" >> $OUTFILE
+echo "$(date "+%d/%m/%Y %T"),AZDB001_db_message_log_error,Message Log Error Check,$schema_id,$message_log_id,$created_date,$error_message,warn" >> $OUTFILE
 else
-echo "$(date "+%d/%m/%Y %T"),AZDB001_db_message_log_error,Message Log Error Check,$message_log_id,$message_uuid,$created_date,$procedure_name,$error_message,$update_request_id,$schema_id,ok" >> $OUTFILE
+echo "$(date "+%d/%m/%Y %T"),AZDB001_db_message_log_error,Message Log Error Check,$schema_id,$message_log_id,$created_date,$error_message,ok" >> $OUTFILE
 fi
 
 done < ${OPDIR}5AZUREDB_AMD_message_log_errors_100.csv
