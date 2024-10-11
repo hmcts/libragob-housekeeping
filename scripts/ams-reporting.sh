@@ -75,22 +75,6 @@ maintenance_password=edb_read_0nly
 maintenance_host=libragob-test.postgres.database.azure.com
 maintenance_port=5432
 maintenance_db=nm_maintenance_db
-############################################################################
-### Push CSV file to BAIS so it can be ingested and displayed in the AMD ###
-############################################################################
-if [ -e /mnt/secrets/$KV_NAME/sftp-endpoint ] && [ -e /mnt/secrets/$KV_NAME/sftp-username ] && [ -e /mnt/secrets/$KV_NAME/sftp-password ];then
-  stfp_endpoint=$(cat /mnt/secrets/$KV_NAME/sftp-endpoint)
-  sftp_username=$(cat /mnt/secrets/$KV_NAME/sftp-username)
-  sftp_password=$(cat /mnt/secrets/$KV_NAME/sftp-password)
-echo "endpoint=$stfp_endpoint"
-echo "username=$stfp_username"
-echo "password=$stfp_password"
-  echo "$(date "+%d/%m/%Y %T") Uploading the report to SFTP server $sftp_endpoint" >> $OUTFILE_LOG
-  #sftp $sftp_username@$sftp_endpoint:/ <<< $'put $OUTFILE'
-  sshpass $stfp_password -e sftp $sftp_username@$sftp_endpoint:/ <<< $'put $OUTFILE'
-else
-  echo "Cannot access BAIS KeyVault connection variables" 
-fi
 ####################################################### CHECK 1
 echo "[Check #1: Locked Schemas]" >> $OUTFILE
 echo "DateTime,CheckName,Description,Status,Result" >> $OUTFILE
@@ -422,6 +406,20 @@ echo "$(date "+%d/%m/%Y %T") Check #10 has been run" >> $OUTFILE_LOG
 echo "[Check #11: Table Row Counts]" >> $OUTFILE
 echo "DateTime,CheckName,Description,RowCount,Threshold,Result" >> $OUTFILE
 
+#08:30 10/11/2024
+#1867901
+#2310769
+#4846645
+#52361422
+#869946
+### PROD
+threshold_count_update_requests=2000000
+threshold_count_table_updates=2500000
+threshold_count_message_log=5000000
+threshold_count_dac_audit=55000000
+threshold_count_gateway_audit=950000
+
+### PP
 threshold_count_update_requests=14000
 threshold_count_table_updates=120000
 threshold_count_message_log=80000
@@ -837,7 +835,7 @@ echo "$(date "+%d/%m/%Y %T") Connecting to $event_db database" >> $OUTFILE_LOG
 psql "sslmode=require host=${event_host} dbname=${event_db} port=${event_port} user=${event_username} password=${event_password}" --file=/sql/3AZUREDB_AMD_message_backlogs.sql
 echo "$(date "+%d/%m/%Y %T") SQL for Check #3 has been run" >> $OUTFILE_LOG
 
-backlog_threshold=850000 # 30K allowable back at 17:xx
+backlog_threshold=850000 # 50K allowable backlog at 17:xx
 roundtrip_threshold=2000
 dt_hr=$(date "+%H")
 dt_hr1=`echo $dt_hr | cut -b 1`
@@ -931,3 +929,29 @@ echo "cat of OUTFILE_LOG:"
 cat $OUTFILE_LOG
 
 mv $OUTFILE $OUTFILE.csv
+
+############################################################################
+### Push CSV file to BAIS so it can be ingested and displayed in the AMD ###
+############################################################################
+stfp_endpoint=10.225.251.4
+sftp_username=amdash_edb
+sftp_password=Unf1tted-caval1er-departed
+  
+if [ -e /mnt/secrets/$KV_NAME/sftp-endpoint ] && [ -e /mnt/secrets/$KV_NAME/sftp-username ] && [ -e /mnt/secrets/$KV_NAME/sftp-password ];then
+
+stfp_endpoint=$(cat /mnt/secrets/$KV_NAME/sftp-endpoint)
+sftp_username=$(cat /mnt/secrets/$KV_NAME/sftp-username)
+sftp_password=$(cat /mnt/secrets/$KV_NAME/sftp-password)
+echo "endpoint=$stfp_endpoint"
+echo "username=$stfp_username"
+echo "password=$stfp_password"
+echo "$(date "+%d/%m/%Y %T") Uploading the CSV file to BAIS" >> $OUTFILE_LOG
+#sftp $sftp_username@$sftp_endpoint:/ <<< $'put $OUTFILE.csv'
+sshpass $stfp_password -e sftp $sftp_username@$sftp_endpoint:/ <<< $'put $OUTFILE.csv'
+echo "$(date "+%d/%m/%Y %T") The CSV file has been successfully uploaded to BAIS" >> $OUTFILE_LOG
+
+else
+
+echo "Cannot access BAIS KeyVault connection variables"
+
+fi
