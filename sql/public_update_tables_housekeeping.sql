@@ -120,3 +120,7 @@ FROM public.update_requests
 WHERE created_date < CURRENT_DATE - INTERVAL '5 days';
 DELETE FROM public.update_requests
 WHERE created_date < CURRENT_DATE - INTERVAL '5 days';
+DELETE FROM public.table_updates_backup
+WHERE created_date < CURRENT_DATE - INTERVAL '45 days';
+DELETE FROM public.update_requests_backup
+WHERE created_date < CURRENT_DATE - INTERVAL '45 days';
