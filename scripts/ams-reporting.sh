@@ -513,7 +513,7 @@ echo "[Check #12a: Today's Latest 10 DACAudit DB Roundtrip Deltas Step 13-12]" >
 echo "DateTime,CheckName,Description,updated_date,uuid,Roundtrip in Millisecs,Result" >> $OUTFILE
 echo "$(date "+%d/%m/%Y %T") Starting Check #12a" >> $OUTFILE_LOG
 echo "$(date "+%d/%m/%Y %T") Connecting to $postgres_db database" >> $OUTFILE_LOG
-psql "sslmode=require host=${postgres_host} dbname=${postgres_db} port=${postgres_port} user=${postgres_username} password=${postgres_password}" --file=/sql/12aAZUREDB_AMD_dacaudit_DBstep13-12_latest100_processing_rates.sql
+psql "sslmode=require host=${postgres_host} dbname=${postgres_db} port=${postgres_port} user=${postgres_username} password=${postgres_password}" --file=/sql/12aAZUREDB_AMD_dacaudit_DBstep13-12_latest10_processing_rates.sql
 echo "$(date "+%d/%m/%Y %T") SQL for Check #12a has been run" >> $OUTFILE_LOG
 
 while read -r line;do
@@ -524,13 +524,13 @@ roundtrip=`echo $line | awk -F"," '{print $3}'`
 
 echo "dt,AZDB001_dacaudit_db_10_proc_rates,Today's Latest 10 DACAudit DB Roundtrip Deltas Step 13-12,$updated_date,$uuid,$roundtrip,ok" >> $OUTFILE
 
-done < ${OPDIR}12aAZUREDB_AMD_dacaudit_DBstep13-12_latest100_processing_rates.csv
+done < ${OPDIR}12aAZUREDB_AMD_dacaudit_DBstep13-12_latest10_processing_rates.csv
 ######################################################################################################################################################################################################
 echo "[Check #12b: Today's Latest 10 DACAudit Full Roundtrip Deltas Step 10-1]" >> $OUTFILE
 echo "DateTime,CheckName,Description,updated_date,uuid,Roundtrip in Millisecs,Result" >> $OUTFILE
 echo "$(date "+%d/%m/%Y %T") Starting Check #12b" >> $OUTFILE_LOG
 echo "$(date "+%d/%m/%Y %T") Connecting to $postgres_db database" >> $OUTFILE_LOG
-psql "sslmode=require host=${postgres_host} dbname=${postgres_db} port=${postgres_port} user=${postgres_username} password=${postgres_password}" --file=/sql/12bAZUREDB_AMD_dacaudit_step10-1_latest100_processing_rates.sql
+psql "sslmode=require host=${postgres_host} dbname=${postgres_db} port=${postgres_port} user=${postgres_username} password=${postgres_password}" --file=/sql/12bAZUREDB_AMD_dacaudit_step10-1_latest10_processing_rates.sql
 echo "$(date "+%d/%m/%Y %T") SQL for Check #12b has been run" >> $OUTFILE_LOG
 
 while read -r line;do
@@ -541,13 +541,13 @@ roundtrip=`echo $line | awk -F"," '{print $3}'`
 
 echo "dt,AZDB001_dacaudit_10_proc_rates,Today's Latest 10 DACAudit Full Roundtrip Deltas Step 10-1,$updated_date,$uuid,$roundtrip,ok" >> $OUTFILE
 
-done < ${OPDIR}12bAZUREDB_AMD_dacaudit_DBstep10-1_latest100_processing_rates.csv
+done < ${OPDIR}12bAZUREDB_AMD_dacaudit_DBstep10-1_latest10_processing_rates.csv
 ######################################################################################################################################################################################################
 echo "[Check #12c: Today's Latest 10 GatewayAudit Full Roundtrip Deltas Step 10-1]" >> $OUTFILE
 echo "DateTime,CheckName,Description,updated_date,uuid,Roundtrip in Millisecs,Result" >> $OUTFILE
 echo "$(date "+%d/%m/%Y %T") Starting Check #12c" >> $OUTFILE_LOG
 echo "$(date "+%d/%m/%Y %T") Connecting to $postgres_db database" >> $OUTFILE_LOG
-psql "sslmode=require host=${postgres_host} dbname=${postgres_db} port=${postgres_port} user=${postgres_username} password=${postgres_password}" --file=/sql/12cAZUREDB_AMD_gwaudit_step10-1_latest100_processing_rates.sql
+psql "sslmode=require host=${postgres_host} dbname=${postgres_db} port=${postgres_port} user=${postgres_username} password=${postgres_password}" --file=/sql/12cAZUREDB_AMD_gwaudit_step10-1_latest10_processing_rates.sql
 echo "$(date "+%d/%m/%Y %T") SQL for Check #12c has been run" >> $OUTFILE_LOG
 
 while read -r line;do
@@ -558,7 +558,7 @@ roundtrip=`echo $line | awk -F"," '{print $3}'`
 
 echo "dt,AZDB001_gwaudit_10_proc_rates,Today's Latest 10 GatewayAudit Full Roundtrip Deltas Step 10-1,$updated_date,$uuid,$roundtrip,ok" >> $OUTFILE
 
-done < ${OPDIR}12cAZUREDB_AMD_gwaudit_step10-1_latest100_processing_rates.csv
+done < ${OPDIR}12cAZUREDB_AMD_gwaudit_step10-1_latest10_processing_rates.csv
 ######################################################################################################################################################################################################
 if [[ 0 == 1 ]];then
 
