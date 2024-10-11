@@ -124,3 +124,5 @@ DELETE FROM public.table_updates_backup
 WHERE created_date < CURRENT_DATE - INTERVAL '45 days';
 DELETE FROM public.update_requests_backup
 WHERE created_date < CURRENT_DATE - INTERVAL '45 days';
+DELETE FROM public.data_differences_table
+WHERE new_value_date < CURRENT_DATE - INTERVAL '45 days';
