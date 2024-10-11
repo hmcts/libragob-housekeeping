@@ -873,6 +873,7 @@ elif [[ $delivery_rate_secs -lt $((60*60*24)) ]];then
 adj_delivery_rate=$(($delivery_rate_secs/3600))
 eta_units=hrs
 else
+adj_delivery_rate=$(($delivery_rate_secs/86400))
 eta_units=days
 fi
 
@@ -935,12 +936,9 @@ sftp_password=Unf1tted-caval1er-departed
   
 #if [ -e /mnt/secrets/$KV_NAME/sftp-endpoint ] && [ -e /mnt/secrets/$KV_NAME/sftp-username ] && [ -e /mnt/secrets/$KV_NAME/sftp-password ];then
 
-stfp_endpoint=$(cat /mnt/secrets/$KV_NAME/sftp-endpoint)
-sftp_username=$(cat /mnt/secrets/$KV_NAME/sftp-username)
-sftp_password=$(cat /mnt/secrets/$KV_NAME/sftp-password)
-echo "endpoint=$stfp_endpoint"
-echo "username=$stfp_username"
-echo "password=$stfp_password"
+#stfp_endpoint=$(cat /mnt/secrets/$KV_NAME/sftp-endpoint)
+#sftp_username=$(cat /mnt/secrets/$KV_NAME/sftp-username)
+#sftp_password=$(cat /mnt/secrets/$KV_NAME/sftp-password)
 echo "$(date "+%d/%m/%Y %T") Uploading the CSV file to BAIS" >> $OUTFILE_LOG
 #sftp $sftp_username@$sftp_endpoint:/ <<< $'put $OUTFILE.csv'
 sshpass $stfp_password -e sftp $sftp_username@$sftp_endpoint:/ <<< $'put $OUTFILE.csv'
