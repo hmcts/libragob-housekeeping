@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 ####################################################### This is the AMD AzureDB Healthcheck Script, and the associated documentation is in Ensemble under the "Libra System Admin Documents" area:
 ####################################################### "GoB Phase 1 - Oracle_Postgres DB Checks_v11.5_MAP.docx" is the latest version as of 01/08/2024
-echo "Script Version 6.9: Check #12a"
+echo "Script Version 7.0: Check #12c"
 mkdir /tmp/ams-reporting/
 OPDIR="/tmp/ams-reporting/"
 OUTFILE="${OPDIR}AZ_ThemisGOB_DB001_AMD"
@@ -423,7 +423,7 @@ threshold_count_gateway_audit=950000
 threshold_count_update_requests=14000
 threshold_count_table_updates=120000
 threshold_count_message_log=80000
-threshold_count_dac_audit=123000000
+threshold_count_dac_audit=55000000
 threshold_count_gateway_audit=50000
 
 echo "$(date "+%d/%m/%Y %T") Starting Check #11a" >> $OUTFILE_LOG
@@ -477,8 +477,6 @@ echo "$(date "+%d/%m/%Y %T"),AZDB001_message_log_row_count,MESSAGE_LOG RowCount,
 
 fi
 
-if [[ 0 == 1 ]];then
-
 echo "$(date "+%d/%m/%Y %T") Starting Check #11d" >> $OUTFILE_LOG
 echo "$(date "+%d/%m/%Y %T") Connecting to $postgres_db database" >> $OUTFILE_LOG
 psql "sslmode=require host=${postgres_host} dbname=${postgres_db} port=${postgres_port} user=${postgres_username} password=${postgres_password}" --file=/sql/11dAZUREDB_AMD_row_counts_DAC_message_audit.sql
@@ -493,8 +491,6 @@ echo "$(date "+%d/%m/%Y %T"),AZDB001_dac_audit_row_count,DAC_AUDIT RowCount,$row
 else
 
 echo "$(date "+%d/%m/%Y %T"),AZDB001_dac_audit_row_count,DAC_AUDIT RowCount,$rowcount_dac_audit,$threshold_count_dac_audit,ok" >> $OUTFILE
-
-fi
 
 fi
 
@@ -517,8 +513,6 @@ fi
 
 echo "$(date "+%d/%m/%Y %T") Check #11 complete" >> $OUTFILE_LOG
 ####################################################### CHECK 12
-if [[ 0 == 1 ]];then
-
 echo "[Check #12a: Today's Latest 100 DACAudit DB Roundtrip Deltas Step 13-12]" >> $OUTFILE
 echo "DateTime,CheckName,Description,updated_date,uuid,Roundtrip in Millisecs,Result" >> $OUTFILE
 echo "$(date "+%d/%m/%Y %T") Starting Check #12a" >> $OUTFILE_LOG
@@ -535,11 +529,7 @@ roundtrip=`echo $line | awk -F"," '{print $3}'`
 echo "dt,AZDB001_dacaudit_db_100_proc_rates,Today's Latest 100 DACAudit DB Roundtrip Deltas Step 13-12,$updated_date,$uuid,$roundtrip,ok" >> $OUTFILE
 
 done < ${OPDIR}12aAZUREDB_AMD_dacaudit_DBstep13-12_latest100_processing_rates.csv
-
-fi
 ######################################################################################################################################################################################################
-if [[ 0 == 1 ]];then
-
 echo "[Check #12b: Today's Latest 100 DACAudit Full Roundtrip Deltas Step 10-1]" >> $OUTFILE
 echo "DateTime,CheckName,Description,updated_date,uuid,Roundtrip in Millisecs,Result" >> $OUTFILE
 echo "$(date "+%d/%m/%Y %T") Starting Check #12b" >> $OUTFILE_LOG
@@ -574,6 +564,8 @@ echo "dt,AZDB001_gwaudit_100_proc_rates,Today's Latest 100 GatewayAudit Full Rou
 
 done < ${OPDIR}12cAZUREDB_AMD_gwaudit_step10-1_latest100_processing_rates.csv
 ######################################################################################################################################################################################################
+if [[ 0 == 1 ]];then
+
 echo "[Check #12d: Daily AVG DACAudit DB Roundtrip Deltas Step 13-12]" >> $OUTFILE
 echo "DateTime,CheckName,Description,avgDailyRT in Millisecs,TotalWorkload in Hours,RecordCount,Result" >> $OUTFILE
 echo "$(date "+%d/%m/%Y %T") Starting Check #12d" >> $OUTFILE_LOG
