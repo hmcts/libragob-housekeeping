@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 ####################################################### This is the AMD AzureDB Healthcheck Script, and the associated documentation is in Ensemble under the "Libra System Admin Documents" area:
 ####################################################### "GoB Phase 1 - Oracle_Postgres DB Checks_v11.5_MAP.docx" is the latest version as of 01/08/2024
-echo "Script Version 7.0: Check #12c"
+echo "Script Version 7.1: sFTP"
 mkdir /tmp/ams-reporting/
 OPDIR="/tmp/ams-reporting/"
 OUTFILE="${OPDIR}AZ_ThemisGOB_DB001_AMD"
@@ -193,8 +193,6 @@ done < ${OPDIR}5AZUREDB_AMD_message_log_errors_100.csv
 
 echo "$(date "+%d/%m/%Y %T") Check #5 complete" >> $OUTFILE_LOG
 ####################################################### CHECK 6
-if [[ 0 == 1 ]];then
-
 echo "[Check #6: Unprocessed, Complete & Processing Checks]" >> $OUTFILE
 echo "DateTime,CheckName,Description,schema_id,Threshold,earliest_unprocessed,latest_complete,latest_processing,Result" >> $OUTFILE
 echo "$(date "+%d/%m/%Y %T") Starting Check #6" >> $OUTFILE_LOG
@@ -272,8 +270,6 @@ mv ${OPDIR}earliest_unprocessed_timestamps.tmp ${OPDIR}earliest_unprocessed_time
 mv ${OPDIR}earliest_processing_timestamps.tmp ${OPDIR}earliest_processing_timestamps_last_check.tmp
 
 echo "$(date "+%d/%m/%Y %T") Check #6 complete" >> $OUTFILE_LOG
-
-fi
 ####################################################### CHECK 7
 echo "[Check #7: Max Daily Update Counts by SchemaId]" >> $OUTFILE
 echo "DateTime,CheckName,Description,schema_id,count_updates,sum_number_of_table_updates,max_number_of_table_updates,BundledPrintThreshold,Result" >> $OUTFILE
@@ -937,7 +933,7 @@ stfp_endpoint=10.225.251.4
 sftp_username=amdash_edb
 sftp_password=Unf1tted-caval1er-departed
   
-if [ -e /mnt/secrets/$KV_NAME/sftp-endpoint ] && [ -e /mnt/secrets/$KV_NAME/sftp-username ] && [ -e /mnt/secrets/$KV_NAME/sftp-password ];then
+#if [ -e /mnt/secrets/$KV_NAME/sftp-endpoint ] && [ -e /mnt/secrets/$KV_NAME/sftp-username ] && [ -e /mnt/secrets/$KV_NAME/sftp-password ];then
 
 stfp_endpoint=$(cat /mnt/secrets/$KV_NAME/sftp-endpoint)
 sftp_username=$(cat /mnt/secrets/$KV_NAME/sftp-username)
@@ -950,8 +946,8 @@ echo "$(date "+%d/%m/%Y %T") Uploading the CSV file to BAIS" >> $OUTFILE_LOG
 sshpass $stfp_password -e sftp $sftp_username@$sftp_endpoint:/ <<< $'put $OUTFILE.csv'
 echo "$(date "+%d/%m/%Y %T") The CSV file has been successfully uploaded to BAIS" >> $OUTFILE_LOG
 
-else
+#else
 
-echo "Cannot access BAIS KeyVault connection variables"
+#echo "Cannot access BAIS KeyVault connection variables"
 
-fi
+#fi
