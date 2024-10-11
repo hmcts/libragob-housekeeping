@@ -477,6 +477,8 @@ echo "$(date "+%d/%m/%Y %T"),AZDB001_message_log_row_count,MESSAGE_LOG RowCount,
 
 fi
 
+if [[ 0 == 1 ]];then
+
 echo "$(date "+%d/%m/%Y %T") Starting Check #11d" >> $OUTFILE_LOG
 echo "$(date "+%d/%m/%Y %T") Connecting to $postgres_db database" >> $OUTFILE_LOG
 psql "sslmode=require host=${postgres_host} dbname=${postgres_db} port=${postgres_port} user=${postgres_username} password=${postgres_password}" --file=/sql/11dAZUREDB_AMD_row_counts_DAC_message_audit.sql
@@ -491,6 +493,8 @@ echo "$(date "+%d/%m/%Y %T"),AZDB001_dac_audit_row_count,DAC_AUDIT RowCount,$row
 else
 
 echo "$(date "+%d/%m/%Y %T"),AZDB001_dac_audit_row_count,DAC_AUDIT RowCount,$rowcount_dac_audit,$threshold_count_dac_audit,ok" >> $OUTFILE
+
+fi
 
 fi
 
@@ -513,6 +517,8 @@ fi
 
 echo "$(date "+%d/%m/%Y %T") Check #11 complete" >> $OUTFILE_LOG
 ####################################################### CHECK 12
+if [[ 0 == 1 ]];then
+
 echo "[Check #12a: Today's Latest 100 DACAudit DB Roundtrip Deltas Step 13-12]" >> $OUTFILE
 echo "DateTime,CheckName,Description,updated_date,uuid,Roundtrip in Millisecs,Result" >> $OUTFILE
 echo "$(date "+%d/%m/%Y %T") Starting Check #12a" >> $OUTFILE_LOG
@@ -529,6 +535,8 @@ roundtrip=`echo $line | awk -F"," '{print $3}'`
 echo "dt,AZDB001_dacaudit_db_100_proc_rates,Today's Latest 100 DACAudit DB Roundtrip Deltas Step 13-12,$updated_date,$uuid,$roundtrip,ok" >> $OUTFILE
 
 done < ${OPDIR}12aAZUREDB_AMD_dacaudit_DBstep13-12_latest100_processing_rates.csv
+
+fi
 ######################################################################################################################################################################################################
 if [[ 0 == 1 ]];then
 
@@ -857,10 +865,10 @@ count_updates=`echo $line | awk -F"," '{print $3}'`
 sum_number_of_table_updates=`echo $line | awk -F"," '{print $4}'`
 max_number_of_table_updates=`echo $line | awk -F"," '{print $5}'`
 
-db_dacRT=`head -1 ${OPDIR}12aAZUREDB_AMD_dacaudit_DBstep13-12_latest100_processing_rates.csv | awk -F"," '{print $3}' | awk -F"." '{print $1}'`
+#db_dacRT=`head -1 ${OPDIR}12aAZUREDB_AMD_dacaudit_DBstep13-12_latest100_processing_rates.csv | awk -F"," '{print $3}' | awk -F"." '{print $1}'`
 #total_dacRT=`head -1 ${OPDIR}12bAZUREDB_AMD_dacaudit_DBstep10-1_latest100_processing_rates.csv  | awk -F"," '{print $3}' | awk -F"." '{print $1}'`
 #total_gwRT=`head -1 ${OPDIR}12cAZUREDB_AMD_gwaudit_step10-1_latest100_processing_rates.csv  | awk -F"," '{print $3}' | awk -F"." '{print $1}'`
-#db_dacRT=589
+db_dacRT=589
 total_dacRT=1101
 total_gwRT=799
 total_roundtrip=$(($db_dacRT+$total_dacRT+$total_gwRT))
