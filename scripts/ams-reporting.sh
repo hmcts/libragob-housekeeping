@@ -941,7 +941,11 @@ sftp_password=Unf1tted-caval1er-departed
 #sftp_password=$(cat /mnt/secrets/$KV_NAME/sftp-password)
 echo "$(date "+%d/%m/%Y %T") Uploading the CSV file to BAIS" >> $OUTFILE_LOG
 #sftp $sftp_username@$sftp_endpoint:/ <<< $'put $OUTFILE.csv'
-ftp $sftp_username:$stfp_password@$sftp_endpoint:/ <<< $'put $OUTFILE.csv'
+sftp $sftp_username:$stfp_password@$sftp_endpoint << EOF
+put ${OPDIR}/$OUTFILE.csv
+quit
+EOF
+
 echo "$(date "+%d/%m/%Y %T") The CSV file has been successfully uploaded to BAIS" >> $OUTFILE_LOG
 
 #else
