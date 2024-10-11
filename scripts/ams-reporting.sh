@@ -520,7 +520,7 @@ updated_date=`echo $line | awk -F"," '{print $1}'`
 uuid=`echo $line | awk -F"," '{print $2}'`
 roundtrip=`echo $line | awk -F"," '{print $3}'`
 
-echo "dt,AZDB001_dacaudit_db_10_proc_rates,Today's Latest 10 DACAudit DB Roundtrip Deltas Step 13-12,$updated_date,$uuid,$roundtrip,ok" >> $OUTFILE
+echo "$(date "+%d/%m/%Y %T"),AZDB001_dacaudit_db_10_proc_rates,Today's Latest 10 DACAudit DB Roundtrip Deltas Step 13-12,$updated_date,$uuid,$roundtrip,ok" >> $OUTFILE
 
 done < ${OPDIR}12aAZUREDB_AMD_dacaudit_DBstep13-12_latest10_processing_rates.csv
 ######################################################################################################################################################################################################
@@ -537,7 +537,7 @@ updated_date=`echo $line | awk -F"," '{print $1}'`
 uuid=`echo $line | awk -F"," '{print $2}'`
 roundtrip=`echo $line | awk -F"," '{print $3}'`
 
-echo "dt,AZDB001_dacaudit_10_proc_rates,Today's Latest 10 DACAudit Full Roundtrip Deltas Step 10-1,$updated_date,$uuid,$roundtrip,ok" >> $OUTFILE
+echo "$(date "+%d/%m/%Y %T"),AZDB001_dacaudit_10_proc_rates,Today's Latest 10 DACAudit Full Roundtrip Deltas Step 10-1,$updated_date,$uuid,$roundtrip,ok" >> $OUTFILE
 
 done < ${OPDIR}12bAZUREDB_AMD_dacaudit_DBstep10-1_latest10_processing_rates.csv
 ######################################################################################################################################################################################################
@@ -554,7 +554,7 @@ updated_date=`echo $line | awk -F"," '{print $1}'`
 uuid=`echo $line | awk -F"," '{print $2}'`
 roundtrip=`echo $line | awk -F"," '{print $3}'`
 
-echo "dt,AZDB001_gwaudit_10_proc_rates,Today's Latest 10 GatewayAudit Full Roundtrip Deltas Step 10-1,$updated_date,$uuid,$roundtrip,ok" >> $OUTFILE
+echo "$(date "+%d/%m/%Y %T"),AZDB001_gwaudit_10_proc_rates,Today's Latest 10 GatewayAudit Full Roundtrip Deltas Step 10-1,$updated_date,$uuid,$roundtrip,ok" >> $OUTFILE
 
 done < ${OPDIR}12cAZUREDB_AMD_gwaudit_step10-1_latest10_processing_rates.csv
 ######################################################################################################################################################################################################
@@ -572,7 +572,7 @@ avgDailyRT=`echo $line | awk -F"," '{print $2}'`
 total_workload=`echo $line | awk -F"," '{print $3}'`
 records=`echo $line | awk -F"," '{print $4}'`
 
-echo "dt,AZDB001_dacaudit_db_avgDailyRT,Daily AVG DACAudit DB Roundtrip Deltas Step 13-12,$dateddmmyyyy,$avgDailyRT,$total_workload,$records,ok" >> $OUTFILE
+echo "$(date "+%d/%m/%Y %T"),AZDB001_dacaudit_db_avgDailyRT,Daily AVG DACAudit DB Roundtrip Deltas Step 13-12,$dateddmmyyyy,$avgDailyRT,$total_workload,$records,ok" >> $OUTFILE
 
 done < ${OPDIR}12dAZUREDB_AMD_dacaudit_DBstep13-12_avgDailyRT.csv
 ######################################################################################################################################################################################################
@@ -590,7 +590,7 @@ avgDailyRT=`echo $line | awk -F"," '{print $2}'`
 total_workload=`echo $line | awk -F"," '{print $3}'`
 records=`echo $line | awk -F"," '{print $4}'`
 
-echo "dt,AZDB001_dacaudit_avgDailyRT,Daily AVG DACAudit Full Roundtrip Deltas Step 10-1,$dateddmmyyyy,$avgDailyRT,$total_workload,$records,ok" >> $OUTFILE
+echo "$(date "+%d/%m/%Y %T"),AZDB001_dacaudit_avgDailyRT,Daily AVG DACAudit Full Roundtrip Deltas Step 10-1,$dateddmmyyyy,$avgDailyRT,$total_workload,$records,ok" >> $OUTFILE
 
 done < ${OPDIR}12eAZUREDB_AMD_dacaudit_step10-1_avgDailyRT.csv
 ######################################################################################################################################################################################################
@@ -608,7 +608,7 @@ avgDailyRT=`echo $line | awk -F"," '{print $2}'`
 total_workload=`echo $line | awk -F"," '{print $3}'`
 records=`echo $line | awk -F"," '{print $4}'`
 
-echo "dt,AZDB001_gwaudit_avgDailyRT,Daily AVG GatewayAudit Full Roundtrip Deltas Step 10-1,$dateddmmyyyy,$avgDailyRT,$total_workload,$records,ok" >> $OUTFILE
+echo "$(date "+%d/%m/%Y %T"),AZDB001_gwaudit_avgDailyRT,Daily AVG GatewayAudit Full Roundtrip Deltas Step 10-1,$dateddmmyyyy,$avgDailyRT,$total_workload,$records,ok" >> $OUTFILE
 
 done < ${OPDIR}12fAZUREDB_AMD_gwaudit_step10-1_avgDailyRT.csv
 ######################################################################################################################################################################################################
@@ -626,7 +626,7 @@ avgHourlyRT=`echo $line | awk -F"," '{print $2}'`
 total_workload=`echo $line | awk -F"," '{print $3}'`
 records=`echo $line | awk -F"," '{print $4}'`
 
-echo "dt,AZDB001_dacaudit_db_avgHourlyRT,48 Hourly AVG DACAudit DB Roundtrip Deltas Step 13-12,$dateddmmyyyy,$avgHourlyRT,$total_workload,$records,ok" >> $OUTFILE
+echo "$(date "+%d/%m/%Y %T"),AZDB001_dacaudit_db_avgHourlyRT,48 Hourly AVG DACAudit DB Roundtrip Deltas Step 13-12,$dateddmmyyyy,$avgHourlyRT,$total_workload,$records,ok" >> $OUTFILE
 
 done < ${OPDIR}12gAZUREDB_AMD_dacaudit_DBstep13-12_avgHourlyRT.csv
 ######################################################################################################################################################################################################
@@ -644,7 +644,7 @@ avgMinuteRT=`echo $line | awk -F"," '{print $2}'`
 total_workload=`echo $line | awk -F"," '{print $3}'`
 records=`echo $line | awk -F"," '{print $4}'`
 
-echo "dt,AZDB001_dacaudit_db_avgMinuteRT,60 Minute AVG DACAudit DB Roundtrip Deltas Step 13-12,$dateddmmyyyy,$avgMinuteRT,$total_workload,$records,ok" >> $OUTFILE
+echo "$(date "+%d/%m/%Y %T"),AZDB001_dacaudit_db_avgMinuteRT,60 Minute AVG DACAudit DB Roundtrip Deltas Step 13-12,$dateddmmyyyy,$avgMinuteRT,$total_workload,$records,ok" >> $OUTFILE
 
 done < ${OPDIR}12hAZUREDB_AMD_dacaudit_DBstep13-12_avgMinuteRT.csv
 ######################################################################################################################################################################################################
@@ -662,7 +662,7 @@ avgHourlyRT=`echo $line | awk -F"," '{print $2}'`
 total_workload=`echo $line | awk -F"," '{print $3}'`
 records=`echo $line | awk -F"," '{print $4}'`
 
-echo "dt,AZDB001_dacaudit_db_avgHourlyRT,48 Hourly AVG DACAudit DB Roundtrip Deltas Step 10-1,$dateddmmyyyy,$avgHourlyRT,$total_workload,$records,ok" >> $OUTFILE
+echo "$(date "+%d/%m/%Y %T"),AZDB001_dacaudit_db_avgHourlyRT,48 Hourly AVG DACAudit DB Roundtrip Deltas Step 10-1,$dateddmmyyyy,$avgHourlyRT,$total_workload,$records,ok" >> $OUTFILE
 
 done < ${OPDIR}12iAZUREDB_AMD_dacaudit_DBstep10-1_avgHourlyRT.csv
 ######################################################################################################################################################################################################
@@ -680,7 +680,7 @@ avgMinuteRT=`echo $line | awk -F"," '{print $2}'`
 total_workload=`echo $line | awk -F"," '{print $3}'`
 records=`echo $line | awk -F"," '{print $4}'`
 
-echo "dt,AZDB001_dacaudit_db_avgMinuteRT,60 Minute AVG DACAudit DB Roundtrip Deltas Step 10-1,$dateddmmyyyy,$avgMinuteRT,$total_workload,$records,ok" >> $OUTFILE
+echo "$(date "+%d/%m/%Y %T"),AZDB001_dacaudit_db_avgMinuteRT,60 Minute AVG DACAudit DB Roundtrip Deltas Step 10-1,$dateddmmyyyy,$avgMinuteRT,$total_workload,$records,ok" >> $OUTFILE
 
 done < ${OPDIR}12jAZUREDB_AMD_dacaudit_DBstep10-1_avgMinuteRT.csv
 ######################################################################################################################################################################################################
@@ -698,7 +698,7 @@ avgHourlyRT=`echo $line | awk -F"," '{print $2}'`
 total_workload=`echo $line | awk -F"," '{print $3}'`
 records=`echo $line | awk -F"," '{print $4}'`
 
-echo "dt,AZDB001_gwaudit_avgHourlyRT,48 Hourly AVG GatewayAudit Full Roundtrip Deltas Step 10-1,$dateddmmyyyy,$avgHourlyRT,$total_workload,$records,ok" >> $OUTFILE
+echo "$(date "+%d/%m/%Y %T"),AZDB001_gwaudit_avgHourlyRT,48 Hourly AVG GatewayAudit Full Roundtrip Deltas Step 10-1,$dateddmmyyyy,$avgHourlyRT,$total_workload,$records,ok" >> $OUTFILE
 
 done < ${OPDIR}12kAZUREDB_AMD_gwaudit_step10-1_avgHourlyRT.csv
 ######################################################################################################################################################################################################
@@ -716,7 +716,7 @@ avgMinuteRT=`echo $line | awk -F"," '{print $2}'`
 total_workload=`echo $line | awk -F"," '{print $3}'`
 records=`echo $line | awk -F"," '{print $4}'`
 
-echo "dt,AZDB001_gwaudit_avgMinuteRT,60 Minute AVG GatewayAudit Full Roundtrip Deltas Step 10-1,$dateddmmyyyy,$avgMinuteRT,$total_workload,$records,ok" >> $OUTFILE
+echo "$(date "+%d/%m/%Y %T"),AZDB001_gwaudit_avgMinuteRT,60 Minute AVG GatewayAudit Full Roundtrip Deltas Step 10-1,$dateddmmyyyy,$avgMinuteRT,$total_workload,$records,ok" >> $OUTFILE
 
 done < ${OPDIR}12lAZUREDB_AMD_gwaudit_step10-1_avgMinuteRT.csv
 ######################################################################################################################################################################################################
@@ -732,7 +732,7 @@ while read -r line;do
 dateddmmyyyy=`echo $line | awk -F"," '{print $1}'`
 records=`echo $line | awk -F"," '{print $2}'`
 
-echo "dt,AZDB001_daily_completed_update_requests,Daily Completed UPDATE_REQUESTS Counts,$dateddmmyyyy,$records,ok" >> $OUTFILE
+echo "$(date "+%d/%m/%Y %T"),AZDB001_daily_completed_update_requests,Daily Completed UPDATE_REQUESTS Counts,$dateddmmyyyy,$records,ok" >> $OUTFILE
 
 done < ${OPDIR}12mAZUREDB_AMD_daily_completed_update_request_counts.csv
 ######################################################################################################################################################################################################
@@ -748,7 +748,7 @@ while read -r line;do
 dateddmmyyyy=`echo $line | awk '{print $1}'`
 records=`echo $line | awk '{print $2}'`
 
-echo "dt,AZDB001_daily_completed_table_updates,Daily Completed TABLE_UPDATES Counts,$dateddmmyyyy,$records,ok" >> $OUTFILE
+echo "$(date "+%d/%m/%Y %T"),AZDB001_daily_completed_table_updates,Daily Completed TABLE_UPDATES Counts,$dateddmmyyyy,$records,ok" >> $OUTFILE
 
 done < ${OPDIR}12nAZUREDB_AMD_daily_completed_table_updates_counts.csv
 ######################################################################################################################################################################################################
@@ -764,7 +764,7 @@ while read -r line;do
 dateddmmyyyy=`echo $line | awk -F"," '{print $1}'`
 records=`echo $line | awk -F"," '{print $2}'`
 
-echo "dt,AZDB001_hourly_completed_update_requests,Hourly Completed UPDATE_REQUESTS Counts,$dateddmmyyyy,$records,ok" >> $OUTFILE
+echo "$(date "+%d/%m/%Y %T"),AZDB001_hourly_completed_update_requests,Hourly Completed UPDATE_REQUESTS Counts,$dateddmmyyyy,$records,ok" >> $OUTFILE
 
 done < ${OPDIR}12oAZUREDB_AMD_hourly_completed_update_request_counts.csv
 ######################################################################################################################################################################################################
@@ -780,7 +780,7 @@ while read -r line;do
 dateddmmyyyy=`echo $line | awk -F"," '{print $1}'`
 records=`echo $line | awk -F"," '{print $2}'`
 
-echo "dt,AZDB001_hourly_completed_table_updates,Hourly Completed TABLE_UPDATES Counts,$dateddmmyyyy,$records,ok" >> $OUTFILE
+echo "$(date "+%d/%m/%Y %T"),AZDB001_hourly_completed_table_updates,Hourly Completed TABLE_UPDATES Counts,$dateddmmyyyy,$records,ok" >> $OUTFILE
 
 done < ${OPDIR}12pAZUREDB_AMD_hourly_completed_table_updates_counts.csv
 ######################################################################################################################################################################################################
@@ -796,7 +796,7 @@ while read -r line;do
 dateddmmyyyy=`echo $line | awk -F"," '{print $1}'`
 records=`echo $line | awk -F"," '{print $2}'`
 
-echo "dt,AZDB001_minute_completed_update_requests,Minute Completed UPDATE_REQUESTS Counts,$dateddmmyyyy,$records,ok" >> $OUTFILE
+echo "$(date "+%d/%m/%Y %T"),AZDB001_minute_completed_update_requests,Minute Completed UPDATE_REQUESTS Counts,$dateddmmyyyy,$records,ok" >> $OUTFILE
 
 done < ${OPDIR}12qAZUREDB_AMD_minute_completed_update_request_counts.csv
 ######################################################################################################################################################################################################
@@ -812,7 +812,7 @@ while read -r line;do
 dateddmmyyyy=`echo $line | awk -F"," '{print $1}'`
 records=`echo $line | awk -F"," '{print $2}'`
 
-echo "dt,AZDB001_minute_completed_table_updates,Minute Completed TABLE_UPDATES Counts,$dateddmmyyyy,$records,ok" >> $OUTFILE
+echo "$(date "+%d/%m/%Y %T"),AZDB001_minute_completed_table_updates,Minute Completed TABLE_UPDATES Counts,$dateddmmyyyy,$records,ok" >> $OUTFILE
 
 done < ${OPDIR}12rAZUREDB_AMD_minute_completed_table_updates_counts.csv
 
