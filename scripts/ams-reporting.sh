@@ -8,7 +8,7 @@ OPDIR="/tmp/ams-reporting/"
 OUTFILE="${OPDIR}AZ_ThemisGOB_DB001_AMD"
 OUTFILE_STATS="${OPDIR}AZ_ThemisGOB_DB001_STATS_AMD"
 OUTFILE_LOG="${OPDIR}AZ_ThemisGOB_DB001_AMD.log"
-rm -f *.csv $OUTFILE $OUTFILE_LOG
+rm -f *.csv $OUTFILE $OUTFILE_STAT $OUTFILE_LOG
 echo $(date "+%d/%m/%Y %T") > $OUTFILE
 echo $(date "+%d/%m/%Y %T") > $OUTFILE_STATS
 
