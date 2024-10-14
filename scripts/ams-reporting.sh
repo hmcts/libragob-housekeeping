@@ -518,20 +518,6 @@ echo "$(date "+%d/%m/%Y %T") Check #10 has been run" >> $OUTFILE_LOG
 echo "[Check #11: Table Row Counts]" >> $OUTFILE
 echo "DateTime,CheckName,Description,RowCount,Threshold,Result" >> $OUTFILE
 
-#08:30 10/11/2024
-#1867901
-#2310769
-#4846645
-#52361422
-#869946
-### PROD
-threshold_count_update_requests=2000000
-threshold_count_table_updates=2500000
-threshold_count_message_log=5000000
-threshold_count_dac_audit=55000000
-threshold_count_gateway_audit=950000
-
-### PP
 threshold_count_update_requests=14000
 threshold_count_table_updates=120000
 threshold_count_message_log=80000
