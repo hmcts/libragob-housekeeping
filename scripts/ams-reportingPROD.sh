@@ -5,7 +5,7 @@ echo "Script Version 7.3: Check 12c onwards"
 echo "Designed by Mark A. Porter"
 mkdir /tmp/ams-reporting/
 OPDIR="/tmp/ams-reporting/"
-OUTFILE="${OPDIR}ThemisAZ"
+OUTFILE="${OPDIR}ThemisAZhc"
 OUTFILE_STATS="${OPDIR}ThemisAZstats"
 OUTFILE_LOG="${OPDIR}ThemisAZ.log"
 echo $(date "+%d/%m/%Y %T") > $OUTFILE
