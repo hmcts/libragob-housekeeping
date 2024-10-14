@@ -823,7 +823,7 @@ echo "[Check #12o: Hourly Completed UPDATE_REQUESTS Counts]" >> $OUTFILE_STATS
 echo "DateTime,CheckName,Description,DTBucket,RecordCount,Result" >> $OUTFILE_STATS
 echo "$(date "+%d/%m/%Y %T") Starting Check #12o" >> $OUTFILE_LOG
 echo "$(date "+%d/%m/%Y %T") Connecting to $event_db database" >> $OUTFILE_LOG
-psql "sslmode=require host=${event_host} dbname=${event_db} port=${event_port} user=${event_username} password=${event_password}" --file=/sql/12oAZUREDB_AMD_Hourly_completed_update_request_counts.sql
+psql "sslmode=require host=${event_host} dbname=${event_db} port=${event_port} user=${event_username} password=${event_password}" --file=/sql/12oAZUREDB_AMD_hourly_completed_update_request_counts.sql
 echo "$(date "+%d/%m/%Y %T") SQL for Check #12o has been run" >> $OUTFILE_LOG
 
 while read -r line;do
@@ -839,7 +839,7 @@ echo "[Check #12p: Hourly Completed TABLE_UPDATES Counts]" >> $OUTFILE_STATS
 echo "DateTime,CheckName,Description,DTBucket,RecordCount,Result" >> $OUTFILE_STATS
 echo "$(date "+%d/%m/%Y %T") Starting Check #12p" >> $OUTFILE_LOG
 echo "$(date "+%d/%m/%Y %T") Connecting to $event_db database" >> $OUTFILE_LOG
-psql "sslmode=require host=${event_host} dbname=${event_db} port=${event_port} user=${event_username} password=${event_password}" --file=/sql/12pAZUREDB_AMD_Hourly_completed_table_updates_counts.sql
+psql "sslmode=require host=${event_host} dbname=${event_db} port=${event_port} user=${event_username} password=${event_password}" --file=/sql/12pAZUREDB_AMD_hourly_completed_table_updates_counts.sql
 echo "$(date "+%d/%m/%Y %T") SQL for Check #12p has been run" >> $OUTFILE_LOG
 
 while read -r line;do
@@ -855,7 +855,7 @@ echo "[Check #12q: Minute Completed UPDATE_REQUESTS Counts]" >> $OUTFILE_STATS
 echo "DateTime,CheckName,Description,DTBucket,RecordCount,Result" >> $OUTFILE_STATS
 echo "$(date "+%d/%m/%Y %T") Starting Check #12q" >> $OUTFILE_LOG
 echo "$(date "+%d/%m/%Y %T") Connecting to $event_db database" >> $OUTFILE_LOG
-psql "sslmode=require host=${event_host} dbname=${event_db} port=${event_port} user=${event_username} password=${event_password}" --file=/sql/12qAZUREDB_AMD_Minute_completed_update_request_counts.sql
+psql "sslmode=require host=${event_host} dbname=${event_db} port=${event_port} user=${event_username} password=${event_password}" --file=/sql/12qAZUREDB_AMD_minute_completed_update_request_counts.sql
 echo "$(date "+%d/%m/%Y %T") SQL for Check #12q has been run" >> $OUTFILE_LOG
 
 while read -r line;do
@@ -871,7 +871,7 @@ echo "[Check #12r: Minute Completed TABLE_UPDATES Counts]" >> $OUTFILE_STATS
 echo "DateTime,CheckName,Description,DTBucket,RecordCount,Result" >> $OUTFILE_STATS
 echo "$(date "+%d/%m/%Y %T") Starting Check #12r" >> $OUTFILE_LOG
 echo "$(date "+%d/%m/%Y %T") Connecting to $event_db database" >> $OUTFILE_LOG
-psql "sslmode=require host=${event_host} dbname=${event_db} port=${event_port} user=${event_username} password=${event_password}" --file=/sql/12rAZUREDB_AMD_Minute_completed_table_updates_counts.sql
+psql "sslmode=require host=${event_host} dbname=${event_db} port=${event_port} user=${event_username} password=${event_password}" --file=/sql/12rAZUREDB_AMD_minute_completed_table_updates_counts.sql
 echo "$(date "+%d/%m/%Y %T") SQL for Check #12r has been run" >> $OUTFILE_LOG
 
 while read -r line;do
