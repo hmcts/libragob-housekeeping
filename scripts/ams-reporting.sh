@@ -1,14 +1,13 @@
 #!/usr/bin/env bash
 ####################################################### This is the AMD AzureDB Healthcheck Script, and the associated documentation is in Ensemble under the "Libra System Admin Documents" area:
 ####################################################### "GoB Phase 1 - Oracle_Postgres DB Checks_v11.5_MAP.docx" is the latest version as of 01/08/2024
-echo "Script Version 7.2: Check 12c onwards"
+echo "Script Version 7.3: Check 12c onwards"
 echo "Designed by Mark A. Porter"
 mkdir /tmp/ams-reporting/
 OPDIR="/tmp/ams-reporting/"
-OUTFILE="${OPDIR}AZ_ThemisGOB_DB001_AMD"
-OUTFILE_STATS="${OPDIR}AZ_ThemisGOB_DB001_STATS_AMD"
-OUTFILE_LOG="${OPDIR}AZ_ThemisGOB_DB001_AMD.log"
-rm -f *.csv $OUTFILE $OUTFILE_STAT $OUTFILE_LOG
+OUTFILE="${OPDIR}ThemisAZ"
+OUTFILE_STATS="${OPDIR}ThemisAZstats"
+OUTFILE_LOG="${OPDIR}ThemisAZ.log"
 echo $(date "+%d/%m/%Y %T") > $OUTFILE
 echo $(date "+%d/%m/%Y %T") > $OUTFILE_STATS
 
@@ -373,7 +372,7 @@ echo "t_out_1900=$t_out_1900"
 echo "t_in_1900=$t_in_1900_processing"
 echo "t_delta_secs=$t_delta_secs"
 echo "t_delta_threshold_secs=$t_delta_threshold_secs"
-echo "========================================================================================================================="
+echo "======================================================================================================================="
 
 if [[ $t_delta_secs_unprocessed -gt $t_delta_threshold_secs ]] || [[ $last_check_unprocessed -gt $t_delta_threshold_secs ]] || [[ $t_delta_secs_processing -gt $t_delta_threshold_secs ]] || [[ $last_check_processing -gt $t_delta_threshold_secs ]];then
 echo "$(date "+%d/%m/%Y %T"),AZDB001_update_processing_backlog,Check of Earliest Unprocessed vs. Latest Complete vs. Latest Processing,$schema_id,${t_delta_threshold_mins}minsStaleness,$earliest_unprocessed,$latest_complete,$latest_processing,warn" >> $OUTFILE
@@ -813,8 +812,8 @@ echo "$(date "+%d/%m/%Y %T") SQL for Check #12n has been run" >> $OUTFILE_LOG
 
 while read -r line;do
 
-dateddmmyyyy=`echo $line | awk '{print $1}'`
-records=`echo $line | awk '{print $2}'`
+dateddmmyyyy=`echo $line | awk -F"," '{print $1}'`
+records=`echo $line | awk -F"," '{print $2}'`
 
 echo "$(date "+%d/%m/%Y %T"),AZDB001_daily_completed_table_updates,Daily Completed TABLE_UPDATES Counts,$dateddmmyyyy,$records,ok" >> $OUTFILE_STATS
 
