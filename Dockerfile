@@ -8,7 +8,9 @@ RUN echo "APT::Get::Assume-Yes \"true\";" > /etc/apt/apt.conf.d/90assumeyes
 RUN apt-get update -y && apt-get upgrade -y
 
 RUN apt-get install -y --no-install-recommends \
-  postgresql-client
+  postgresql-client \
+  bc \
+  openssh-client
 
 COPY scripts/${SCRIPT_FILE} ${SCRIPT_FILE}
 COPY sql sql
