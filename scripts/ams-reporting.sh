@@ -281,30 +281,24 @@ done < ${OPDIR}4AZUREDB_AMD_thread_status_counts.csv
 echo "$(date "+%d/%m/%Y %T") Check #4 complete" >> $OUTFILE_LOG
 ####################################################### CHECK 5
 echo "[Check #5: MESSAGE_LOG Errors]" >> $OUTFILE
-echo "DateTime,CheckName,Description,schema_id,message_log_id,created_date,error_message,Result" >> $OUTFILE
+echo "DateTime,CheckName,Description,schema_id,error_message,Result" >> $OUTFILE
 echo "$(date "+%d/%m/%Y %T") Starting Check #5" >> $OUTFILE_LOG
 echo "$(date "+%d/%m/%Y %T") Connecting to $event_db database" >> $OUTFILE_LOG
 psql "sslmode=require host=${event_host} dbname=${event_db} port=${event_port} user=${event_username} password=${event_password}" --file=/sql/5AZUREDB_AMD_message_log_errors.sql
 echo "$(date "+%d/%m/%Y %T") SQL for Check #5 has been run" >> $OUTFILE_LOG
 
-# Put protection in to only work on the last 100 lines of errors
-head -100 ${OPDIR}5AZUREDB_AMD_message_log_errors.csv > ${OPDIR}5AZUREDB_AMD_message_log_errors_100.tmp
-mv ${OPDIR}5AZUREDB_AMD_message_log_errors_100.tmp ${OPDIR}5AZUREDB_AMD_message_log_errors_100.csv
-
 while read -r line;do
 
 schema_id=`echo $line | awk -F"," '{print $1}'`
-message_log_id=`echo $line | awk -F"," '{print $2}'`
-created_date=`echo $line | awk -F"," '{print $3}'`
-error_message=`echo $line | awk -F"," '{print $4}'`
+error_message=`echo $line | awk -F"," '{print $2}'`
 
-if [ ! -z $message_log_id ];then
-echo "$(date "+%d/%m/%Y %T"),AZDB001_db_message_log_error,Message Log Error Check,$schema_id,$message_log_id,$created_date,$error_message,warn" >> $OUTFILE
+if [ ! -z $error_message ];then
+echo "$(date "+%d/%m/%Y %T"),AZDB001_db_message_log_error,Message Log Error Check,$schema_id,$error_message,warn" >> $OUTFILE
 else
-echo "$(date "+%d/%m/%Y %T"),AZDB001_db_message_log_error,Message Log Error Check,$schema_id,$message_log_id,$created_date,$error_message,ok" >> $OUTFILE
+echo "$(date "+%d/%m/%Y %T"),AZDB001_db_message_log_error,Message Log Error Check,$schema_id,$error_message,ok" >> $OUTFILE
 fi
 
-done < ${OPDIR}5AZUREDB_AMD_message_log_errors_100.csv
+done < ${OPDIR}5AZUREDB_AMD_message_log_errors.csv
 
 echo "$(date "+%d/%m/%Y %T") Check #5 complete" >> $OUTFILE_LOG
 ####################################################### CHECK 6
@@ -393,7 +387,7 @@ echo "$(date "+%d/%m/%Y %T") Starting Check #7" >> $OUTFILE_LOG
 echo "$(date "+%d/%m/%Y %T") Connecting to $event_db database" >> $OUTFILE_LOG
 psql "sslmode=require host=${event_host} dbname=${event_db} port=${event_port} user=${event_username} password=${event_password}" --file=/sql/7AZUREDB_AMD_max_daily_update_counts_by_schemaid.sql
 echo "$(date "+%d/%m/%Y %T") SQL for Check #7 has been run" >> $OUTFILE_LOG
-bundled_print_threshold=90000
+bundled_print_threshold=92000
 
 while read -r line;do
 
