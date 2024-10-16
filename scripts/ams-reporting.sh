@@ -175,7 +175,7 @@ echo "$(date "+%d/%m/%Y %T"),AZDB_gwaudit_10_proc_rates,Today's Latest 10 Gatewa
 done < ${OPDIR}12cAZUREDB_AMD_gwaudit_step10-1_latest10_processing_rates.csv
 ####################################################### CHECK 3
 echo "[Check #3: Update Backlogs]" >> $OUTFILE
-echo "DateTime,CheckName,Status,COUNTupdates,MAXupdates,SUMupdates,BacklogThreshold,RoundtripMS,RoundtripThreshold,ETA,Result" >> $OUTFILE
+echo "DateTime,CheckNameSchemaID,Status,COUNTupdates,MAXupdates,SUMupdates,BacklogThreshold,RoundtripMS,RoundtripThreshold,ETA,Result" >> $OUTFILE
 echo "$(date "+%d/%m/%Y %T") Starting Check #3" >> $OUTFILE_LOG
 echo "$(date "+%d/%m/%Y %T") Connecting to $event_db database" >> $OUTFILE_LOG
 psql "sslmode=require host=${event_host} dbname=${event_db} port=${event_port} user=${event_username} password=${event_password}" --file=/sql/3AZUREDB_AMD_message_backlogs.sql
@@ -209,13 +209,14 @@ total_gwRT=`head -1 ${OPDIR}12cAZUREDB_AMD_gwaudit_step10-1_latest10_processing_
 echo $db_dacRT
 echo $total_dacRT
 echo $total_gwRT
-#total_roundtrip=$(($db_dacRT+$total_dacRT+$total_gwRT))
-#total_roundtrip_secs=$(($total_roundtrip/1000))
-#delivery_rate_secs=$(($sum_number_of_table_updates*$total_roundtrip_secs))
-total_roundtrip=`echo "scale=3;$db_dacRT+$total_dacRT+$total_gwRT" | bc`
+total_roundtrip=$(($db_dacRT+$total_dacRT+$total_gwRT))
+echo $total_roundtrip
+total_roundtrip_secs=$(($total_roundtrip/1000))
+delivery_rate_secs=$(($sum_number_of_table_updates*$total_roundtrip_secs))
+echo $total_roundtrip_secs
+echo $delivery_rate_secs
 total_roundtrip_secs=`echo "scale=3;$total_roundtrip/1000" | bc`
 delivery_rate_secs=`echo "scale=3;$sum_number_of_table_updates*$total_roundtrip_secs" | bc`
-echo $total_roundtrip
 echo $total_roundtrip_secs
 echo $delivery_rate_secs
 
@@ -290,7 +291,7 @@ done < ${OPDIR}4AZUREDB_AMD_thread_status_counts.csv
 echo "$(date "+%d/%m/%Y %T") Check #4 complete" >> $OUTFILE_LOG
 ####################################################### CHECK 5
 echo "[Check #5: MESSAGE_LOG Errors]" >> $OUTFILE
-echo "DateTime,CheckName,error_message,Result" >> $OUTFILE
+echo "DateTime,CheckNameSchemaID,error_message,Result" >> $OUTFILE
 echo "$(date "+%d/%m/%Y %T") Starting Check #5" >> $OUTFILE_LOG
 echo "$(date "+%d/%m/%Y %T") Connecting to $event_db database" >> $OUTFILE_LOG
 psql "sslmode=require host=${event_host} dbname=${event_db} port=${event_port} user=${event_username} password=${event_password}" --file=/sql/5AZUREDB_AMD_message_log_errors.sql
@@ -312,7 +313,7 @@ done < ${OPDIR}5AZUREDB_AMD_message_log_errors.csv
 echo "$(date "+%d/%m/%Y %T") Check #5 complete" >> $OUTFILE_LOG
 ####################################################### CHECK 6
 echo "[Check #6: Unprocessed, Complete & Processing Checks]" >> $OUTFILE
-echo "DateTime,CheckName,Threshold,earliest_unprocessed,latest_complete,latest_processing,Result" >> $OUTFILE
+echo "DateTime,CheckNameSchemaID,Threshold,earliest_unprocessed,latest_complete,latest_processing,Result" >> $OUTFILE
 echo "$(date "+%d/%m/%Y %T") Starting Check #6" >> $OUTFILE_LOG
 echo "$(date "+%d/%m/%Y %T") Connecting to $event_db database" >> $OUTFILE_LOG
 psql "sslmode=require host=${event_host} dbname=${event_db} port=${event_port} user=${event_username} password=${event_password}" --file=/sql/6AZUREDB_AMD_update_processing_backlog.sql
@@ -391,7 +392,7 @@ mv ${OPDIR}earliest_processing_timestamps.tmp ${OPDIR}earliest_processing_timest
 echo "$(date "+%d/%m/%Y %T") Check #6 complete" >> $OUTFILE_LOG
 ####################################################### CHECK 7
 echo "[Check #7: Max Daily Update Counts by SchemaId]" >> $OUTFILE
-echo "DateTime,CheckName,count_updates,sum_number_of_table_updates,max_number_of_table_updates,BundledPrintThreshold,Result" >> $OUTFILE
+echo "DateTime,CheckNameSchemaID,count_updates,sum_number_of_table_updates,max_number_of_table_updates,BundledPrintThreshold,Result" >> $OUTFILE
 echo "$(date "+%d/%m/%Y %T") Starting Check #7" >> $OUTFILE_LOG
 echo "$(date "+%d/%m/%Y %T") Connecting to $event_db database" >> $OUTFILE_LOG
 psql "sslmode=require host=${event_host} dbname=${event_db} port=${event_port} user=${event_username} password=${event_password}" --file=/sql/7AZUREDB_AMD_max_daily_update_counts_by_schemaid.sql
