@@ -292,7 +292,7 @@ while read -r line;do
 schema_id=`echo $line | awk -F"," '{print $1}'`
 error_message=`echo $line | awk -F"," '{print $2}'`
 
-if [ ! -z $error_message ];then
+if [ ! -z $schema_id ];then
 echo "$(date "+%d/%m/%Y %T"),AZDB001_db_message_log_error,Message Log Error Check,$schema_id,$error_message,warn" >> $OUTFILE
 else
 echo "$(date "+%d/%m/%Y %T"),AZDB001_db_message_log_error,Message Log Error Check,$schema_id,$error_message,ok" >> $OUTFILE
