@@ -175,7 +175,7 @@ echo "$(date "+%d/%m/%Y %T"),AZDB_gwaudit_10_proc_rates,Today's Latest 10 Gatewa
 done < ${OPDIR}12cAZUREDB_AMD_gwaudit_step10-1_latest10_processing_rates.csv
 ####################################################### CHECK 3
 echo "[Check #3: Update Backlogs]" >> $OUTFILE
-echo "DateTime,CheckName,SchemaId,Status,COUNTupdates,MAXupdates,SUMupdates,BacklogThreshold,RoundtripMS,RoundtripThreshold,ETA,Result" >> $OUTFILE
+echo "DateTime,CheckName,Status,COUNTupdates,MAXupdates,SUMupdates,BacklogThreshold,RoundtripMS,RoundtripThreshold,ETA,Result" >> $OUTFILE
 echo "$(date "+%d/%m/%Y %T") Starting Check #3" >> $OUTFILE_LOG
 echo "$(date "+%d/%m/%Y %T") Connecting to $event_db database" >> $OUTFILE_LOG
 psql "sslmode=require host=${event_host} dbname=${event_db} port=${event_port} user=${event_username} password=${event_password}" --file=/sql/3AZUREDB_AMD_message_backlogs.sql
@@ -227,9 +227,9 @@ fi
 if [[ $status != ERROR ]];then
 
 if [[ $sum_number_of_table_updates -gt $backlog_adaptive_threshold ]] || [[ $total_roundtrip -gt $roundtrip_threshold ]];then
-echo "$(date "+%d/%m/%Y %T"),AZDB_msg_backlog,$schema_id,$status,$count_updates,$max_number_of_table_updates,$sum_number_of_table_updates,$backlog_adaptive_threshold,$total_roundtrip,$roundtrip_threshold,${adj_delivery_rate}${eta_units},warn" >> $OUTFILE
+echo "$(date "+%d/%m/%Y %T"),AZDB_msg_backlog${schema_id},$status,$count_updates,$max_number_of_table_updates,$sum_number_of_table_updates,$backlog_adaptive_threshold,$total_roundtrip,$roundtrip_threshold,${adj_delivery_rate}${eta_units},warn" >> $OUTFILE
 else
-echo "$(date "+%d/%m/%Y %T"),AZDB_msg_backlog,$schema_id,$status,$count_updates,$max_number_of_table_updates,$sum_number_of_table_updates,$backlog_adaptive_threshold,$total_roundtrip,$roundtrip_threshold,${adj_delivery_rate}${eta_units},ok" >> $OUTFILE
+echo "$(date "+%d/%m/%Y %T"),AZDB_msg_backlog${schema_id},$status,$count_updates,$max_number_of_table_updates,$sum_number_of_table_updates,$backlog_adaptive_threshold,$total_roundtrip,$roundtrip_threshold,${adj_delivery_rate}${eta_units},ok" >> $OUTFILE
 fi
 
 fi
@@ -281,7 +281,7 @@ done < ${OPDIR}4AZUREDB_AMD_thread_status_counts.csv
 echo "$(date "+%d/%m/%Y %T") Check #4 complete" >> $OUTFILE_LOG
 ####################################################### CHECK 5
 echo "[Check #5: MESSAGE_LOG Errors]" >> $OUTFILE
-echo "DateTime,CheckName,schema_id,error_message,Result" >> $OUTFILE
+echo "DateTime,CheckName,error_message,Result" >> $OUTFILE
 echo "$(date "+%d/%m/%Y %T") Starting Check #5" >> $OUTFILE_LOG
 echo "$(date "+%d/%m/%Y %T") Connecting to $event_db database" >> $OUTFILE_LOG
 psql "sslmode=require host=${event_host} dbname=${event_db} port=${event_port} user=${event_username} password=${event_password}" --file=/sql/5AZUREDB_AMD_message_log_errors.sql
@@ -293,9 +293,9 @@ schema_id=`echo $line | awk -F"," '{print $1}'`
 error_message=`echo $line | awk -F"," '{print $2}'`
 
 if [ ! -z $schema_id ];then
-echo "$(date "+%d/%m/%Y %T"),AZDB_db_message_log_error,$schema_id,$error_message,warn" >> $OUTFILE
+echo "$(date "+%d/%m/%Y %T"),AZDB_db_message_log_error${schema_id},$error_message,warn" >> $OUTFILE
 else
-echo "$(date "+%d/%m/%Y %T"),AZDB_db_message_log_error,$schema_id,$error_message,ok" >> $OUTFILE
+echo "$(date "+%d/%m/%Y %T"),AZDB_db_message_log_error${schema_id},$error_message,ok" >> $OUTFILE
 fi
 
 done < ${OPDIR}5AZUREDB_AMD_message_log_errors.csv
@@ -303,7 +303,7 @@ done < ${OPDIR}5AZUREDB_AMD_message_log_errors.csv
 echo "$(date "+%d/%m/%Y %T") Check #5 complete" >> $OUTFILE_LOG
 ####################################################### CHECK 6
 echo "[Check #6: Unprocessed, Complete & Processing Checks]" >> $OUTFILE
-echo "DateTime,CheckName,schema_id,Threshold,earliest_unprocessed,latest_complete,latest_processing,Result" >> $OUTFILE
+echo "DateTime,CheckName,Threshold,earliest_unprocessed,latest_complete,latest_processing,Result" >> $OUTFILE
 echo "$(date "+%d/%m/%Y %T") Starting Check #6" >> $OUTFILE_LOG
 echo "$(date "+%d/%m/%Y %T") Connecting to $event_db database" >> $OUTFILE_LOG
 psql "sslmode=require host=${event_host} dbname=${event_db} port=${event_port} user=${event_username} password=${event_password}" --file=/sql/6AZUREDB_AMD_update_processing_backlog.sql
@@ -369,9 +369,9 @@ echo "t_delta_threshold_secs=$t_delta_threshold_secs"
 echo "======================================================================================================"
 
 if [[ $t_delta_secs_unprocessed -gt $t_delta_threshold_secs ]] || [[ $last_check_unprocessed -gt $t_delta_threshold_secs ]] || [[ $t_delta_secs_processing -gt $t_delta_threshold_secs ]] || [[ $last_check_processing -gt $t_delta_threshold_secs ]];then
-echo "$(date "+%d/%m/%Y %T"),AZDB_update_processing_backlog,$schema_id,${t_delta_threshold_mins}minsStaleness,$earliest_unprocessed,$latest_complete,$latest_processing,warn" >> $OUTFILE
+echo "$(date "+%d/%m/%Y %T"),AZDB_update_processing_backlog${schema_id},${t_delta_threshold_mins}minsStaleness,$earliest_unprocessed,$latest_complete,$latest_processing,warn" >> $OUTFILE
 else
-echo "$(date "+%d/%m/%Y %T"),AZDB_update_processing_backlog,$schema_id,${t_delta_threshold_mins}minsStaleness,$earliest_unprocessed,$latest_complete,$latest_processing,ok" >> $OUTFILE
+echo "$(date "+%d/%m/%Y %T"),AZDB_update_processing_backlog${schema_id},${t_delta_threshold_mins}minsStaleness,$earliest_unprocessed,$latest_complete,$latest_processing,ok" >> $OUTFILE
 fi
 
 done < ${OPDIR}6AZUREDB_AMD_update_processing_backlog.csv
@@ -382,7 +382,7 @@ mv ${OPDIR}earliest_processing_timestamps.tmp ${OPDIR}earliest_processing_timest
 echo "$(date "+%d/%m/%Y %T") Check #6 complete" >> $OUTFILE_LOG
 ####################################################### CHECK 7
 echo "[Check #7: Max Daily Update Counts by SchemaId]" >> $OUTFILE
-echo "DateTime,CheckName,schema_id,count_updates,sum_number_of_table_updates,max_number_of_table_updates,BundledPrintThreshold,Result" >> $OUTFILE
+echo "DateTime,CheckName,count_updates,sum_number_of_table_updates,max_number_of_table_updates,BundledPrintThreshold,Result" >> $OUTFILE
 echo "$(date "+%d/%m/%Y %T") Starting Check #7" >> $OUTFILE_LOG
 echo "$(date "+%d/%m/%Y %T") Connecting to $event_db database" >> $OUTFILE_LOG
 psql "sslmode=require host=${event_host} dbname=${event_db} port=${event_port} user=${event_username} password=${event_password}" --file=/sql/7AZUREDB_AMD_max_daily_update_counts_by_schemaid.sql
@@ -397,9 +397,9 @@ sum_number_of_table_updates=`echo $line | awk -F"," '{print $3}'`
 max_number_of_table_updates=`echo $line | awk -F"," '{print $4}'`
 
 if [[ $max_number_of_table_updates -gt $bundled_print_threshold ]];then
-echo "$(date "+%d/%m/%Y %T"),AZDB_max_updates,$schema_id,$count_updates,$sum_number_of_table_updates,$max_number_of_table_updates,$bundled_print_threshold,warn" >> $OUTFILE
+echo "$(date "+%d/%m/%Y %T"),AZDB_max_updates${schema_id},$count_updates,$sum_number_of_table_updates,$max_number_of_table_updates,$bundled_print_threshold,warn" >> $OUTFILE
 else
-echo "$(date "+%d/%m/%Y %T"),AZDB_max_updates,$schema_id,$count_updates,$sum_number_of_table_updates,$max_number_of_table_updates,$bundled_print_threshold,ok" >> $OUTFILE
+echo "$(date "+%d/%m/%Y %T"),AZDB_max_updates${schema_id},$count_updates,$sum_number_of_table_updates,$max_number_of_table_updates,$bundled_print_threshold,ok" >> $OUTFILE
 fi
 
 done < ${OPDIR}7AZUREDB_AMD_max_daily_update_counts_by_schemaid.csv
