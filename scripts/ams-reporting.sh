@@ -175,7 +175,7 @@ echo "$(date "+%d/%m/%Y %T"),AZDB_gwaudit_10_proc_rates,Today's Latest 10 Gatewa
 done < ${OPDIR}12cAZUREDB_AMD_gwaudit_step10-1_latest10_processing_rates.csv
 ####################################################### CHECK 3
 echo "[Check #3: Update Backlogs]" >> $OUTFILE
-echo "DateTime,CheckName,SchemaId,Status,COUNTupdates,max_number_of_table_updates,sum_number_of_table_updates,AdaptiveBacklogThreshold,DBdacRate_inMS,TOTALdacRate_inMS,TOTALgwRate_inMS,Total Roundtrip in Millisecs,RoundtripThreshold,DeliveryETA,Result" >> $OUTFILE
+echo "DateTime,CheckName,SchemaId,Status,COUNTupdates,max_number_of_table_updates,sum_number_of_table_updates,BacklogThreshold,RoundtripMS,RoundtripThreshold,ETA,Result" >> $OUTFILE
 echo "$(date "+%d/%m/%Y %T") Starting Check #3" >> $OUTFILE_LOG
 echo "$(date "+%d/%m/%Y %T") Connecting to $event_db database" >> $OUTFILE_LOG
 psql "sslmode=require host=${event_host} dbname=${event_db} port=${event_port} user=${event_username} password=${event_password}" --file=/sql/3AZUREDB_AMD_message_backlogs.sql
@@ -227,9 +227,9 @@ fi
 if [[ $status != ERROR ]];then
 
 if [[ $sum_number_of_table_updates -gt $backlog_adaptive_threshold ]] || [[ $total_roundtrip -gt $roundtrip_threshold ]];then
-echo "$(date "+%d/%m/%Y %T"),AZDB_msg_backlog,$schema_id,$status,$count_updates,$max_number_of_table_updates,$sum_number_of_table_updates,$backlog_adaptive_threshold,$db_dacRT,$total_dacRT,$total_gwRT,$total_roundtrip,$roundtrip_threshold,${adj_delivery_rate}${eta_units},warn" >> $OUTFILE
+echo "$(date "+%d/%m/%Y %T"),AZDB_msg_backlog,$schema_id,$status,$count_updates,$max_number_of_table_updates,$sum_number_of_table_updates,$backlog_adaptive_threshold,$total_roundtrip,$roundtrip_threshold,${adj_delivery_rate}${eta_units},warn" >> $OUTFILE
 else
-echo "$(date "+%d/%m/%Y %T"),AZDB_msg_backlog,$schema_id,$status,$count_updates,$max_number_of_table_updates,$sum_number_of_table_updates,$backlog_adaptive_threshold,$db_dacRT,$total_dacRT,$total_gwRT,$total_roundtrip,$roundtrip_threshold,${adj_delivery_rate}${eta_units},ok" >> $OUTFILE
+echo "$(date "+%d/%m/%Y %T"),AZDB_msg_backlog,$schema_id,$status,$count_updates,$max_number_of_table_updates,$sum_number_of_table_updates,$backlog_adaptive_threshold,$total_roundtrip,$roundtrip_threshold,${adj_delivery_rate}${eta_units},ok" >> $OUTFILE
 fi
 
 fi
