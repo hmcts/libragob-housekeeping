@@ -175,7 +175,7 @@ echo "$(date "+%d/%m/%Y %T"),AZDB_gwaudit_10_proc_rates,Today's Latest 10 Gatewa
 done < ${OPDIR}12cAZUREDB_AMD_gwaudit_step10-1_latest10_processing_rates.csv
 ####################################################### CHECK 3
 echo "[Check #3: Update Backlogs]" >> $OUTFILE
-echo "DateTime,CheckName,SchemaId,Status,COUNTupdates,max_number_of_table_updates,sum_number_of_table_updates,BacklogThreshold,RoundtripMS,RoundtripThreshold,ETA,Result" >> $OUTFILE
+echo "DateTime,CheckName,SchemaId,Status,COUNTupdates,MAXupdates,SUMupdates,BacklogThreshold,RoundtripMS,RoundtripThreshold,ETA,Result" >> $OUTFILE
 echo "$(date "+%d/%m/%Y %T") Starting Check #3" >> $OUTFILE_LOG
 echo "$(date "+%d/%m/%Y %T") Connecting to $event_db database" >> $OUTFILE_LOG
 psql "sslmode=require host=${event_host} dbname=${event_db} port=${event_port} user=${event_username} password=${event_password}" --file=/sql/3AZUREDB_AMD_message_backlogs.sql
