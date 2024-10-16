@@ -215,6 +215,9 @@ echo $total_gwRT
 total_roundtrip=`echo "scale=3;$db_dacRT+$total_dacRT+$total_gwRT" | bc`
 total_roundtrip_secs=`echo "scale=3;$total_roundtrip/1000" | bc`
 delivery_rate_secs=`echo "scale=3;$sum_number_of_table_updates*$total_roundtrip_secs" | bc`
+echo $total_roundtrip
+echo $total_roundtrip_secs
+echo $delivery_rate_secs
 
 if [[ $delivery_rate_secs -lt 60 ]];then
 adj_delivery_rate=$delivery_rate_secs
