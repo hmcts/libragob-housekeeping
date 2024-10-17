@@ -978,7 +978,7 @@ echo "cat of ams-reporting:"
 cat /tmp/ams-reporting/ams-reporting
 ls -altr /tmp/ams-reporting/
 echo "$(date "+%d/%m/%Y %T") Uploading the CSV file to BAIS" >> $OUTFILE_LOG
-sftp -oidentityfile=/tmp/ams-reporting/ams-reporting $sftp_username@$sftp_endpoint << EOF
+sftp -oidentityfile=/tmp/ams-reporting/ams-reporting ${sftp_username}@${sftp_endpoint} << EOF
 put ${OPDIR}/$OUTFILE.csv
 put ${OPDIR}/$OUTFILE_STATS.csv
 quit
