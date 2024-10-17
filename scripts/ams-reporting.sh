@@ -911,10 +911,6 @@ fi
 ####################
 ### AMD Override ###
 ####################
-history_dat=/tmp/ams-reporting/ams-reporting_history.csv
-grep -i "warn" ${OUTFILE}>> $history_dat
-grep -i "not ok" ${OUTFILE}>> $history_dat
-
 cp $OUTFILE ${OUTFILE}.orig ### creates a copy of the current output file
 > ${OUTFILE}.temp
 override_file=/tmp/ams-reporting/ams-reporting_overrides_list.dat
@@ -954,8 +950,6 @@ echo "override=$override"
         rm -rf ${OUTFILE}.temp
 fi
 
-grep -i "OverRide" ${OUTFILE}>> $history_dat #### marks when the override was put on
-
 echo "cat of $OUTFILE:"
 cat $OUTFILE
 echo "cat of $OUTFILE_STATS:"
@@ -964,8 +958,6 @@ echo "cat of $OUTFILE_LOG:"
 cat $OUTFILE_LOG
 echo "cat of $override_file:"
 cat $override_file
-echo "cat of $history_dat:"
-cat $history_dat
 
 mv $OUTFILE $OUTFILE.csv
 mv $OUTFILE_STATS $OUTFILE_STATS.csv
