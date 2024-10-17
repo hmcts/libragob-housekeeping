@@ -223,13 +223,13 @@ fi
 
 echo "-----------$delivery_rate_secs"
 
-if [ echo $(echo "$delivery_rate_secs < 60" | bc) ];then
+if [ $(echo "$delivery_rate_secs < 60" | bc) ];then
 adj_delivery_rate=$delivery_rate_secs
 eta_units=secs
-elif [ echo $(echo "$delivery_rate_secs < 3600" | bc) ];then
+elif [ $(echo "$delivery_rate_secs < 3600" | bc) ];then
 adj_delivery_rate=$(($delivery_rate_secs/60))
 eta_units=mins
-elif [ echo $(echo "$delivery_rate_secs < 86400" | bc) ];then
+elif [ $(echo "$delivery_rate_secs < 86400" | bc) ];then
 adj_delivery_rate=$(($delivery_rate_secs/3600))
 eta_units=hrs
 else
