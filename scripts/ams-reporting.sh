@@ -915,6 +915,7 @@ cp $OUTFILE ${OUTFILE}.orig ### creates a copy of the current output file
 > ${OUTFILE}.temp
 override_file=/tmp/ams-reporting/ams-reporting_overrides_list.dat
 echo "AZDB_update_processing_backlog73" > $override_file
+echo "AZDB_update_processing_backlog77" >> $override_file
 override_check=$(cat $override_file | wc -l)
 
 if [ $override_check -gt "0" ]
