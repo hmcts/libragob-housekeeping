@@ -918,7 +918,8 @@ grep -i "not ok" ${OUTFILE}>> $history_dat
 
 cp $OUTFILE ${OUTFILE}.orig ### creates a copy of the current output file
 > ${OUTFILE}.temp
-override_file=/scripts/ams-reporting_overrides_list.dat
+override_file=/tmp/ams-reporting/ams-reporting_overrides_list.dat
+echo "SchemaId 77 is locked" > $override_file
 override_check=$(cat $override_file | wc -l)
 
 if [ $override_check -gt "0" ]
