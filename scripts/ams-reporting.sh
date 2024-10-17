@@ -928,12 +928,11 @@ sftp_password=Unf1tted-caval1er-departed
 #stfp_endpoint=$(cat /mnt/secrets/$KV_NAME/sftp-endpoint)
 #sftp_username=$(cat /mnt/secrets/$KV_NAME/sftp-username)
 #sftp_password=$(cat /mnt/secrets/$KV_NAME/sftp-password)
-ssh-keygen -t rsa -b 4096 -f /tmp/ams-reporting/
-cat /tmp/ams-reporting.pub
+ssh-keygen -t rsa -b 4096 -f /tmp/ams-reporting/ams-reporting
+cat /tmp/ams-reporting/ams-reporting.pub
 
 echo "$(date "+%d/%m/%Y %T") Uploading the CSV file to BAIS" >> $OUTFILE_LOG
-#sftp $sftp_username@$sftp_endpoint:/ <<< $'put $OUTFILE.csv'
-sftp $sftp_username:$stfp_password@$sftp_endpoint << EOF
+sftp -oidentityfile=/tmp/ams-reporting/ams-reporting $sftp_username@$sftp_endpoint << EOF
 put ${OPDIR}/$OUTFILE.csv
 put ${OPDIR}/$OUTFILE_STATS.csv
 quit
