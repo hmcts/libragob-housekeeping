@@ -913,7 +913,7 @@ fi
 ####################
 cp $OUTFILE ${OUTFILE}.orig ### creates a copy of the current output file
 > ${OUTFILE}.temp
-override_file=/tmp/ams-reporting/ams-reporting_overrides_list.dat
+override_file=${OPDIR}ams-reporting_overrides_list.dat
 echo "AZDB_update_processing_backlog73" > $override_file
 #echo "AZDB_update_processing_backlog77" >> $override_file
 override_check=$(cat $override_file | wc -l)
@@ -933,10 +933,10 @@ then
                                 item_line=$(echo "$line" | cut -d',' -f1-2 )
                                 if [ *"$item_line"* != *"$last_line"* ]
                                 then
-                                        echo "$item" | sed 's/,NOT OK/OverRide,OK/g' | sed 's/,warn/OverRide,OK/g' | sed 's/,NOT OK/OverRide,OK/g' >> ${OUTFILE}.temp
+                                        echo "$item" | sed 's/,not ok/OverRide,ok/g' | sed 's/,warn/OverRide,ok/g' | sed 's/,not ok/OverRide,ok/g' >> ${OUTFILE}.temp
                                 else
                                         tac ${OUTFILE}.temp | sed '1 d' | tac > ${OUTFILE}.temp
-                                        echo "$item" | sed 's/,NOT OK/OverRide,OK/g' | sed 's/,warn/OverRide,OK/g' | sed 's/,NOT OK/OverRide,OK/g' >> ${OUTFILE}.temp
+                                        echo "$item" | sed 's/,not ok/OverRide,ok/g' | sed 's/,warn/OverRide,ok/g' | sed 's/,not ok/OverRide,ok/g' >> ${OUTFILE}.temp
                                 fi
                         elif [ "$item" != "$prev" ]
                         then
