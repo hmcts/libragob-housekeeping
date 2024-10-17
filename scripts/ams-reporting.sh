@@ -237,6 +237,14 @@ adj_delivery_rate=`echo "scale=3;$delivery_rate_secs/86400" | bc`
 eta_units=days
 fi
 
+adj_delivery_rate_tmp=$adj_delivery_rate
+
+if [[ `echo $adj_delivery_rate_tmp | cut -b 1` == "." ]];then
+adj_delivery_rate="0$adj_delivery_rate_tmp"
+else
+adj_delivery_rate=$adj_delivery_rate_tmp
+fi
+
 if [[ $status != ERROR ]];then
 
 if [[ $sum_number_of_table_updates -gt $backlog_adaptive_threshold ]] || [[ $total_roundtrip -gt $roundtrip_threshold ]];then
