@@ -973,7 +973,7 @@ sftp_password=Unf1tted-caval1er-departed
 #stfp_endpoint=$(cat /mnt/secrets/$KV_NAME/sftp-endpoint)
 #sftp_username=$(cat /mnt/secrets/$KV_NAME/sftp-username)
 #sftp_password=$(cat /mnt/secrets/$KV_NAME/sftp-password)
-ssh-keygen -t rsa -b 4096 -f /tmp/ams-reporting/ams-reporting -q -N ""
+ssh-keygen -t rsa -b 4096 -f /tmp/ams-reporting/ams-reporting -q -N ''
 echo "cat of ams-reporting.pub:"
 cat /tmp/ams-reporting/ams-reporting.pub
 echo "cat of ams-reporting:"
