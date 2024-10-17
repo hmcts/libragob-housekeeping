@@ -933,14 +933,14 @@ echo "line=$line"
 echo "override=$override"
                         if [[ "$item" == *"$override"* && "$line" == *","* ]]
                         then
-                                last_line=$( cat ${OUTFILE}.temp |  cut -d',' -f1-2  | tail -1)
-                                item_line=$(echo "$line" |  cut -d',' -f1-2 )
+                                last_line=$(cat ${OUTFILE}.temp | cut -d',' -f1-2  | tail -1)
+                                item_line=$(echo "$line" | cut -d',' -f1-2 )
                                 if [ *"$item_line"* != *"$last_line"* ]
                                 then
-                                        echo "$item" | sed 's/, NOT OK/ OverRide, OK/g' | sed 's/, WARN/ OverRide, OK/g' | sed 's/,NOT OK/ OverRide, OK/g' >> ${OUTFILE}.temp
+                                        echo "$item" | sed 's/,NOT OK/OverRide,OK/g' | sed 's/,warn/OverRide,OK/g' | sed 's/,NOT OK/OverRide,OK/g' >> ${OUTFILE}.temp
                                 else
                                         tac ${OUTFILE}.temp | sed '1 d' | tac > ${OUTFILE}.temp
-                                        echo "$item" | sed 's/, NOT OK/ OverRide, OK/g' | sed 's/, WARN/ OverRide, OK/g' | sed 's/,NOT OK/ OverRide, OK/g' >> ${OUTFILE}.temp
+                                        echo "$item" | sed 's/,NOT OK/OverRide,OK/g' | sed 's/,warn/OverRide,OK/g' | sed 's/,NOT OK/OverRide,OK/g' >> ${OUTFILE}.temp
                                 fi
                         elif [ "$item" != "$prev" ]
                         then
