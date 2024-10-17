@@ -961,6 +961,8 @@ echo "cat of $OUTFILE_STATS:"
 cat $OUTFILE_STATS
 echo "cat of $OUTFILE_LOG:"
 cat $OUTFILE_LOG
+echo "cat of $override_file:"
+cat $override_file
 echo "cat of $history_dat:"
 cat $history_dat
 
