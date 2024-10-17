@@ -211,12 +211,10 @@ echo $total_dacRT
 echo $total_gwRT
 total_roundtrip=$(($db_dacRT+$total_dacRT+$total_gwRT))
 echo $total_roundtrip
-total_roundtrip_secs=$(($total_roundtrip/1000))
-delivery_rate_secs=$(($sum_number_of_table_updates*$total_roundtrip_secs))
-echo $total_roundtrip_secs
-echo $delivery_rate_secs
-total_roundtrip_secs=`echo "scale=3;$total_roundtrip/1000" | bc`
-delivery_rate_secs=`echo "scale=3;$sum_number_of_table_updates*$total_roundtrip_secs" | bc`
+#total_roundtrip_secs=$(($total_roundtrip/1000))
+#delivery_rate_secs=$(($sum_number_of_table_updates*$total_roundtrip_secs))
+total_roundtrip_secs=`echo "$total_roundtrip/1000" | bc`
+delivery_rate_secs=`echo "$sum_number_of_table_updates*$total_roundtrip_secs" | bc`
 echo $total_roundtrip_secs
 echo $delivery_rate_secs
 
