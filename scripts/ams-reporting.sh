@@ -206,17 +206,22 @@ max_number_of_table_updates=`echo $line | awk -F"," '{print $5}'`
 db_dacRT=`head -1 ${OPDIR}12aAZUREDB_AMD_dacaudit_DBstep13-12_latest10_processing_rates.csv | awk -F"," '{print $3}' | awk -F"." '{print $1}'`
 total_dacRT=`head -1 ${OPDIR}12bAZUREDB_AMD_dacaudit_DBstep10-1_latest10_processing_rates.csv  | awk -F"," '{print $3}' | awk -F"." '{print $1}'`
 total_gwRT=`head -1 ${OPDIR}12cAZUREDB_AMD_gwaudit_step10-1_latest10_processing_rates.csv  | awk -F"," '{print $3}' | awk -F"." '{print $1}'`
-echo $db_dacRT
-echo $total_dacRT
-echo $total_gwRT
 total_roundtrip=$(($db_dacRT+$total_dacRT+$total_gwRT))
-echo $total_roundtrip
 #total_roundtrip_secs=$(($total_roundtrip/1000))
 #delivery_rate_secs=$(($sum_number_of_table_updates*$total_roundtrip_secs))
-total_roundtrip_secs=`echo "$total_roundtrip/1000" | bc`
-delivery_rate_secs=`echo "$sum_number_of_table_updates*$total_roundtrip_secs" | bc`
+total_roundtrip_secs=`echo "scale=3;$total_roundtrip/1000" | bc`
+delivery_rate_secs=`echo "scale=3;$sum_number_of_table_updates*$total_roundtrip_secs" | bc`
+delivery_rate_secs_tmp=$delivery_rate_secs
 echo $total_roundtrip_secs
 echo $delivery_rate_secs
+
+if [[ `echo $delivery_rate_secs_tmp | grep "^."` ]];then
+delivery_rate_secs="0$delivery_rate_secs_tmp"
+else
+delivery_rate_secs=$delivery_rate_secs_tmp
+fi
+
+echo "-----------$delivery_rate_secs"
 
 if [[ $delivery_rate_secs -lt 60 ]];then
 adj_delivery_rate=$delivery_rate_secs
