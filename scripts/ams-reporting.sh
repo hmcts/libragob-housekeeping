@@ -915,13 +915,6 @@ echo "$(date "+%d/%m/%Y %T") Check #13 complete" >> $OUTFILE_LOG
 
 fi
 
-echo "cat of OUTFILE:"
-cat $OUTFILE
-echo "cat of OUTFILE_STATS:"
-cat $OUTFILE_STATS
-echo "cat of OUTFILE_LOG:"
-cat $OUTFILE_LOG
-
 ####################
 ### AMD Override ###
 ####################
@@ -967,6 +960,12 @@ fi
 
 grep -i "OverRide" ${OUTFILE}>> $history_dat #### marks when the override was put on
 
+echo "cat of $OUTFILE:"
+cat $OUTFILE
+echo "cat of $OUTFILE_STATS:"
+cat $OUTFILE_STATS
+echo "cat of $OUTFILE_LOG:"
+cat $OUTFILE_LOG
 echo "cat of $history_dat:"
 cat $history_dat
 
