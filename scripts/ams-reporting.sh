@@ -914,6 +914,51 @@ cat $OUTFILE_STATS
 echo "cat of OUTFILE_LOG:"
 cat $OUTFILE_LOG
 
+####################
+### AMD Override ###
+####################
+history_dat=/tmp/ams-reporting/ams-reporting_history.csv
+grep -i "warn" ${OUTFILE}>> $history_dat
+grep -i "not ok" ${OUTFILE}>> $history_dat
+
+cp $OUTFILE ${OUTFILE}.orig ### creates a copy of the current output file
+> ${OUTFILE}.temp
+override_file=/tmp/ams-reporting/ams-reporting_overrides_list.dat
+override_check=$(cat $override_file | wc -l)
+
+if [ $override_check -gt "0" ]
+then
+        > ${OUTFILE}.temp
+        while IFS= read -r line
+        do
+                item="$line"
+                while IFS= read -r override
+                do
+                        if [[ "$item" == *"$override"* && "$line" == *","* ]]
+                        then
+                                last_line=$( cat ${OUTFILE}.temp |  cut -d',' -f1-2  | tail -1)
+                                item_line=$(echo "$line" |  cut -d',' -f1-2 )
+                                if [ *"$item_line"* != *"$last_line"* ]
+                                then
+                                        echo "$item" | sed 's/, NOT OK/ OverRide, OK/g' | sed 's/, WARN/ OverRide, OK/g' | sed 's/,NOT OK/ OverRide, OK/g' >> ${OUTFILE}.temp
+                                else
+                                        tac ${OUTFILE}.temp | sed '1 d' | tac > ${OUTFILE}.temp
+                                        echo "$item" | sed 's/, NOT OK/ OverRide, OK/g' | sed 's/, WARN/ OverRide, OK/g' | sed 's/,NOT OK/ OverRide, OK/g' >> ${OUTFILE}.temp
+                                fi
+                        elif [ "$item" != "$prev" ]
+                        then
+                                echo "$item"  >> ${OUTFILE}.temp
+                        fi
+                        prev="$item"
+                done < $override_file
+                prev="$item"
+        done < ${OUTFILE}.orig
+        cp ${OUTFILE}.temp $OUTFILE
+        rm -rf ${OUTFILE}.temp
+fi
+
+grep -i "OverRide" ${OUTFILE}>> $history_dat #### marks when the override was put on
+
 mv $OUTFILE $OUTFILE.csv
 mv $OUTFILE_STATS $OUTFILE_STATS.csv
 ############################################################################
