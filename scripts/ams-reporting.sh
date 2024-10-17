@@ -924,10 +924,9 @@ then
         while IFS= read -r line
         do
                 item="$line"
-echo "line=$line"
+
                 while IFS= read -r override
                 do
-echo "override=$override"
                         if [[ "$item" == *"$override"* && "$line" == *","* ]]
                         then
                                 last_line=$(cat ${OUTFILE}.temp | cut -d',' -f1-2  | tail -1)
