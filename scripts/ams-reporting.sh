@@ -207,13 +207,9 @@ db_dacRT=`head -1 ${OPDIR}12aAZUREDB_AMD_dacaudit_DBstep13-12_latest10_processin
 total_dacRT=`head -1 ${OPDIR}12bAZUREDB_AMD_dacaudit_DBstep10-1_latest10_processing_rates.csv  | awk -F"," '{print $3}' | awk -F"." '{print $1}'`
 total_gwRT=`head -1 ${OPDIR}12cAZUREDB_AMD_gwaudit_step10-1_latest10_processing_rates.csv  | awk -F"," '{print $3}' | awk -F"." '{print $1}'`
 total_roundtrip=$(($db_dacRT+$total_dacRT+$total_gwRT))
-#total_roundtrip_secs=$(($total_roundtrip/1000))
-#delivery_rate_secs=$(($sum_number_of_table_updates*$total_roundtrip_secs))
-total_roundtrip_secs=`echo "scale=3;$total_roundtrip/1000" | bc`
-delivery_rate_secs=`echo "scale=3;$sum_number_of_table_updates*$total_roundtrip_secs" | bc`
+total_roundtrip_secs=`echo "scale=1;$total_roundtrip/1000" | bc`
+delivery_rate_secs=`echo "scale=1;$sum_number_of_table_updates*$total_roundtrip_secs" | bc`
 delivery_rate_secs_tmp=$delivery_rate_secs
-echo $total_roundtrip_secs
-echo $delivery_rate_secs
 
 if [[ `echo $delivery_rate_secs_tmp | cut -b 1` == "." ]];then
 delivery_rate_secs="0$delivery_rate_secs_tmp"
@@ -221,19 +217,17 @@ else
 delivery_rate_secs=$delivery_rate_secs_tmp
 fi
 
-echo "-----------$delivery_rate_secs"
-
 if [ $(echo "$delivery_rate_secs < 60" | bc -l) = 1 ];then
 adj_delivery_rate=$delivery_rate_secs
 eta_units=secs
 elif [ $(echo "$delivery_rate_secs < 3600" | bc -l) = 1 ];then
-adj_delivery_rate=`echo "scale=3;$delivery_rate_secs/60" | bc`
+adj_delivery_rate=`echo "scale=1;$delivery_rate_secs/60" | bc`
 eta_units=mins
 elif [ $(echo "$delivery_rate_secs < 86400" | bc -l) = 1 ];then
-adj_delivery_rate=`echo "scale=3;$delivery_rate_secs/3600" | bc`
+adj_delivery_rate=`echo "scale=1;$delivery_rate_secs/3600" | bc`
 eta_units=hrs
 else
-adj_delivery_rate=`echo "scale=3;$delivery_rate_secs/86400" | bc`
+adj_delivery_rate=`echo "scale=1;$delivery_rate_secs/86400" | bc`
 eta_units=days
 fi
 
