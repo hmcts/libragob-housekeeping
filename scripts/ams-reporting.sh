@@ -215,8 +215,6 @@ delivery_rate_secs_tmp=$delivery_rate_secs
 echo $total_roundtrip_secs
 echo $delivery_rate_secs
 
-delivery_rate_secs_tmp=.8888
-
 if [[ `echo $delivery_rate_secs_tmp | cut -b 1` == "." ]];then
 delivery_rate_secs="0$delivery_rate_secs_tmp"
 else
