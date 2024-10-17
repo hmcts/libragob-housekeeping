@@ -227,13 +227,13 @@ if [ $(echo "$delivery_rate_secs < 60" | bc -l) = 1 ];then
 adj_delivery_rate=$delivery_rate_secs
 eta_units=secs
 elif [ $(echo "$delivery_rate_secs < 3600" | bc -l) = 1 ];then
-adj_delivery_rate=$(($delivery_rate_secs/60))
+adj_delivery_rate=`echo "scale=3;$delivery_rate_secs/60" | bc`
 eta_units=mins
 elif [ $(echo "$delivery_rate_secs < 86400" | bc -l) = 1 ];then
-adj_delivery_rate=$(($delivery_rate_secs/3600))
+adj_delivery_rate=`echo "scale=3;$delivery_rate_secs/3600" | bc`
 eta_units=hrs
 else
-adj_delivery_rate=$(($delivery_rate_secs/86400))
+adj_delivery_rate=`echo "scale=3;$delivery_rate_secs/86400" | bc`
 eta_units=days
 fi
 
