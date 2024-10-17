@@ -923,7 +923,7 @@ grep -i "not ok" ${OUTFILE}>> $history_dat
 
 cp $OUTFILE ${OUTFILE}.orig ### creates a copy of the current output file
 > ${OUTFILE}.temp
-override_file=/tmp/ams-reporting/ams-reporting_overrides_list.dat
+override_file=/scripts/ams-reporting_overrides_list.dat
 override_check=$(cat $override_file | wc -l)
 
 if [ $override_check -gt "0" ]
@@ -958,6 +958,9 @@ then
 fi
 
 grep -i "OverRide" ${OUTFILE}>> $history_dat #### marks when the override was put on
+
+echo "cat of $history_dat:"
+cat $history_dat
 
 mv $OUTFILE $OUTFILE.csv
 mv $OUTFILE_STATS $OUTFILE_STATS.csv
