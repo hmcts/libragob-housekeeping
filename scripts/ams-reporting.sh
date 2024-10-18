@@ -932,7 +932,7 @@ while read -r override;do
 
 if [[ `echo $line | grep $override | grep -Pi "(,warn|,not ok)"` ]];then
 
-echo $line | sed 's/,not ok/OverRide,ok/g' | sed 's/,warn/OverRide,ok/g' | sed 's/,not ok/OverRide,ok/g' >> $OUTFILE.temp
+echo $line | sed 's/,warn/OverRide,ok/g' | sed 's/,not ok/OverRide,ok/g' >> $OUTFILE.temp
 
 else
 
