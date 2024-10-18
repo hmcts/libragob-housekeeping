@@ -175,7 +175,7 @@ echo "$(date "+%d/%m/%Y %T"),AZDB_gwaudit_10_proc_rates,Today's Latest 10 Gatewa
 done < ${OPDIR}12cAZUREDB_AMD_gwaudit_step10-1_latest10_processing_rates.csv
 ####################################################### CHECK 3
 echo "[Check #3: Update Backlogs]" >> $OUTFILE
-echo "DateTime,CheckNameSchemaID,Status,COUNTupdates,MAXupdates,SUMupdates,BacklogThreshold,RoundtripMS,RoundtripThreshold,ETA,Result" >> $OUTFILE
+echo "DateTime,CheckNameSchemaID,Status,COUNTupdates,MAXupdates,SUMupdates,BacklogThreshold,ResultBacklog,RoundtripMS,RoundtripThreshold,ETA,ResultRoundtrip" >> $OUTFILE
 echo "$(date "+%d/%m/%Y %T") Starting Check #3" >> $OUTFILE_LOG
 echo "$(date "+%d/%m/%Y %T") Connecting to $event_db database" >> $OUTFILE_LOG
 psql "sslmode=require host=${event_host} dbname=${event_db} port=${event_port} user=${event_username} password=${event_password}" --file=/sql/3AZUREDB_AMD_message_backlogs.sql
@@ -241,13 +241,19 @@ fi
 
 if [[ $status != ERROR ]];then
 
-if [[ $sum_number_of_table_updates -gt $backlog_adaptive_threshold ]] || [[ $total_roundtrip -gt $roundtrip_threshold ]];then
-echo "$(date "+%d/%m/%Y %T"),AZDB_msg_backlog${schema_id},$status,$count_updates,$max_number_of_table_updates,$sum_number_of_table_updates,$backlog_adaptive_threshold,$total_roundtrip,$roundtrip_threshold,${adj_delivery_rate}${eta_units},warn" >> $OUTFILE
+if [[ $sum_number_of_table_updates -gt $backlog_adaptive_threshold ]];then
+result_backlog=warn
 else
-echo "$(date "+%d/%m/%Y %T"),AZDB_msg_backlog${schema_id},$status,$count_updates,$max_number_of_table_updates,$sum_number_of_table_updates,$backlog_adaptive_threshold,$total_roundtrip,$roundtrip_threshold,${adj_delivery_rate}${eta_units},ok" >> $OUTFILE
+result_backlog=ok
 fi
 
+if [[ $total_roundtrip -gt $roundtrip_threshold ]];then
+result_roundtrip=warn
+else
+result_roundtrip=ok
 fi
+
+echo "$(date "+%d/%m/%Y %T"),AZDB_msg_backlog${schema_id},$status,$count_updates,$max_number_of_table_updates,$sum_number_of_table_updates,$backlog_adaptive_threshold,$result_backlog,$total_roundtrip,$roundtrip_threshold,${adj_delivery_rate}${eta_units},$result_roundtrip" >> $OUTFILE
 
 done < ${OPDIR}3AZUREDB_AMD_message_backlogs.csv
 
@@ -911,16 +917,16 @@ fi
 ####################
 ### AMD Override ###
 ####################
-cp $OUTFILE ${OUTFILE}.orig ### creates a copy of the current output file
-> ${OUTFILE}.temp
+cp $OUTFILE $OUTFILE.orig ### creates a copy of the current output file
+> $OUTFILE.temp
 override_file=${OPDIR}ams-reporting_overrides_list.dat
 echo "AZDB_update_processing_backlog73" > $override_file
-#echo "AZDB_update_processing_backlog77" >> $override_file
+echo "AZDB_update_processing_backlog77" >> $override_file
 override_check=$(cat $override_file | wc -l)
 
 if [ $override_check -gt "0" ]
 then
-        > ${OUTFILE}.temp
+        > $OUTFILE.temp
         while IFS= read -r line
         do
                 item="$line"
@@ -929,25 +935,25 @@ then
                 do
                         if [[ "$item" == *"$override"* && "$line" == *","* ]]
                         then
-                                last_line=$(cat ${OUTFILE}.temp | cut -d',' -f1-2  | tail -1)
+                                last_line=$(cat $OUTFILE.temp | cut -d',' -f1-2  | tail -1)
                                 item_line=$(echo "$line" | cut -d',' -f1-2 )
                                 if [ *"$item_line"* != *"$last_line"* ]
                                 then
-                                        echo "$item" | sed 's/,not ok/OverRide,ok/g' | sed 's/,warn/OverRide,ok/g' | sed 's/,not ok/OverRide,ok/g' >> ${OUTFILE}.temp
+                                        echo "$item" | sed 's/,not ok/OverRide,ok/g' | sed 's/,warn/OverRide,ok/g' | sed 's/,not ok/OverRide,ok/g' >> $OUTFILE.temp
                                 else
-                                        tac ${OUTFILE}.temp | sed '1 d' | tac > ${OUTFILE}.temp
-                                        echo "$item" | sed 's/,not ok/OverRide,ok/g' | sed 's/,warn/OverRide,ok/g' | sed 's/,not ok/OverRide,ok/g' >> ${OUTFILE}.temp
+                                        tac $OUTFILE.temp | sed '1 d' | tac > $OUTFILE.temp
+                                        echo "$item" | sed 's/,not ok/OverRide,ok/g' | sed 's/,warn/OverRide,ok/g' | sed 's/,not ok/OverRide,ok/g' >> $OUTFILE.temp
                                 fi
                         elif [ "$item" != "$prev" ]
                         then
-                                echo "$item"  >> ${OUTFILE}.temp
+                                echo "$item"  >> $OUTFILE.temp
                         fi
                         prev="$item"
                 done < $override_file
                 prev="$item"
-        done < ${OUTFILE}.orig
-        cp ${OUTFILE}.temp $OUTFILE
-        rm -rf ${OUTFILE}.temp
+        done < $OUTFILE.orig
+        cp $OUTFILE.temp $OUTFILE
+        rm -rf $OUTFILE.temp
 fi
 
 echo "cat of $OUTFILE:"
