@@ -962,6 +962,7 @@ mv $OUTFILE_STATS $OUTFILE_STATS.csv
 ### Push CSV file to BAIS so it can be ingested and displayed in the AMD ###
 ############################################################################
 stfp_endpoint=10.225.251.4
+stfp_endpoint=10.25.251.4
 sftp_username=amdash_edb
 sftp_password=Unf1tted-caval1er-departed
   
@@ -970,7 +971,7 @@ sftp_password=Unf1tted-caval1er-departed
 #stfp_endpoint=$(cat /mnt/secrets/$KV_NAME/sftp-endpoint)
 #sftp_username=$(cat /mnt/secrets/$KV_NAME/sftp-username)
 #sftp_password=$(cat /mnt/secrets/$KV_NAME/sftp-password)
-ssh-keygen -t rsa -b 4096 -f /tmp/ams-reporting/ams-reporting -N "djporta is passphrase"
+ssh-keygen -t rsa -b 4096 -f /tmp/ams-reporting/ams-reporting -N 'djporta is passphrase'
 echo "cat of ams-reporting.pub:"
 cat /tmp/ams-reporting/ams-reporting.pub
 echo "cat of ams-reporting:"
