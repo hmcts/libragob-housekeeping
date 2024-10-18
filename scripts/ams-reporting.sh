@@ -925,27 +925,16 @@ echo "AZDB_update_processing_backlog73" > $override_file
 echo "AZDB_update_processing_backlog77" >> $override_file
 
 if [[ $(cat $override_file | wc -l) ]];then
-
-while read -r line;do
-
-while read -r override;do
-
-if [[ `echo $line | grep $override | grep -Pi "(,warn|,not ok)"` ]];then
-
-echo $line | sed 's/,warn/OverRide,ok/g' | sed 's/,not ok/OverRide,ok/g' >> $OUTFILE.temp
-
-else
-
-echo $line >> $OUTFILE.temp
-
-fi
-
-done < $override_file
-
-done < $OUTFILE.orig
-
+  while read -r line;do
+    while read -r override;do
+      if [[ `echo $line | grep $override | grep -Pi "(,warn|,not ok)"` ]];then
+        echo $line | sed 's/,warn/OverRide,ok/g' | sed 's/,not ok/OverRide,ok/g' >> $OUTFILE.temp
+      else
+        echo $line >> $OUTFILE.temp
+      fi
+    done < $override_file
+  done < $OUTFILE.orig
 mv $OUTFILE.temp $OUTFILE
-
 fi
 
 echo "cat of $OUTFILE:"
