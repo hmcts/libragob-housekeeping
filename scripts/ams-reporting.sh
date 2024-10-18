@@ -255,6 +255,8 @@ fi
 
 echo "$(date "+%d/%m/%Y %T"),AZDB_msg_backlog${schema_id},$status,$count_updates,$max_number_of_table_updates,$sum_number_of_table_updates,$backlog_adaptive_threshold,$result_backlog,$total_roundtrip,$roundtrip_threshold,${adj_delivery_rate}${eta_units},$result_roundtrip" >> $OUTFILE
 
+fi
+
 done < ${OPDIR}3AZUREDB_AMD_message_backlogs.csv
 
 echo "$(date "+%d/%m/%Y %T") Check #3 complete" >> $OUTFILE_LOG
