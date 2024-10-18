@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 ####################################################### This is the AMD AzureDB Healthcheck Script, and the associated documentation is in Ensemble under the "Libra System Admin Documents" area:
 ####################################################### "GoB Phase 1 - Oracle_Postgres DB Checks_v11.6_MAP.docx" is the latest version as of 18/10/2024
-echo "Script Version 8.3: override code fix"
+echo "Script Version 8.4: override code fix"
 echo "Designed by Mark A. Porter"
 OPDIR="/tmp/ams-reporting/"
 mkdir $OPDIR
@@ -925,7 +925,7 @@ echo "AZDB_update_processing_backlog73" > $override_file
 echo "AZDB_update_processing_backlog77" >> $override_file
 echo "AZDB_db_message_log_error73" >> $override_file
 
-if [ -f "override_file" ];then
+#if [ -f "override_file" ];then
 
 while read -r line;do
   line_overidden=0
@@ -946,7 +946,7 @@ done < $OUTFILE.orig
 
 mv $OUTFILE.temp $OUTFILE
 
-fi
+#fi
 
 echo "cat of $OUTFILE:"
 cat $OUTFILE
