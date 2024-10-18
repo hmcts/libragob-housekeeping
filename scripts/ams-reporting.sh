@@ -3,8 +3,8 @@
 ####################################################### "GoB Phase 1 - Oracle_Postgres DB Checks_v11.5_MAP.docx" is the latest version as of 01/08/2024
 echo "Script Version 8.2: override code fix"
 echo "Designed by Mark A. Porter"
-mkdir /tmp/ams-reporting/
-OPDIR="/tmp/ams-reporting/"
+OPDIR=/tmp/ams-reporting/
+mkdir $OPDIR
 OUTFILE="${OPDIR}ThemisAZhc"
 OUTFILE_STATS="${OPDIR}ThemisAZstats"
 OUTFILE_LOG="${OPDIR}ThemisAZ.log"
