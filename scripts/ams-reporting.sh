@@ -921,9 +921,9 @@ fi
 ####################
 cp $OUTFILE $OUTFILE.orig ### creates a copy of the current output file
 override_file=${OPDIR}ams-reporting_overrides_list.dat
-echo "AZDB_update_processing_backlog73" > $override_file
-echo "AZDB_update_processing_backlog77" >> $override_file
-echo "AZDB_db_message_log_error73" >> $override_file
+#echo "AZDB_update_processing_backlog73" > $override_file
+#echo "AZDB_update_processing_backlog77" >> $override_file
+#echo "AZDB_db_message_log_error73" >> $override_file
 testit=`cat $override_file | wc -l | xargs`
 
 if [[ $testit -gt 0 ]];then
