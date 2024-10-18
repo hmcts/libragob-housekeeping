@@ -925,7 +925,7 @@ override_file=${OPDIR}ams-reporting_overrides_list.dat
 #echo "AZDB_update_processing_backlog77" >> $override_file
 #echo "AZDB_db_message_log_error73" >> $override_file
 
-[ -f "override_file" ];then
+if [ -f "override_file" ];then
 
 while read -r line;do
   line_overidden=0
