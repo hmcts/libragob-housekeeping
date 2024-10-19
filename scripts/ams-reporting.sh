@@ -905,9 +905,9 @@ sequence_number=`echo $line | awk -F"," '{print $3}'`
 previous_sequence_number=`echo $line | awk -F"," '{print $4}'`
 insert_type=`echo $line | awk -F"," '{print $5}'`
 
-if [[ $sequence_number -eq $previous_sequence_number ]] && [[ $insert_type = I ]];then
-#echo "$(date "+%d/%m/%Y %T"),AZDB_ora_rowscn_bug$schema_id,$update_request_id,$insert_type,$sequence_number,$previous_sequence_number,warn" >> $OUTFILE
-echo "$(date "+%d/%m/%Y %T"),AZDB_ora_rowscn_bug$schema_id,$update_request_id,$insert_type,$sequence_number,$previous_sequence_number,ok" >> $OUTFILE
+#if [[ $sequence_number -eq $previous_sequence_number ]] && [[ $insert_type = I ]];then
+if [[ $sequence_number -eq $previous_sequence_number ]];then
+echo "$(date "+%d/%m/%Y %T"),AZDB_ora_rowscn_bug$schema_id,$update_request_id,$insert_type,$sequence_number,$previous_sequence_number,warn" >> $OUTFILE
 else
 echo "$(date "+%d/%m/%Y %T"),AZDB_ora_rowscn_bug$schema_id,$update_request_id,$insert_type,$sequence_number,$previous_sequence_number,ok" >> $OUTFILE
 fi
@@ -924,7 +924,8 @@ cp $OUTFILE $OUTFILE.orig ### creates a copy of the current output file
 override_file=${OPDIR}ams-reporting_overrides_list.dat
 echo "AZDB_update_processing_backlog73" > $override_file
 echo "AZDB_update_processing_backlog77" >> $override_file
-echo "AZDB_db_message_log_error73" >> $override_file
+#echo "AZDB_db_message_log_error73" >> $override_file
+echo "message_log.*Reconciliation run mismatch occurred.*73" >> $override_file
 testit=`cat $override_file | wc -l | xargs`
 
 if [[ $testit -gt 0 ]];then
@@ -933,7 +934,7 @@ while read -r line;do
   line_overidden=0
 
   while read -r override;do
-    if [[ `echo $line | grep $override | grep -Pi "(\,warn|\,not ok)"` ]];then
+    if [[ `echo $line | grep -P "$override" | grep -Pi "(\,warn|\,not ok)"` ]];then
       if [[ $line_overidden == 0 ]];then
         echo $line | sed 's/,warn/OverRide,ok/g' | sed 's/,not ok/OverRide,ok/g' >> $OUTFILE.temp
         line_overidden=1
