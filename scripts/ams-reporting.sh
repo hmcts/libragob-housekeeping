@@ -906,11 +906,10 @@ previous_sequence_number=`echo $line | awk -F"," '{print $4}'`
 insert_type=`echo $line | awk -F"," '{print $5}'`
 
 #if [[ $sequence_number -eq $previous_sequence_number ]] && [[ $insert_type = I ]];then
-if [[ $sequence_number -eq $previous_sequence_number ]];then
 echo "$(date "+%d/%m/%Y %T"),AZDB_ora_rowscn_bug$schema_id,$update_request_id,$insert_type,$sequence_number,$previous_sequence_number,warn" >> $OUTFILE
-else
-echo "$(date "+%d/%m/%Y %T"),AZDB_ora_rowscn_bug$schema_id,$update_request_id,$insert_type,$sequence_number,$previous_sequence_number,ok" >> $OUTFILE
-fi
+#else
+#echo "$(date "+%d/%m/%Y %T"),AZDB_ora_rowscn_bug$schema_id,$update_request_id,$insert_type,$sequence_number,$previous_sequence_number,ok" >> $OUTFILE
+#fi
 
 done < ${OPDIR}12AZUREDB_AMD_ora_rowscn_bug_seq_nums.csv
 
