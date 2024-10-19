@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 ####################################################### This is the AMD AzureDB Healthcheck Script, and the associated documentation is in Ensemble under the "Libra System Admin Documents" area:
 ####################################################### "GoB Phase 1 - Oracle_Postgres DB Checks_v11.6_MAP.docx" is the latest version as of 18/10/2024
-echo "Script Version 8.6: ssh-keygen passphrase"
+echo "Script Version 8.7: Check #12 ora_rowscn"
 echo "Designed by Mark A. Porter"
 OPDIR="/tmp/ams-reporting/"
 mkdir $OPDIR
@@ -887,15 +887,15 @@ echo "$(date "+%d/%m/%Y %T"),AZDB_minute_completed_table_updates,Minute Complete
 done < ${OPDIR}12rAZUREDB_AMD_minute_completed_table_updates_counts.csv
 
 echo "$(date "+%d/%m/%Y %T") Check #12 complete" >> $OUTFILE_LOG
-####################################################### CHECK 13
-if [[ 0 == 1 ]];then # disabled permanently as it's since been realised its not always a hard break when sequence_number = previous_sequence_number
+####################################################### CHECK 12
+#if [[ 0 == 1 ]];then # disabled permanently as it's since been realised its not always a hard break when sequence_number = previous_sequence_number
 
-echo "[Check #13: ora_rowscn SequenceNumber Bug]" >> $OUTFILE
-echo "DateTime,CheckName,update_request_id,schema_id,sequence_number,previous_sequence_number,Result" >> $OUTFILE
-echo "$(date "+%d/%m/%Y %T") Starting Check #13" >> $OUTFILE_LOG
+echo "[Check #12: ora_rowscn SequenceNumber Bug]" >> $OUTFILE
+echo "DateTime,CheckNameSchemaID,update_request_id,insert_type,sequence_number,previous_sequence_number,Result" >> $OUTFILE
+echo "$(date "+%d/%m/%Y %T") Starting Check #12" >> $OUTFILE_LOG
 echo "$(date "+%d/%m/%Y %T") Connecting to $event_db database" >> $OUTFILE_LOG
-psql "sslmode=require host=${event_host} dbname=${event_db} port=${event_port} user=${event_username} password=${event_password}" --file=/sql/13AZUREDB_AMD_ora_rowscn_bug_seq_nums.sql
-echo "$(date "+%d/%m/%Y %T") SQL for Check #13 has been run" >> $OUTFILE_LOG
+psql "sslmode=require host=${event_host} dbname=${event_db} port=${event_port} user=${event_username} password=${event_password}" --file=/sql/12AZUREDB_AMD_ora_rowscn_bug_seq_nums.sql
+echo "$(date "+%d/%m/%Y %T") SQL for Check #12 has been run" >> $OUTFILE_LOG
 
 while read -r line;do
 
@@ -906,24 +906,25 @@ previous_sequence_number=`echo $line | awk -F"," '{print $4}'`
 insert_type=`echo $line | awk -F"," '{print $5}'`
 
 if [[ $sequence_number -eq $previous_sequence_number ]] && [[ $insert_type = I ]];then
-echo "$(date "+%d/%m/%Y %T"),AZDB_ora_rowscn_bug,$update_request_id,$schema_id,$sequence_number,$previous_sequence_number,warn" >> $OUTFILE
+#echo "$(date "+%d/%m/%Y %T"),AZDB_ora_rowscn_bug$schema_id,$update_request_id,$insert_type,$sequence_number,$previous_sequence_number,warn" >> $OUTFILE
+echo "$(date "+%d/%m/%Y %T"),AZDB_ora_rowscn_bug$schema_id,$update_request_id,$insert_type,$sequence_number,$previous_sequence_number,ok" >> $OUTFILE
 else
-echo "$(date "+%d/%m/%Y %T"),AZDB_ora_rowscn_bug,$update_request_id,$schema_id,$sequence_number,$previous_sequence_number,ok" >> $OUTFILE
+echo "$(date "+%d/%m/%Y %T"),AZDB_ora_rowscn_bug$schema_id,$update_request_id,$insert_type,$sequence_number,$previous_sequence_number,ok" >> $OUTFILE
 fi
 
-done < ${OPDIR}13AZUREDB_AMD_ora_rowscn_bug_seq_nums.csv
+done < ${OPDIR}12AZUREDB_AMD_ora_rowscn_bug_seq_nums.csv
 
-echo "$(date "+%d/%m/%Y %T") Check #13 complete" >> $OUTFILE_LOG
+echo "$(date "+%d/%m/%Y %T") Check #12 complete" >> $OUTFILE_LOG
 
-fi
+#fi
 ####################
 ### AMD Override ###
 ####################
 cp $OUTFILE $OUTFILE.orig ### creates a copy of the current output file
 override_file=${OPDIR}ams-reporting_overrides_list.dat
-#echo "AZDB_update_processing_backlog73" > $override_file
-#echo "AZDB_update_processing_backlog77" >> $override_file
-#echo "AZDB_db_message_log_error73" >> $override_file
+echo "AZDB_update_processing_backlog73" > $override_file
+echo "AZDB_update_processing_backlog77" >> $override_file
+echo "AZDB_db_message_log_error73" >> $override_file
 testit=`cat $override_file | wc -l | xargs`
 
 if [[ $testit -gt 0 ]];then
