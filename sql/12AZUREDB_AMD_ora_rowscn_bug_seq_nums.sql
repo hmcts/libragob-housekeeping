@@ -1,0 +1,1 @@
+\copy (SELECT schema_id,update_request_id,insert_type,sequence_number,previous_sequence_number from public.update_requests where status != 'COMPLETE' and sequence_number=previous_sequence_number order by 1 asc) To '/tmp/ams-reporting/12AZUREDB_AMD_ora_rowscn_bug_seq_nums.csv' With CSV DELIMITER ','
