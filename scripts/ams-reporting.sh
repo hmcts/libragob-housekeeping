@@ -900,11 +900,12 @@ echo "$(date "+%d/%m/%Y %T") SQL for Check #12 has been run" >> $OUTFILE_LOG
 
 while read -r line;do
 
-update_request_id=`echo $line | awk -F"," '{print $1}'`
-schema_id=`echo $line | awk -F"," '{print $2}'`
-sequence_number=`echo $line | awk -F"," '{print $3}'`
-previous_sequence_number=`echo $line | awk -F"," '{print $4}'`
-update_type=`echo $line | awk -F"," '{print $5}'`
+schema_id=`echo $line | awk -F"," '{print $1}'`
+update_request_id=`echo $line | awk -F"," '{print $3}'`
+update_type=`echo $line | awk -F"," '{print $3}'`
+created_date=`echo $line | awk -F"," '{print $4}'`
+sequence_number=`echo $line | awk -F"," '{print $5}'`
+previous_sequence_number=`echo $line | awk -F"," '{print $6}'`
 
 #if [[ $sequence_number -eq $previous_sequence_number ]] && [[ $insert_type = I ]];then
 if [[ $sequence_number -eq $previous_sequence_number ]];then
