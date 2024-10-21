@@ -891,7 +891,7 @@ echo "$(date "+%d/%m/%Y %T") Check #12 complete" >> $OUTFILE_LOG
 #if [[ 0 == 1 ]];then # disabled permanently as it's since been realised its not always a hard break when sequence_number = previous_sequence_number
 
 echo "[Check #12: ora_rowscn SequenceNumber Bug]" >> $OUTFILE
-echo "DateTime,CheckNameSchemaID,update_request_id,insert_type,sequence_number,previous_sequence_number,Result" >> $OUTFILE
+echo "DateTime,CheckNameSchemaID,update_request_id,insert_type,created_date,sequence_number,previous_sequence_number,Result" >> $OUTFILE
 echo "$(date "+%d/%m/%Y %T") Starting Check #12" >> $OUTFILE_LOG
 echo "$(date "+%d/%m/%Y %T") Connecting to $event_db database" >> $OUTFILE_LOG
 psql "sslmode=require host=${event_host} dbname=${event_db} port=${event_port} user=${event_username} password=${event_password}" --file=/sql/12AZUREDB_AMD_ora_rowscn_bug_seq_nums.sql
@@ -903,13 +903,14 @@ update_request_id=`echo $line | awk -F"," '{print $1}'`
 schema_id=`echo $line | awk -F"," '{print $2}'`
 sequence_number=`echo $line | awk -F"," '{print $3}'`
 previous_sequence_number=`echo $line | awk -F"," '{print $4}'`
-insert_type=`echo $line | awk -F"," '{print $5}'`
+update_type=`echo $line | awk -F"," '{print $5}'`
 
 #if [[ $sequence_number -eq $previous_sequence_number ]] && [[ $insert_type = I ]];then
-echo "$(date "+%d/%m/%Y %T"),AZDB_ora_rowscn_bug$schema_id,$update_request_id,$insert_type,$sequence_number,$previous_sequence_number,warn" >> $OUTFILE
-#else
-#echo "$(date "+%d/%m/%Y %T"),AZDB_ora_rowscn_bug$schema_id,$update_request_id,$insert_type,$sequence_number,$previous_sequence_number,ok" >> $OUTFILE
-#fi
+if [[ $sequence_number -eq $previous_sequence_number ]]
+echo "$(date "+%d/%m/%Y %T"),AZDB_ora_rowscn_bug$schema_id,$update_request_id,$update_type,$created_date,$sequence_number,$previous_sequence_number,warn" >> $OUTFILE
+else
+echo "$(date "+%d/%m/%Y %T"),AZDB_ora_rowscn_bug$schema_id,$update_request_id,$update_type,$created_date,$sequence_number,$previous_sequence_number,ok" >> $OUTFILE
+fi
 
 done < ${OPDIR}12AZUREDB_AMD_ora_rowscn_bug_seq_nums.csv
 
