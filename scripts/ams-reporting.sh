@@ -988,6 +988,9 @@ if [[ $check_key_present -eq 0 ]];then
 cp /tmp/ams-reporting/ams-reporting.pvt.key /mnt/secrets/$KV_NAME/sftp_pvt_key
 fi
 
+echo "cat of /mnt/secrets/$KV_NAME/sftp_pvt_key:"
+cat /mnt/secrets/$KV_NAME/sftp_pvt_key
+
 ls -altr /tmp/ams-reporting/
 echo "$(date "+%d/%m/%Y %T") Uploading the CSV file to BAIS" >> $OUTFILE_LOG
 sftp -oidentityfile=/mnt/secrets/$KV_NAME/sftp_pvt_key ${sftp_username}@${sftp_endpoint} << EOF
