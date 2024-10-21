@@ -965,8 +965,8 @@ mv $OUTFILE_STATS $OUTFILE_STATS.csv
 ############################################################################
 ### Push CSV file to BAIS so it can be ingested and displayed in the AMD ###
 ############################################################################
-stfp_endpoint="10.225.251.4"
-stfp_endpoint="10.25.251.4"
+stfp_endpoint='10.225.251.4'
+stfp_endpoint='10.25.251.4'
 sftp_username=amdash_edb
 sftp_password=Unf1tted-caval1er-departed
 
@@ -976,13 +976,21 @@ sftp_password=Unf1tted-caval1er-departed
 #sftp_username=$(cat /mnt/secrets/$KV_NAME/sftp-username)
 #sftp_password=$(cat /mnt/secrets/$KV_NAME/sftp-password)
 ssh-keygen -t rsa -b 4096 -f /tmp/ams-reporting/ams-reporting -N 'djporta is passphrase'
-echo "cat of ams-reporting.pub:"
-cat /tmp/ams-reporting/ams-reporting.pub
-echo "cat of ams-reporting:"
-cat /tmp/ams-reporting/ams-reporting
+mv /tmp/ams-reporting/ams-reporting.pub /tmp/ams-reporting/ams-reporting.pub.key
+mv /tmp/ams-reporting/ams-reporting /tmp/ams-reporting/ams-reporting.pvt.key
+echo "cat of ams-reporting.pub.key:"
+cat /tmp/ams-reporting/ams-reporting.pub.key
+echo "cat of ams-reporting.pvt.key:"
+cat /tmp/ams-reporting/ams-reporting.pvt.key
+check_key_present=`cat /mnt/secrets/$KV_NAME/sftp_pvt_key | wc -l | xargs`
+
+if [[ $check_key_present -eq 0 ]];then
+cp /tmp/ams-reporting/ams-reporting.pvt.key /mnt/secrets/$KV_NAME/sftp_pvt_key
+fi
+
 ls -altr /tmp/ams-reporting/
 echo "$(date "+%d/%m/%Y %T") Uploading the CSV file to BAIS" >> $OUTFILE_LOG
-sftp -oidentityfile=/tmp/ams-reporting/ams-reporting ${sftp_username}@${sftp_endpoint} << EOF
+sftp -oidentityfile=/mnt/secrets/$KV_NAME/sftp_pvt_key ${sftp_username}@${sftp_endpoint} << EOF
 put ${OPDIR}/$OUTFILE.csv
 put ${OPDIR}/$OUTFILE_STATS.csv
 quit
