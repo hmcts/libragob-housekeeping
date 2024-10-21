@@ -10,7 +10,7 @@ OUTFILE_STATS="${OPDIR}ThemisAZstats"
 OUTFILE_LOG="${OPDIR}ThemisAZ.log"
 echo $(date "+%d/%m/%Y %T") > $OUTFILE
 echo $(date "+%d/%m/%Y %T") > $OUTFILE_STATS
-
+cat /mnt/secrets/$KV_NAME/event-datasource-username
 ###############################################################
 ### Set-up DB connection variables, extracted from KeyVault ###
 ###############################################################
@@ -962,11 +962,11 @@ mv $OUTFILE_STATS $OUTFILE_STATS.csv
 ############################################################################
 ### Push CSV file to BAIS so it can be ingested and displayed in the AMD ###
 ############################################################################
-stfp_endpoint=10.225.251.4
-stfp_endpoint=10.25.251.4
+stfp_endpoint="10.225.251.4"
+stfp_endpoint="10.25.251.4"
 sftp_username=amdash_edb
 sftp_password=Unf1tted-caval1er-departed
-  
+
 #if [ -e /mnt/secrets/$KV_NAME/sftp-endpoint ] && [ -e /mnt/secrets/$KV_NAME/sftp-username ] && [ -e /mnt/secrets/$KV_NAME/sftp-password ];then
 
 #stfp_endpoint=$(cat /mnt/secrets/$KV_NAME/sftp-endpoint)
