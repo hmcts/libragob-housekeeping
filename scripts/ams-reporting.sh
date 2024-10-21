@@ -10,6 +10,7 @@ OUTFILE_STATS="${OPDIR}ThemisAZstats"
 OUTFILE_LOG="${OPDIR}ThemisAZ.log"
 echo $(date "+%d/%m/%Y %T") > $OUTFILE
 echo $(date "+%d/%m/%Y %T") > $OUTFILE_STATS
+echo "cat of /mnt/secrets/$KV_NAME/event-datasource-username:"
 cat /mnt/secrets/$KV_NAME/event-datasource-username
 ###############################################################
 ### Set-up DB connection variables, extracted from KeyVault ###
