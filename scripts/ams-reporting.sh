@@ -892,7 +892,7 @@ echo "$(date "+%d/%m/%Y %T") Check #12 complete" >> $OUTFILE_LOG
 #if [[ 0 == 1 ]];then # disabled permanently as it's since been realised its not always a hard break when sequence_number = previous_sequence_number
 
 echo "[Check #12: ora_rowscn SequenceNumber Bug]" >> $OUTFILE
-echo "DateTime,CheckNameSchemaID,update_request_id,insert_type,created_date,sequence_number,previous_sequence_number,Result" >> $OUTFILE
+echo "DateTime,CheckNameSchemaID,update_request_id,update_type,created_date,sequence_number,previous_sequence_number,Result" >> $OUTFILE
 echo "$(date "+%d/%m/%Y %T") Starting Check #12" >> $OUTFILE_LOG
 echo "$(date "+%d/%m/%Y %T") Connecting to $event_db database" >> $OUTFILE_LOG
 psql "sslmode=require host=${event_host} dbname=${event_db} port=${event_port} user=${event_username} password=${event_password}" --file=/sql/12AZUREDB_AMD_ora_rowscn_bug_seq_nums.sql
@@ -901,7 +901,7 @@ echo "$(date "+%d/%m/%Y %T") SQL for Check #12 has been run" >> $OUTFILE_LOG
 while read -r line;do
 
 schema_id=`echo $line | awk -F"," '{print $1}'`
-update_request_id=`echo $line | awk -F"," '{print $3}'`
+update_request_id=`echo $line | awk -F"," '{print $2}'`
 update_type=`echo $line | awk -F"," '{print $3}'`
 created_date=`echo $line | awk -F"," '{print $4}'`
 sequence_number=`echo $line | awk -F"," '{print $5}'`
