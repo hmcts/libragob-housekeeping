@@ -906,7 +906,7 @@ previous_sequence_number=`echo $line | awk -F"," '{print $4}'`
 update_type=`echo $line | awk -F"," '{print $5}'`
 
 #if [[ $sequence_number -eq $previous_sequence_number ]] && [[ $insert_type = I ]];then
-if [[ $sequence_number -eq $previous_sequence_number ]]
+if [[ $sequence_number -eq $previous_sequence_number ]];then
 echo "$(date "+%d/%m/%Y %T"),AZDB_ora_rowscn_bug$schema_id,$update_request_id,$update_type,$created_date,$sequence_number,$previous_sequence_number,warn" >> $OUTFILE
 else
 echo "$(date "+%d/%m/%Y %T"),AZDB_ora_rowscn_bug$schema_id,$update_request_id,$update_type,$created_date,$sequence_number,$previous_sequence_number,ok" >> $OUTFILE
