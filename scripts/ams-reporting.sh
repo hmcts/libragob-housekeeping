@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 ####################################################### This is the AMD AzureDB Healthcheck Script, and the associated documentation is in Ensemble under the "Libra System Admin Documents" area:
 ####################################################### "GoB Phase 1 - Oracle_Postgres DB Checks_v11.6_MAP.docx" is the latest version as of 18/10/2024
-echo "Script Version 9.3: sftp"
+echo "Script Version 9.5: sftp"
 echo "Designed by Mark A. Porter"
 OPDIR="/tmp/ams-reporting/"
 mkdir $OPDIR
@@ -23,60 +23,60 @@ event_port=`echo $event_url | awk -F":" {'print $4'} | awk -F"\/" {'print $1'}`
 event_db=`echo $event_url | awk -F":" {'print $4'} | awk -F"\/" {'print $2'}`
 
 # PostgresDB connection variables
-#postgres_username=`cat /mnt/secrets/$KV_NAME/themis-gateway-dbusername`
-#postgres_password=`cat /mnt/secrets/$KV_NAME/themis-gateway-dbpassword`
-#postgres_url=`cat /mnt/secrets/$KV_NAME/themis-gateway-datasourceurl`
-#postgres_host=`echo $postgres_url | awk -F"\/\/" {'print $2'} | awk -F":" {'print $1'}`
-#postgres_port=`echo $postgres_url | awk -F":" {'print $4'} | awk -F"\/" {'print $1'}`
-#postgres_db=`echo $postgres_url | awk -F":" {'print $4'} | awk -F"\/" {'print $2'}
+postgres_username=`cat /mnt/secrets/$KV_NAME/themis-gateway-dbusername`
+postgres_password=`cat /mnt/secrets/$KV_NAME/themis-gateway-dbpassword`
+postgres_url=`cat /mnt/secrets/$KV_NAME/themis-gateway-datasourceurl`
+postgres_host=`echo $postgres_url | awk -F"\/\/" {'print $2'} | awk -F":" {'print $1'}`
+postgres_port=`echo $postgres_url | awk -F":" {'print $4'} | awk -F"\/" {'print $1'}`
+postgres_db=`echo $postgres_url | awk -F":" {'print $4'} | awk -F"\/" {'print $2'}
 
-postgres_username=edb_amd
-postgres_password=edb_read_0nly
-postgres_host=libragob-test.postgres.database.azure.com
-postgres_port=5432
-postgres_db=postgres
+#postgres_username=edb_amd
+#postgres_password=edb_read_0nly
+#postgres_host=libragob-test.postgres.database.azure.com
+#postgres_port=5432
+#postgres_db=postgres
 
 # ConfiscationDB connection variables
-#confiscation_username=$(cat /mnt/secrets/$KV_NAME/confiscation-datasource-username)
-#confiscation_password=$(cat /mnt/secrets/$KV_NAME/confiscation-datasource-password)
-#confiscation_url=$(cat /mnt/secrets/$KV_NAME/confiscation-datasource-url)
-#confiscation_host=`echo $confiscation_url | awk -F"\/\/" {'print $2'} | awk -F":" {'print $1'}`
-#confiscation_port=`echo $confiscation_url | awk -F":" {'print $4'} | awk -F"\/" {'print $1'}`
-#confiscation_db=`echo $confiscation_url | awk -F":" {'print $4'} | awk -F"\/" {'print $2'}`
+confiscation_username=$(cat /mnt/secrets/$KV_NAME/confiscation-datasource-username)
+confiscation_password=$(cat /mnt/secrets/$KV_NAME/confiscation-datasource-password)
+confiscation_url=$(cat /mnt/secrets/$KV_NAME/confiscation-datasource-url)
+confiscation_host=`echo $confiscation_url | awk -F"\/\/" {'print $2'} | awk -F":" {'print $1'}`
+confiscation_port=`echo $confiscation_url | awk -F":" {'print $4'} | awk -F"\/" {'print $1'}`
+confiscation_db=`echo $confiscation_url | awk -F":" {'print $4'} | awk -F"\/" {'print $2'}`
 
 # FinesDB connection variables
-#fines_username=$(cat /mnt/secrets/$KV_NAME/fines-datasource-username)
-#fines_password=$(cat /mnt/secrets/$KV_NAME/fines-datasource-password)
-#fines_url=$(cat /mnt/secrets/$KV_NAME/fines-datasource-url)
-#fines_host=`echo $fines_url | awk -F"\/\/" {'print $2'} | awk -F":" {'print $1'}`
-#fines_port=`echo $fines_url | awk -F":" {'print $4'} | awk -F"\/" {'print $1'}`
-#fines_db=`echo $fines_url | awk -F":" {'print $4'} | awk -F"\/" {'print $2'}`
+fines_username=$(cat /mnt/secrets/$KV_NAME/fines-datasource-username)
+fines_password=$(cat /mnt/secrets/$KV_NAME/fines-datasource-password)
+fines_url=$(cat /mnt/secrets/$KV_NAME/fines-datasource-url)
+fines_host=`echo $fines_url | awk -F"\/\/" {'print $2'} | awk -F":" {'print $1'}`
+fines_port=`echo $fines_url | awk -F":" {'print $4'} | awk -F"\/" {'print $1'}`
+fines_db=`echo $fines_url | awk -F":" {'print $4'} | awk -F"\/" {'print $2'}`
 
 # MaintenanceDB connection variables
-#maintenance_username=$(cat /mnt/secrets/$KV_NAME/maintenance-datasource-username)
-#maintenance_password=$(cat /mnt/secrets/$KV_NAME/maintenance-datasource-password)
-#maintenance_url=$(cat /mnt/secrets/$KV_NAME/maintenance-datasource-url)
-#maintenance_host=`echo $maintenance_url | awk -F"\/\/" {'print $2'} | awk -F":" {'print $1'}`
-#maintenance_port=`echo $maintenance_url | awk -F":" {'print $4'} | awk -F"\/" {'print $1'}`
-#maintenance_db=`echo $maintenance_url | awk -F":" {'print $4'} | awk -F"\/" {'print $2'}`
+maintenance_username=$(cat /mnt/secrets/$KV_NAME/maintenance-datasource-username)
+maintenance_password=$(cat /mnt/secrets/$KV_NAME/maintenance-datasource-password)
+maintenance_url=$(cat /mnt/secrets/$KV_NAME/maintenance-datasource-url)
+maintenance_host=`echo $maintenance_url | awk -F"\/\/" {'print $2'} | awk -F":" {'print $1'}`
+maintenance_port=`echo $maintenance_url | awk -F":" {'print $4'} | awk -F"\/" {'print $1'}`
+maintenance_db=`echo $maintenance_url | awk -F":" {'print $4'} | awk -F"\/" {'print $2'}`
 
-confiscation_username=edb_amd
-confiscation_password=edb_read_0nly
-confiscation_host=libragob-test.postgres.database.azure.com
-confiscation_port=5432
-confiscation_db=nm_confiscation_db
+#confiscation_username=edb_amd
+#confiscation_password=edb_read_0nly
+#confiscation_host=libragob-test.postgres.database.azure.com
+#confiscation_port=5432
+#confiscation_db=nm_confiscation_db
 
-fines_username=edb_amd
-fines_password=edb_read_0nly
-fines_host=libragob-test.postgres.database.azure.com
-fines_port=5432
-fines_db=nm_fines_db
+#fines_username=edb_amd
+#fines_password=edb_read_0nly
+#fines_host=libragob-test.postgres.database.azure.com
+#fines_port=5432
+#fines_db=nm_fines_db
 
-maintenance_username=edb_amd
-maintenance_password=edb_read_0nly
-maintenance_host=libragob-test.postgres.database.azure.com
-maintenance_port=5432
-maintenance_db=nm_maintenance_db
+#maintenance_username=edb_amd
+#maintenance_password=edb_read_0nly
+#maintenance_host=libragob-test.postgres.database.azure.com
+#maintenance_port=5432
+#maintenance_db=nm_maintenance_db
 ####################################################### CHECK 1
 echo "[Check #1: Locked Schemas]" >> $OUTFILE
 echo "DateTime,CheckName,Status,Result" >> $OUTFILE
@@ -967,12 +967,12 @@ mv $OUTFILE_STATS $OUTFILE_STATS.csv
 sftp_endpoint=10.225.251.4
 #sftp_endpoint=10.25.251.4
 sftp_username=amdash_edb
-sftp_password=Unf1tted-caval1er-departed
+#sftp_password=Unf1tted-caval1er-departed
 
-#if [ -e /mnt/secrets/$KV_NAME/sftp-endpoint ] && [ -e /mnt/secrets/$KV_NAME/sftp-username ] && [ -e /mnt/secrets/$KV_NAME/sftp-password ];then
+if [ -e /mnt/secrets/$KV_NAME/sftp-endpoint ] && [ -e /mnt/secrets/$KV_NAME/sftp-username ];then
 
-#sftp_endpoint=$(cat /mnt/secrets/$KV_NAME/sftp-endpoint)
-#sftp_username=$(cat /mnt/secrets/$KV_NAME/sftp-username)
+sftp_endpoint=$(cat /mnt/secrets/$KV_NAME/sftp-endpoint)
+sftp_username=$(cat /mnt/secrets/$KV_NAME/sftp-username)
 #sftp_password=$(cat /mnt/secrets/$KV_NAME/sftp-password)
 ssh-keygen -t rsa -b 4096 -f /tmp/ams-reporting/ams-reporting -N 'djporta is passphrase'
 mv /tmp/ams-reporting/ams-reporting.pub /tmp/ams-reporting/ams-reporting.pub.key
@@ -1000,8 +1000,8 @@ EOF
 
 echo "$(date "+%d/%m/%Y %T") The CSV file has been successfully uploaded to BAIS" >> $OUTFILE_LOG
 
-#else
+else
 
-#echo "Cannot access BAIS KeyVault connection variables"
+echo "Cannot access BAIS KeyVault connection variables"
 
-#fi
+fi
