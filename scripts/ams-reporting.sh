@@ -10,7 +10,6 @@ OUTFILE_STATS="${OPDIR}ThemisAZstats"
 OUTFILE_LOG="${OPDIR}ThemisAZ.log"
 echo $(date "+%d/%m/%Y %T") > $OUTFILE
 echo $(date "+%d/%m/%Y %T") > $OUTFILE_STATS
-
 ###############################################################
 ### Set-up DB connection variables, extracted from KeyVault ###
 ###############################################################
@@ -28,7 +27,7 @@ postgres_password=`cat /mnt/secrets/$KV_NAME/themis-gateway-dbpassword`
 postgres_url=`cat /mnt/secrets/$KV_NAME/themis-gateway-datasourceurl`
 postgres_host=`echo $postgres_url | awk -F"\/\/" {'print $2'} | awk -F":" {'print $1'}`
 postgres_port=`echo $postgres_url | awk -F":" {'print $4'} | awk -F"\/" {'print $1'}`
-postgres_db=`echo $postgres_url | awk -F":" {'print $4'} | awk -F"\/" {'print $2'}
+postgres_db=`echo $postgres_url | awk -F":" {'print $4'} | awk -F"\/" {'print $2'}`
 
 #postgres_username=edb_amd
 #postgres_password=edb_read_0nly
@@ -969,7 +968,7 @@ sftp_endpoint=10.225.251.4
 sftp_username=amdash_edb
 #sftp_password=Unf1tted-caval1er-departed
 
-#if [ -e /mnt/secrets/$KV_NAME/sftp-endpoint ] && [ -e /mnt/secrets/$KV_NAME/sftp-username ];then
+if [ -e /mnt/secrets/$KV_NAME/sftp-endpoint ] && [ -e /mnt/secrets/$KV_NAME/sftp-username ];then
 
 sftp_endpoint=$(cat /mnt/secrets/$KV_NAME/sftp-endpoint)
 sftp_username=$(cat /mnt/secrets/$KV_NAME/sftp-username)
@@ -1000,8 +999,8 @@ EOF
 
 echo "$(date "+%d/%m/%Y %T") The CSV file has been successfully uploaded to BAIS" >> $OUTFILE_LOG
 
-#else
+else
 
-#echo "Cannot access BAIS KeyVault connection variables"
+echo "Cannot access BAIS KeyVault connection variables"
 
-#fi
+fi
