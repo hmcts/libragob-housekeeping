@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 ####################################################### This is the AMD AzureDB Healthcheck Script, and the associated documentation is in Ensemble under the "Libra System Admin Documents" area:
 ####################################################### "GoB Phase 1 - Oracle_Postgres DB Checks_v11.6_MAP.docx" is the latest version as of 18/10/2024
-echo "Script Version 8.9: sftp debug ip change"
+echo "Script Version 9.0: sftp"
 echo "Designed by Mark A. Porter"
 OPDIR="/tmp/ams-reporting/"
 mkdir $OPDIR
@@ -964,8 +964,8 @@ mv $OUTFILE_STATS $OUTFILE_STATS.csv
 ############################################################################
 ### Push CSV file to BAIS so it can be ingested and displayed in the AMD ###
 ############################################################################
-stfp_endpoint=10.225.251.4
-#stfp_endpoint=10.25.251.4
+sfto_endpoint=10.225.251.4
+#sftp_endpoint=10.25.251.4
 sftp_username=amdash_edb
 sftp_password=Unf1tted-caval1er-departed
 
