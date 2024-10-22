@@ -968,18 +968,23 @@ sftp_endpoint=10.225.251.4
 sftp_username=amdash_edb
 #sftp_password=Unf1tted-caval1er-departed
 
+echo "cat of /mnt/secrets/$KV_NAME/sftp-pvt-key:"
+cat /mnt/secrets/$KV_NAME/sftp-pvt-key
+ls -altr /mnt/secrets/$KV_NAME/
+ls -altr /tmp/ams-reporting/
+
 if [ -e /mnt/secrets/$KV_NAME/sftp-endpoint ] && [ -e /mnt/secrets/$KV_NAME/sftp-username ];then
 
 sftp_endpoint=$(cat /mnt/secrets/$KV_NAME/sftp-endpoint)
 sftp_username=$(cat /mnt/secrets/$KV_NAME/sftp-username)
 #sftp_password=$(cat /mnt/secrets/$KV_NAME/sftp-password)
-ssh-keygen -t rsa -b 4096 -f /tmp/ams-reporting/ams-reporting -N 'djporta is passphrase'
-mv /tmp/ams-reporting/ams-reporting.pub /tmp/ams-reporting/ams-reporting.pub.key
-mv /tmp/ams-reporting/ams-reporting /tmp/ams-reporting/ams-reporting.pvt.key
-echo "cat of ams-reporting.pub.key:"
-cat /tmp/ams-reporting/ams-reporting.pub.key
-echo "cat of ams-reporting.pvt.key:"
-cat /tmp/ams-reporting/ams-reporting.pvt.key
+#ssh-keygen -t rsa -b 4096 -f /tmp/ams-reporting/ams-reporting -N 'djporta is passphrase'
+#mv /tmp/ams-reporting/ams-reporting.pub /tmp/ams-reporting/ams-reporting.pub.key
+#mv /tmp/ams-reporting/ams-reporting /tmp/ams-reporting/ams-reporting.pvt.key
+#echo "cat of ams-reporting.pub.key:"
+#cat /tmp/ams-reporting/ams-reporting.pub.key
+#echo "cat of ams-reporting.pvt.key:"
+#cat /tmp/ams-reporting/ams-reporting.pvt.key
 #check_key_present=`cat /mnt/secrets/$KV_NAME/sftp-pvt-key | wc -l | xargs`
 
 #if [[ $check_key_present -eq 0 ]];then
