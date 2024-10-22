@@ -969,7 +969,7 @@ sftp_endpoint=10.225.251.4
 sftp_username=amdash_edb
 #sftp_password=Unf1tted-caval1er-departed
 
-if [ -e /mnt/secrets/$KV_NAME/sftp-endpoint ] && [ -e /mnt/secrets/$KV_NAME/sftp-username ];then
+#if [ -e /mnt/secrets/$KV_NAME/sftp-endpoint ] && [ -e /mnt/secrets/$KV_NAME/sftp-username ];then
 
 sftp_endpoint=$(cat /mnt/secrets/$KV_NAME/sftp-endpoint)
 sftp_username=$(cat /mnt/secrets/$KV_NAME/sftp-username)
@@ -1000,8 +1000,8 @@ EOF
 
 echo "$(date "+%d/%m/%Y %T") The CSV file has been successfully uploaded to BAIS" >> $OUTFILE_LOG
 
-else
+#else
 
-echo "Cannot access BAIS KeyVault connection variables"
+#echo "Cannot access BAIS KeyVault connection variables"
 
-fi
+#fi
