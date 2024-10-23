@@ -29,12 +29,6 @@ postgres_host=`echo $postgres_url | awk -F"\/\/" {'print $2'} | awk -F":" {'prin
 postgres_port=`echo $postgres_url | awk -F":" {'print $4'} | awk -F"\/" {'print $1'}`
 postgres_db=`echo $postgres_url | awk -F":" {'print $4'} | awk -F"\/" {'print $2'}`
 
-#postgres_username=edb_amd
-#postgres_password=edb_read_0nly
-#postgres_host=libragob-test.postgres.database.azure.com
-#postgres_port=5432
-#postgres_db=postgres
-
 # ConfiscationDB connection variables
 confiscation_username=$(cat /mnt/secrets/$KV_NAME/confiscation-datasource-username)
 confiscation_password=$(cat /mnt/secrets/$KV_NAME/confiscation-datasource-password)
@@ -58,24 +52,6 @@ maintenance_url=$(cat /mnt/secrets/$KV_NAME/maintenance-datasource-url)
 maintenance_host=`echo $maintenance_url | awk -F"\/\/" {'print $2'} | awk -F":" {'print $1'}`
 maintenance_port=`echo $maintenance_url | awk -F":" {'print $4'} | awk -F"\/" {'print $1'}`
 maintenance_db=`echo $maintenance_url | awk -F":" {'print $4'} | awk -F"\/" {'print $2'}`
-
-#confiscation_username=edb_amd
-#confiscation_password=edb_read_0nly
-#confiscation_host=libragob-test.postgres.database.azure.com
-#confiscation_port=5432
-#confiscation_db=nm_confiscation_db
-
-#fines_username=edb_amd
-#fines_password=edb_read_0nly
-#fines_host=libragob-test.postgres.database.azure.com
-#fines_port=5432
-#fines_db=nm_fines_db
-
-#maintenance_username=edb_amd
-#maintenance_password=edb_read_0nly
-#maintenance_host=libragob-test.postgres.database.azure.com
-#maintenance_port=5432
-#maintenance_db=nm_maintenance_db
 ####################################################### CHECK 1
 echo "[Check #1: Locked Schemas]" >> $OUTFILE
 echo "DateTime,CheckName,Status,Result" >> $OUTFILE
@@ -965,11 +941,6 @@ mv $OUTFILE_STATS $OUTFILE_STATS.csv
 ############################################################################
 ### Push CSV file to BAIS so it can be ingested and displayed in the AMD ###
 ############################################################################
-sftp_endpoint=10.225.251.4
-#sftp_endpoint=10.25.251.4
-sftp_username=amdash_edb
-#sftp_password=Unf1tted-caval1er-departed
-
 echo "cat of /mnt/secrets/$KV_NAME/sftp-pvt-key:"
 cat /mnt/secrets/$KV_NAME/sftp-pvt-key
 #ls -altr /mnt/secrets/$KV_NAME/
@@ -979,7 +950,6 @@ if [ -e /mnt/secrets/$KV_NAME/sftp-endpoint ] && [ -e /mnt/secrets/$KV_NAME/sftp
 
 sftp_endpoint=$(cat /mnt/secrets/$KV_NAME/sftp-endpoint)
 sftp_username=$(cat /mnt/secrets/$KV_NAME/sftp-username)
-#sftp_password=$(cat /mnt/secrets/$KV_NAME/sftp-password)
 #ssh-keygen -t rsa -b 4096 -f /tmp/ams-reporting/ams-reporting -N 'djporta is passphrase'
 #mv /tmp/ams-reporting/ams-reporting.pub /tmp/ams-reporting/ams-reporting.pub.key
 #mv /tmp/ams-reporting/ams-reporting /tmp/ams-reporting/ams-reporting.pvt.key
