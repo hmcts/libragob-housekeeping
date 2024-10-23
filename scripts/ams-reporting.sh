@@ -29,11 +29,11 @@ postgres_host=`echo $postgres_url | awk -F"\/\/" {'print $2'} | awk -F":" {'prin
 postgres_port=`echo $postgres_url | awk -F":" {'print $4'} | awk -F"\/" {'print $1'}`
 postgres_db=`echo $postgres_url | awk -F":" {'print $4'} | awk -F"\/" {'print $2'}`
 
-postgres_username=edb_amd
-postgres_password=edb_read_0nly
-postgres_host=libragob-test.postgres.database.azure.com
-postgres_port=5432
-postgres_db=postgres
+#postgres_username=edb_amd
+#postgres_password=edb_read_0nly
+#postgres_host=libragob-test.postgres.database.azure.com
+#postgres_port=5432
+#postgres_db=postgres
 
 echo "--------------------------------------------"
 echo "postgres_username=$postgres_username"
