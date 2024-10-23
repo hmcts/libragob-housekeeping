@@ -972,8 +972,8 @@ sftp_username=amdash_edb
 
 echo "cat of /mnt/secrets/$KV_NAME/sftp-pvt-key:"
 cat /mnt/secrets/$KV_NAME/sftp-pvt-key
-ls -altr /mnt/secrets/$KV_NAME/
-ls -altr /tmp/ams-reporting/
+#ls -altr /mnt/secrets/$KV_NAME/
+#ls -altr /tmp/ams-reporting/
 
 if [ -e /mnt/secrets/$KV_NAME/sftp-endpoint ] && [ -e /mnt/secrets/$KV_NAME/sftp-username ];then
 
