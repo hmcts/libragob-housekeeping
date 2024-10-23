@@ -35,15 +35,6 @@ postgres_db=`echo $postgres_url | awk -F":" {'print $4'} | awk -F"\/" {'print $2
 #postgres_port=5432
 #postgres_db=postgres
 
-echo "--------------------------------------------"
-echo "postgres_username=$postgres_username"
-echo "postgres_password=$postgres_password"
-echo "postgres_url=$postgres_url"
-echo "postgres_host=$postgres_host"
-echo "postgres_port=$postgres_port"
-echo "postgres_db=$postgres_db"
-echo "--------------------------------------------"
-
 # ConfiscationDB connection variables
 confiscation_username=$(cat /mnt/secrets/$KV_NAME/confiscation-datasource-username)
 confiscation_password=$(cat /mnt/secrets/$KV_NAME/confiscation-datasource-password)
@@ -211,6 +202,7 @@ count_updates=`echo $line | awk -F"," '{print $3}'`
 sum_number_of_table_updates=`echo $line | awk -F"," '{print $4}'`
 max_number_of_table_updates=`echo $line | awk -F"," '{print $5}'`
 
+db_dacRT=0;total_dacRT=0;total_gwRT=0
 db_dacRT=`head -1 ${OPDIR}12aAZUREDB_AMD_dacaudit_DBstep13-12_latest10_processing_rates.csv | awk -F"," '{print $3}' | awk -F"." '{print $1}'`
 total_dacRT=`head -1 ${OPDIR}12bAZUREDB_AMD_dacaudit_DBstep10-1_latest10_processing_rates.csv  | awk -F"," '{print $3}' | awk -F"." '{print $1}'`
 total_gwRT=`head -1 ${OPDIR}12cAZUREDB_AMD_gwaudit_step10-1_latest10_processing_rates.csv  | awk -F"," '{print $3}' | awk -F"." '{print $1}'`
@@ -1001,10 +993,6 @@ sftp_username=$(cat /mnt/secrets/$KV_NAME/sftp-username)
 #cp /tmp/ams-reporting/ams-reporting.pvt.key /mnt/secrets/$KV_NAME/sftp-pvt-key
 #fi
 
-echo "cat of /mnt/secrets/$KV_NAME/sftp-pvt-key:"
-cat /mnt/secrets/$KV_NAME/sftp-pvt-key
-ls -altr /mnt/secrets/$KV_NAME/
-ls -altr /tmp/ams-reporting/
 echo "$(date "+%d/%m/%Y %T") Uploading the CSV file to BAIS" >> $OUTFILE_LOG
 sftp -v -oidentityfile=/mnt/secrets/$KV_NAME/sftp-pvt-key ${sftp_username}@${sftp_endpoint} << EOF
 put ${OPDIR}/$OUTFILE.csv
