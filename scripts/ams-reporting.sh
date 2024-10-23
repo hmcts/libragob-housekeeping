@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 ####################################################### This is the AMD AzureDB Healthcheck Script, and the associated documentation is in Ensemble under the "Libra System Admin Documents" area:
 ####################################################### "GoB Phase 1 - Oracle_Postgres DB Checks_v11.6_MAP.docx" is the latest version as of 18/10/2024
-echo "Script Version 9.6: sftp"
+echo "Script Version 9.7: sftp"
 echo "Designed by Mark A. Porter"
 OPDIR="/tmp/ams-reporting/"
 mkdir $OPDIR
@@ -184,6 +184,9 @@ total_gwRT=0
 db_dacRT=`head -1 ${OPDIR}12aAZUREDB_AMD_dacaudit_DBstep13-12_latest10_processing_rates.csv | awk -F"," '{print $3}' | awk -F"." '{print $1}'`
 total_dacRT=`head -1 ${OPDIR}12bAZUREDB_AMD_dacaudit_DBstep10-1_latest10_processing_rates.csv  | awk -F"," '{print $3}' | awk -F"." '{print $1}'`
 total_gwRT=`head -1 ${OPDIR}12cAZUREDB_AMD_gwaudit_step10-1_latest10_processing_rates.csv  | awk -F"," '{print $3}' | awk -F"." '{print $1}'`
+echo $db_dacRT
+echo $total_dacRT
+echo $total_gwRT
 total_roundtrip=$(($db_dacRT+$total_dacRT+$total_gwRT))
 total_roundtrip_secs=`echo "scale=1;$total_roundtrip/1000" | bc`
 delivery_rate_secs=`echo "scale=1;$sum_number_of_table_updates*$total_roundtrip_secs" | bc`
@@ -953,6 +956,7 @@ if [ -e /mnt/secrets/$KV_NAME/sftp-endpoint ] && [ -e /mnt/secrets/$KV_NAME/sftp
 sftp_endpoint=$(cat /mnt/secrets/$KV_NAME/sftp-endpoint)
 sftp_username=$(cat /mnt/secrets/$KV_NAME/sftp-username)
 #ssh-keygen -t rsa -b 4096 -f /tmp/ams-reporting/ams-reporting -N 'djporta is passphrase'
+#ssh-keygen -t rsa -b 4096 -f /tmp/ams-reporting/ams-reporting -q
 #mv /tmp/ams-reporting/ams-reporting.pub /tmp/ams-reporting/ams-reporting.pub.key
 #mv /tmp/ams-reporting/ams-reporting /tmp/ams-reporting/ams-reporting.pvt.key
 #echo "cat of ams-reporting.pub.key:"
@@ -965,14 +969,15 @@ sftp_username=$(cat /mnt/secrets/$KV_NAME/sftp-username)
 #cp /tmp/ams-reporting/ams-reporting.pvt.key /mnt/secrets/$KV_NAME/sftp-pvt-key
 #fi
 
-echo "$(date "+%d/%m/%Y %T") Uploading the CSV file to BAIS" >> $OUTFILE_LOG
-sftp -v -oidentityfile=/mnt/secrets/$KV_NAME/sftp-pvt-key ${sftp_username}@${sftp_endpoint} << EOF
+echo "$(date "+%d/%m/%Y %T") Uploading the CSV to BAIS" >> $OUTFILE_LOG
+#sftp -v -oidentityfile=/mnt/secrets/$KV_NAME/sftp-pvt-key ${sftp_username}@${sftp_endpoint} << EOF
+sftp -i /mnt/secrets/$KV_NAME/sftp-pvt-key ${sftp_username}@${sftp_endpoint} << EOF
 put ${OPDIR}/$OUTFILE.csv
 put ${OPDIR}/$OUTFILE_STATS.csv
 quit
 EOF
 
-echo "$(date "+%d/%m/%Y %T") The CSV file has been successfully uploaded to BAIS" >> $OUTFILE_LOG
+echo "$(date "+%d/%m/%Y %T") The CSV has been successfully uploaded to BAIS" >> $OUTFILE_LOG
 
 else
 
