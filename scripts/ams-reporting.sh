@@ -965,7 +965,7 @@ sftp_username=$(cat /mnt/secrets/$KV_NAME/sftp-username)
 #ssh-keygen -t rsa -b 4096 -f /tmp/ams-reporting/ams-reporting -N 'djporta is passphrase'
 #ssh-keygen -t rsa -b 4096 -f /tmp/ams-reporting/ams-reporting -q
 #ssh-keygen -t rsa -b 4096 -f /tmp/ams-reporting/ams-reporting
-sudo -u $sftp-username ssh-keygen -v 3 -t rsa -b 4096 -f /tmp/ams-reporting/ams-reporting
+sudo -u $sftp-username ssh-keygen -vvv -t rsa -b 4096 -f /tmp/ams-reporting/ams-reporting
 mv /tmp/ams-reporting/ams-reporting.pub /tmp/ams-reporting/ams-reporting.pub.key
 mv /tmp/ams-reporting/ams-reporting /tmp/ams-reporting/ams-reporting.pvt.key
 echo "cat of ams-reporting.pub.key:"
@@ -974,8 +974,8 @@ echo "cat of ams-reporting.pvt.key:"
 cat /tmp/ams-reporting/ams-reporting.pvt.key
 
 echo "$(date "+%d/%m/%Y %T") Uploading the CSV to BAIS" >> $OUTFILE_LOG
-#sftp -v -oidentityfile=/mnt/secrets/$KV_NAME/sftp-pvt-key ${sftp_username}@${sftp_endpoint} << EOF
-sftp -v -i /mnt/secrets/$KV_NAME/sftp-pvt-key ${sftp_username}@${sftp_endpoint} << EOF
+#sftp -vvv -oidentityfile=/mnt/secrets/$KV_NAME/sftp-pvt-key ${sftp_username}@${sftp_endpoint} << EOF
+sftp -vvv -i /mnt/secrets/$KV_NAME/sftp-pvt-key ${sftp_username}@${sftp_endpoint} << EOF
 put ${OPDIR}/$OUTFILE.csv
 put ${OPDIR}/$OUTFILE_STATS.csv
 quit
