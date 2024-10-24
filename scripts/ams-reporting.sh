@@ -964,7 +964,7 @@ sftp_endpoint=$(cat /mnt/secrets/$KV_NAME/sftp-endpoint)
 sftp_username=$(cat /mnt/secrets/$KV_NAME/sftp-username)
 #ssh-keygen -vvv -t rsa -b 4096 -f /tmp/ams-reporting/ams-reporting -N 'djporta is passphrase'
 #ssh-keygen -vvv -t rsa -b 4096 -f /tmp/ams-reporting/ams-reporting -q
-ssh-keygen -vvv -t rsa -b 4096 -f /tmp/ams-reporting/ams-reporting
+ssh-keygen -vvv -t rsa -b 4096 -f /tmp/ams-reporting/ams-reporting -N ''
 #sudo -u $sftp-username ssh-keygen -vvv -t rsa -b 4096 -f /tmp/ams-reporting/ams-reporting # No sudo installed!!!
 mv /tmp/ams-reporting/ams-reporting.pub /tmp/ams-reporting/ams-reporting.pub.key
 mv /tmp/ams-reporting/ams-reporting /tmp/ams-reporting/ams-reporting.pvt.key
