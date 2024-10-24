@@ -973,8 +973,8 @@ sftp_username=$(cat /mnt/secrets/$KV_NAME/sftp-username)
 
 echo "$(date "+%d/%m/%Y %T") Uploading the CSV to BAIS" >> $OUTFILE_LOG
 #sftp -v -oidentityfile=/mnt/secrets/$KV_NAME/sftp-pvt-key ${sftp_username}@${sftp_endpoint} << EOF
-sftp -v -oidentityfile=/mnt/secrets/$KV_NAME/sftp-pvt-kexxxxxxxxxxxxxxxxxxy ${sftp_username}@${sftp_endpoint} << EOF
 #sftp -v -i /mnt/secrets/$KV_NAME/sftp-pvt-key ${sftp_username}@${sftp_endpoint} << EOF
+sftp -v -i /mnt/secrets/$KV_NAME/sftp-pvt-keyxxxxxxxxxxxxxxxx ${sftp_username}@${sftp_endpoint} << EOF
 put ${OPDIR}/$OUTFILE.csv
 put ${OPDIR}/$OUTFILE_STATS.csv
 quit
