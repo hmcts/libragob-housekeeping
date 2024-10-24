@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 ####################################################### This is the AMD AzureDB Healthcheck Script, and the associated documentation is in Ensemble under the "Libra System Admin Documents" area:
 ####################################################### "GoB Phase 1 - Oracle_Postgres DB Checks_v11.6_MAP.docx" is the latest version as of 18/10/2024
-echo "Script Version 9.7: sftp"
+echo "Script Version 9.8: sftp"
 echo "Designed by Mark A. Porter"
 OPDIR="/tmp/ams-reporting/"
 mkdir $OPDIR
@@ -178,15 +178,30 @@ count_updates=`echo $line | awk -F"," '{print $3}'`
 sum_number_of_table_updates=`echo $line | awk -F"," '{print $4}'`
 max_number_of_table_updates=`echo $line | awk -F"," '{print $5}'`
 
-db_dacRT=0
-total_dacRT=0
-total_gwRT=0
 db_dacRT=`head -1 ${OPDIR}12aAZUREDB_AMD_dacaudit_DBstep13-12_latest10_processing_rates.csv | awk -F"," '{print $3}' | awk -F"." '{print $1}'`
 total_dacRT=`head -1 ${OPDIR}12bAZUREDB_AMD_dacaudit_DBstep10-1_latest10_processing_rates.csv  | awk -F"," '{print $3}' | awk -F"." '{print $1}'`
 total_gwRT=`head -1 ${OPDIR}12cAZUREDB_AMD_gwaudit_step10-1_latest10_processing_rates.csv  | awk -F"," '{print $3}' | awk -F"." '{print $1}'`
+
 echo $db_dacRT
 echo $total_dacRT
 echo $total_gwRT
+
+if [ -z $db_dacRT ];then
+db_dacRT=0
+fi
+
+if [ -z $total_dacRT ];then
+total_dacRT=0
+fi
+
+if [ -z $total_gwRT ];then
+total_gwRT=0
+fi
+
+echo $db_dacRT
+echo $total_dacRT
+echo $total_gwRT
+
 total_roundtrip=$(($db_dacRT+$total_dacRT+$total_gwRT))
 total_roundtrip_secs=`echo "scale=1;$total_roundtrip/1000" | bc`
 delivery_rate_secs=`echo "scale=1;$sum_number_of_table_updates*$total_roundtrip_secs" | bc`
