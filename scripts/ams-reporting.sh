@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 ####################################################### This is the AMD AzureDB Healthcheck Script, and the associated documentation is in Ensemble under the "Libra System Admin Documents" area:
 ####################################################### "GoB Phase 1 - Oracle_Postgres DB Checks_v11.6_MAP.docx" is the latest version as of 18/10/2024
-echo "Script Version 10.6: ubuntu"
+echo "Script Version 10.7: ssh-rsa enable"
 echo "Designed by Mark A. Porter"
 OPDIR="/tmp/ams-reporting/"
 mkdir $OPDIR
@@ -979,7 +979,8 @@ cat /tmp/ams-reporting/ams-reporting.pvt.key
 
 echo "$(date "+%d/%m/%Y %T") Uploading the CSV to BAIS" >> $OUTFILE_LOG
 #sftp -vvv -oidentityfile=/mnt/secrets/$KV_NAME/sftp-pvt-key ${sftp_username}@${sftp_endpoint} << EOF
-sftp -vvv -i /mnt/secrets/$KV_NAME/sftp-pvt-key ${sftp_username}@${sftp_endpoint} << EOF
+#sftp -vvv -i /mnt/secrets/$KV_NAME/sftp-pvt-key ${sftp_username}@${sftp_endpoint} << EOF
+sftp -vvv -oHostKeyAlgorithms=+ssh-rsa -i /mnt/secrets/$KV_NAME/sftp-pvt-key ${sftp_username}@${sftp_endpoint} << EOF
 put ${OPDIR}/$OUTFILE.csv
 put ${OPDIR}/$OUTFILE_STATS.csv
 quit
