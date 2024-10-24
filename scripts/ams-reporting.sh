@@ -182,10 +182,6 @@ db_dacRT=`head -1 ${OPDIR}12aAZUREDB_AMD_dacaudit_DBstep13-12_latest10_processin
 total_dacRT=`head -1 ${OPDIR}12bAZUREDB_AMD_dacaudit_DBstep10-1_latest10_processing_rates.csv  | awk -F"," '{print $3}' | awk -F"." '{print $1}'`
 total_gwRT=`head -1 ${OPDIR}12cAZUREDB_AMD_gwaudit_step10-1_latest10_processing_rates.csv  | awk -F"," '{print $3}' | awk -F"." '{print $1}'`
 
-echo $db_dacRT
-echo $total_dacRT
-echo $total_gwRT
-
 if [ -z $db_dacRT ];then
 db_dacRT=0
 fi
@@ -197,10 +193,6 @@ fi
 if [ -z $total_gwRT ];then
 total_gwRT=0
 fi
-
-echo $db_dacRT
-echo $total_dacRT
-echo $total_gwRT
 
 total_roundtrip=$(($db_dacRT+$total_dacRT+$total_gwRT))
 total_roundtrip_secs=`echo "scale=1;$total_roundtrip/1000" | bc`
