@@ -970,11 +970,6 @@ sftp_username=$(cat /mnt/secrets/$KV_NAME/sftp-username)
 #cat /tmp/ams-reporting/ams-reporting.pub.key
 #echo "cat of ams-reporting.pvt.key:"
 #cat /tmp/ams-reporting/ams-reporting.pvt.key
-#check_key_present=`cat /mnt/secrets/$KV_NAME/sftp-pvt-key | wc -l | xargs`
-
-#if [[ $check_key_present -eq 0 ]];then
-#cp /tmp/ams-reporting/ams-reporting.pvt.key /mnt/secrets/$KV_NAME/sftp-pvt-key
-#fi
 
 echo "$(date "+%d/%m/%Y %T") Uploading the CSV to BAIS" >> $OUTFILE_LOG
 #sftp -v -oidentityfile=/mnt/secrets/$KV_NAME/sftp-pvt-key ${sftp_username}@${sftp_endpoint} << EOF
