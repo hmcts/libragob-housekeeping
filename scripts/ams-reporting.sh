@@ -994,5 +994,3 @@ else
 echo "Cannot access BAIS KeyVault connection variables"
 
 fi
-
-cat /dev/tty
