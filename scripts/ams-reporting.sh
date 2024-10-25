@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 ####################################################### This is the AMD AzureDB Healthcheck Script, and the associated documentation is in Ensemble under the "Libra System Admin Documents" area:
 ####################################################### "GoB Phase 1 - Oracle_Postgres DB Checks_v11.6_MAP.docx" is the latest version as of 18/10/2024
-echo "Script Version 10.7: ssh-rsa enable"
+echo "Script Version 10.8: passphrase"
 echo "Designed by Mark A. Porter"
 OPDIR="/tmp/ams-reporting/"
 mkdir $OPDIR
@@ -968,7 +968,8 @@ echo $sftp_username
 echo "------------------------------"
 #ssh-keygen -vvv -t rsa -b 4096 -f /tmp/ams-reporting/ams-reporting -N 'djporta is passphrase'
 #ssh-keygen -vvv -t rsa -b 4096 -f /tmp/ams-reporting/ams-reporting -q
-ssh-keygen -vvv -t rsa -b 4096 -f /tmp/ams-reporting/ams-reporting -N ''
+#ssh-keygen -vvv -t rsa -b 4096 -f /tmp/ams-reporting/ams-reporting -N ''
+ssh-keygen -vvv -t rsa -b 4096 -f /tmp/ams-reporting/ams-reporting -N djportaIsPassphrase
 #sudo -u $sftp-username ssh-keygen -vvv -t rsa -b 4096 -f /tmp/ams-reporting/ams-reporting # No sudo installed!!!
 mv /tmp/ams-reporting/ams-reporting.pub /tmp/ams-reporting/ams-reporting.pub.key
 mv /tmp/ams-reporting/ams-reporting /tmp/ams-reporting/ams-reporting.pvt.key
