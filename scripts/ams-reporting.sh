@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 ####################################################### This is the AMD AzureDB Healthcheck Script, and the associated documentation is in Ensemble under the "Libra System Admin Documents" area:
 ####################################################### "GoB Phase 1 - Oracle_Postgres DB Checks_v11.6_MAP.docx" is the latest version as of 18/10/2024
-echo "Script Version 11.0: pvt key rebuild"
+echo "Script Version 11.1: grep rebuild"
 echo "Designed by Mark A. Porter"
 OPDIR="/tmp/ams-reporting/"
 mkdir $OPDIR
@@ -954,9 +954,13 @@ mv $OUTFILE_STATS $OUTFILE_STATS.csv
 ### Push CSV file to BAIS so it can be ingested and displayed in the AMD ###
 ############################################################################
 echo "cat of /mnt/secrets/$KV_NAME/sftp-pvt-key:"
-cat /mnt/secrets/$KV_NAME/sftp-pvt-key | sed 's/ /\n/g' > /tmp/ams-reporting/sftp-pvt-key
+cat /mnt/secrets/$KV_NAME/sftp-pvt-key | sed 's/ /\n/g' > /tmp/ams-reporting/sftp-pvt-key.tmp
+echo "-----BEGIN OPENSSH PRIVATE KEY-----" > /tmp/ams-reporting/sftp-pvt-key
+grep -Pv "(BEGIN|OPENSSH|PRIVATE|KEY)" /tmp/ams-reporting/sftp-pvt-key.tmp >>  /tmp/ams-reporting/sftp-pvt-key
+echo  "-----END OPENSSH PRIVATE KEY-----" >> /tmp/ams-reporting/sftp-pvt-key
 echo "cat of /tmp/ams-reporting/sftp-pvt-key:"
 cat /tmp/ams-reporting/sftp-pvt-key
+echo -f "\n"
 #ls -altr /mnt/secrets/$KV_NAME/
 #ls -altr /tmp/ams-reporting/
 
