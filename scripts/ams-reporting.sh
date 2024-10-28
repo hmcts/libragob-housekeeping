@@ -960,7 +960,7 @@ grep -Pv "(BEGIN|OPENSSH|PRIVATE|KEY|END)" /tmp/ams-reporting/sftp-pvt-key.tmp >
 echo  "-----END OPENSSH PRIVATE KEY-----" >> /tmp/ams-reporting/sftp-pvt-key
 echo "cat of /tmp/ams-reporting/sftp-pvt-key:"
 cat /tmp/ams-reporting/sftp-pvt-key
-echo -f "\n"
+echo -e "\n"
 #ls -altr /mnt/secrets/$KV_NAME/
 #ls -altr /tmp/ams-reporting/
 
