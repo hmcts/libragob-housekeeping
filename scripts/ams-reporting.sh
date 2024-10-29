@@ -953,13 +953,13 @@ mv $OUTFILE_STATS $OUTFILE_STATS.csv
 ############################################################################
 ### Push CSV file to BAIS so it can be ingested and displayed in the AMD ###
 ############################################################################
-echo "cat of /mnt/secrets/$KV_NAME/sftp-pvt-key ORIG:"
+echo "cat of /mnt/secrets/$KV_NAME/sftp-pvt-key KV:"
 cat /mnt/secrets/$KV_NAME/sftp-pvt-key
 cat /mnt/secrets/$KV_NAME/sftp-pvt-key | sed 's/ /\n/g' > /tmp/ams-reporting/sftp-pvt-key.tmp
 echo "-----BEGIN OPENSSH PRIVATE KEY-----" > /tmp/ams-reporting/sftp-pvt-key
 grep -Pv "(BEGIN|OPENSSH|PRIVATE|KEY|END)" /tmp/ams-reporting/sftp-pvt-key.tmp >> /tmp/ams-reporting/sftp-pvt-key
 echo  "-----END OPENSSH PRIVATE KEY-----" >> /tmp/ams-reporting/sftp-pvt-key
-echo "cat of /tmp/ams-reporting/sftp-pvt-key NEW:"
+echo "cat of /tmp/ams-reporting/sftp-pvt-key REBUILT:"
 cat /tmp/ams-reporting/sftp-pvt-key
 sed -e 's/[\t ]//g;/^$/d' /tmp/ams-reporting/sftp-pvt-key
 echo "cat of /tmp/ams-reporting/sftp-pvt-key CLEANED:"
