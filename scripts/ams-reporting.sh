@@ -961,7 +961,7 @@ grep -Pv "(BEGIN|OPENSSH|PRIVATE|KEY|END)" /tmp/ams-reporting/sftp-pvt-key.tmp >
 echo  "-----END OPENSSH PRIVATE KEY-----" >> /tmp/ams-reporting/sftp-pvt-key
 echo "cat of /tmp/ams-reporting/sftp-pvt-key REBUILT:"
 cat /tmp/ams-reporting/sftp-pvt-key
-sed -e 's/[\t ]//g;/^$/d' /tmp/ams-reporting/sftp-pvt-key
+cat /tmp/ams-reporting/sftp-pvt-key | sed -e 's/[\t ]//g;/^$/d' > /tmp/ams-reporting/sftp-pvt-key
 echo "cat of /tmp/ams-reporting/sftp-pvt-key CLEANED:"
 cat /tmp/ams-reporting/sftp-pvt-key
 #printf "\n"
