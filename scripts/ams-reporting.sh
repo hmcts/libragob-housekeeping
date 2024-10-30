@@ -973,12 +973,6 @@ if [ -e /mnt/secrets/$KV_NAME/sftp-endpoint ] && [ -e /mnt/secrets/$KV_NAME/sftp
 
 sftp_endpoint=$(cat /mnt/secrets/$KV_NAME/sftp-endpoint)
 sftp_username=$(cat /mnt/secrets/$KV_NAME/sftp-username)
-#sftp_username=ubuntu
-#echo "------------------------------"
-#echo $sftp_username
-#echo "------------------------------"
-#ssh-keygen -vvv -t rsa -b 4096 -f /tmp/ams-reporting/ams-reporting -q
-#ssh-keygen -vvv -t rsa -b 4096 -f /tmp/ams-reporting/ams-reporting -N djportaIsPassphrase
 #ssh-keygen -vvv -t rsa -b 4096 -f /tmp/ams-reporting/ams-reporting -N ""
 #mv /tmp/ams-reporting/ams-reporting.pub /tmp/ams-reporting/ams-reporting.pub.key
 #mv /tmp/ams-reporting/ams-reporting /tmp/ams-reporting/ams-reporting.pvt.key
@@ -988,9 +982,6 @@ sftp_username=$(cat /mnt/secrets/$KV_NAME/sftp-username)
 #cat /tmp/ams-reporting/ams-reporting.pvt.key
 
 echo "$(date "+%d/%m/%Y %T") Uploading the CSV to BAIS" >> $OUTFILE_LOG
-#sftp -vvv -oidentityfile=/mnt/secrets/$KV_NAME/sftp-pvt-key ${sftp_username}@${sftp_endpoint} << EOF
-#sftp -vvv -i /mnt/secrets/$KV_NAME/sftp-pvt-key ${sftp_username}@${sftp_endpoint} << EOF
-#sftp -vvv -oHostKeyAlgorithms=+ssh-rsa -i /mnt/secrets/$KV_NAME/sftp-pvt-key ${sftp_username}@${sftp_endpoint} << EOF
 sftp -oStrictHostKeyChecking=no -oHostKeyAlgorithms=+ssh-rsa -i /tmp/ams-reporting/sftp-pvt-key ${sftp_username}@${sftp_endpoint} << EOF
 put $OUTFILE.csv
 put $OUTFILE_STATS.csv
