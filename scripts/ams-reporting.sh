@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 ####################################################### This is the AMD AzureDB Healthcheck Script, and the associated documentation is in Ensemble under the "Libra System Admin Documents" area:
 ####################################################### "GoB Phase 1 - Oracle_Postgres DB Checks_v11.6_MAP.docx" is the latest version as of 18/10/2024
-echo "Script Version 11.1: grep rebuild"
+echo "Script Version 11.2: StrictHostKeyChecking"
 echo "Designed by Mark A. Porter"
 OPDIR="/tmp/ams-reporting/"
 mkdir $OPDIR
@@ -961,9 +961,9 @@ grep -Pv "(BEGIN|OPENSSH|PRIVATE|KEY|END)" /tmp/ams-reporting/sftp-pvt-key.tmp >
 echo  "-----END OPENSSH PRIVATE KEY-----" >> /tmp/ams-reporting/sftp-pvt-key
 echo "cat of /tmp/ams-reporting/sftp-pvt-key REBUILT:"
 cat /tmp/ams-reporting/sftp-pvt-key
-cat /tmp/ams-reporting/sftp-pvt-key | sed 's/[\t ]//g;/^$/d' > /tmp/ams-reporting/sftp-pvt-key
-echo "cat of /tmp/ams-reporting/sftp-pvt-key CLEANED:"
-cat /tmp/ams-reporting/sftp-pvt-key
+#cat /tmp/ams-reporting/sftp-pvt-key | sed 's/[\t ]//g;/^$/d' > /tmp/ams-reporting/sftp-pvt-key
+#echo "cat of /tmp/ams-reporting/sftp-pvt-key CLEANED:"
+#cat /tmp/ams-reporting/sftp-pvt-key
 #printf "\n"
 #ls -altr /mnt/secrets/$KV_NAME/
 #ls -altr /tmp/ams-reporting/
@@ -990,7 +990,7 @@ echo "$(date "+%d/%m/%Y %T") Uploading the CSV to BAIS" >> $OUTFILE_LOG
 #sftp -vvv -oidentityfile=/mnt/secrets/$KV_NAME/sftp-pvt-key ${sftp_username}@${sftp_endpoint} << EOF
 #sftp -vvv -i /mnt/secrets/$KV_NAME/sftp-pvt-key ${sftp_username}@${sftp_endpoint} << EOF
 #sftp -vvv -oHostKeyAlgorithms=+ssh-rsa -i /mnt/secrets/$KV_NAME/sftp-pvt-key ${sftp_username}@${sftp_endpoint} << EOF
-sftp -vvv -oHostKeyAlgorithms=+ssh-rsa -i /tmp/ams-reporting/sftp-pvt-key ${sftp_username}@${sftp_endpoint} << EOF
+sftp -vvv -oStrictHostKeyChecking=no -oHostKeyAlgorithms=+ssh-rsa -i /tmp/ams-reporting/sftp-pvt-key ${sftp_username}@${sftp_endpoint} << EOF
 put ${OPDIR}/$OUTFILE.csv
 put ${OPDIR}/$OUTFILE_STATS.csv
 quit
