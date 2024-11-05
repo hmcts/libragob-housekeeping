@@ -914,17 +914,23 @@ echo "$(date "+%d/%m/%Y %T") Starting Check #13" >> $OUTFILE_LOG
 echo "$(date "+%d/%m/%Y %T") Connecting to $postgres_db database" >> $OUTFILE_LOG
 psql "sslmode=require host=${postgres_host} dbname=${postgres_db} port=${postgres_port} user=${postgres_username} password=${postgres_password}" --file=/sql/13AZUREDB_AMD_message_audit_id_INT_out_of_range.sql
 echo "$(date "+%d/%m/%Y %T") SQL for Check #13 has been run" >> $OUTFILE_LOG
+count=1
 
 while read -r line;do
 
-table_name=`echo $line | awk -F"," '{print $1}'`
-max_message_audit_id=`echo $line | awk -F"," '{print $2}'`
+if [[ $count == 1 ]];then
+tablename=DAC
+else
+tablename=Gateway
+fi
+
+max_message_audit_id=`echo $line | awk -F"," '{print $1}'`
 threshold_max_int=5 #2000000000 #2147483647 is max allowable
 
 if [[ $max_message_audit_id -gt $threshold_max_int ]];then
-echo "$(date "+%d/%m/%Y %T"),AZDB_message_audit_id_INT_out_of_range,DAC,$max_message_audit_id,$threshold_max_int,warn" >> $OUTFILE
+echo "$(date "+%d/%m/%Y %T"),AZDB_message_audit_id_INT_out_of_range,$tablename,$max_message_audit_id,$threshold_max_int,warn" >> $OUTFILE
 else
-echo "$(date "+%d/%m/%Y %T"),AZDB_message_audit_id_INT_out_of_range,Gateway,$max_message_audit_id,$threshold_max_int,ok" >> $OUTFILE
+echo "$(date "+%d/%m/%Y %T"),AZDB_message_audit_id_INT_out_of_range,$tablename,$max_message_audit_id,$threshold_max_int,ok" >> $OUTFILE
 fi
 
 done < ${OPDIR}13AZUREDB_AMD_message_audit_id_INT_out_of_range.csv
