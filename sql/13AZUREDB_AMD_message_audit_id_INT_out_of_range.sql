@@ -1,0 +1,1 @@
+\copy (select max(message_audit_id) from themis_dac.message_audit union all select max(message_audit_id) from themis_gateway.message_audit) To '/tmp/ams-reporting/13AZUREDB_AMD_message_audit_id_INT_out_of_range.csv' With CSV DELIMITER ','
