@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 ####################################################### This is the AMD AzureDB Healthcheck Script, and the associated documentation is in Ensemble under the "Libra System Admin Documents" area:
 ####################################################### "GoB Phase 1 - Oracle_Postgres DB Checks_v11.6_MAP.docx" is the latest version as of 18/10/2024
-echo "Script Version 11.7: debug off"
+echo "Script Version 11.8: Check 13"
 echo "Designed by Mark A. Porter"
 OPDIR="/tmp/ams-reporting/"
 mkdir $OPDIR
@@ -907,6 +907,29 @@ done < ${OPDIR}12AZUREDB_AMD_ora_rowscn_bug_seq_nums.csv
 echo "$(date "+%d/%m/%Y %T") Check #12 complete" >> $OUTFILE_LOG
 
 #fi
+####################################################### CHECK 13
+echo "[Check #13: DAC & Gateway message_audit_id INT out of range]" >> $OUTFILE
+echo "DateTime,Tablename,max(message_audit_id),Threshold,Result" >> $OUTFILE
+echo "$(date "+%d/%m/%Y %T") Starting Check #13" >> $OUTFILE_LOG
+echo "$(date "+%d/%m/%Y %T") Connecting to $postgres_db database" >> $OUTFILE_LOG
+psql "sslmode=require host=${postgres_host} dbname=${postgres_db} port=${postgres_port} user=${postgres_username} password=${postgres_password}" --file=/sql/13AZUREDB_AMD_message_audit_id_INT_out_of_range.sql
+echo "$(date "+%d/%m/%Y %T") SQL for Check #13 has been run" >> $OUTFILE_LOG
+
+while read -r line;do
+
+table_name=`echo $line | awk -F"," '{print $1}'`
+max_message_audit_id=`echo $line | awk -F"," '{print $2}'`
+threshold_max_int=5 #2000000000 #2147483647 is max allowable
+
+if [[ $max_message_audit_id -gt $threshold_max_int ]];then
+echo "$(date "+%d/%m/%Y %T"),AZDB_message_audit_id_INT_out_of_range,DAC,$max_message_audit_id,$threshold_max_int,warn" >> $OUTFILE
+else
+echo "$(date "+%d/%m/%Y %T"),AZDB_message_audit_id_INT_out_of_range,Gateway,$max_message_audit_id,$threshold_max_int,ok" >> $OUTFILE
+fi
+
+done < ${OPDIR}13AZUREDB_AMD_message_audit_id_INT_out_of_range.csv
+
+echo "$(date "+%d/%m/%Y %T") Check #13 complete" >> $OUTFILE_LOG
 ####################
 ### AMD Override ###
 ####################
