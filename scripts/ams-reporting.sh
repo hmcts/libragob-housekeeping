@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 ####################################################### This is the AMD AzureDB Healthcheck Script, and the associated documentation is in Ensemble under the "Libra System Admin Documents" area:
 ####################################################### "GoB Phase 1 - Oracle_Postgres DB Checks_v11.6_MAP.docx" is the latest version as of 18/10/2024
-echo "Script Version 12.2: checks 1&2 again"
+echo "Script Version 12.2: checks 1&2 gt"
 echo "Designed by Mark A. Porter"
 OPDIR="/tmp/ams-reporting/"
 mkdir $OPDIR
@@ -60,7 +60,7 @@ echo "$(date "+%d/%m/%Y %T") Connecting to $event_db database" >> $OUTFILE_LOG
 psql "sslmode=require host=${event_host} dbname=${event_db} port=${event_port} user=${event_username} password=${event_password}" --file=/sql/1AZUREDB_AMD_locked_schemas.sql
 echo "$(date "+%d/%m/%Y %T") SQL for Check #1 has been run" >> $OUTFILE_LOG
 
-if [[ `cat ${OPDIR}1AZUREDB_AMD_locked_schemas.csv | wc -l` ]];then
+if [[ `cat ${OPDIR}1AZUREDB_AMD_locked_schemas.csv | wc -l` -gt 0 ]];then
 
 while read -r line;do
 
@@ -84,7 +84,7 @@ echo "$(date "+%d/%m/%Y %T") Connecting to $postgres_db database" >> $OUTFILE_LO
 psql "sslmode=require host=${postgres_host} dbname=${postgres_db} port=${postgres_port} user=${postgres_username} password=${postgres_password}" --file=/sql/2AZUREDB_AMD_locked_keys.sql
 echo "$(date "+%d/%m/%Y %T") SQL for Check #2 has been run" >> $OUTFILE_LOG
 
-if [[ `cat ${OPDIR}2AZUREDB_AMD_locked_keys.csv | wc -l` ]];then
+if [[ `cat ${OPDIR}2AZUREDB_AMD_locked_keys.csv | wc -l` -gt 0 ]];then
 
 while read -r line;do
 
