@@ -87,12 +87,12 @@ echo "$(date "+%d/%m/%Y %T") SQL for Check #2 has been run" >> $OUTFILE_LOG
 while read -r line;do
 
 if [[ `echo $line | awk '{print $1}'` ]];then
-
+echo "loop1"
 key_lock=`echo $line | awk '{print $1}'`
 echo "$(date "+%d/%m/%Y %T"),AZDB_key_lock,Instance Key $key_lock is locked,warn" >> $OUTFILE
 
 else
-
+echo "loop2"
 echo "$(date "+%d/%m/%Y %T"),AZDB_key_lock,No Instance Key Locks,ok" >> $OUTFILE
 
 fi
