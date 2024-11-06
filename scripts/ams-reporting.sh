@@ -60,20 +60,20 @@ echo "$(date "+%d/%m/%Y %T") Connecting to $event_db database" >> $OUTFILE_LOG
 psql "sslmode=require host=${event_host} dbname=${event_db} port=${event_port} user=${event_username} password=${event_password}" --file=/sql/1AZUREDB_AMD_locked_schemas.sql
 echo "$(date "+%d/%m/%Y %T") SQL for Check #1 has been run" >> $OUTFILE_LOG
 
-if [ -e "${OPDIR}1AZUREDB_AMD_locked_schemas.csv" ];then
-
 while read -r line;do
+
+if [[ `echo $line | awk '{print $1}'` ]];then
 
 schema_lock=`echo $line | awk '{print $1}'`
 echo "$(date "+%d/%m/%Y %T"),AZDB_schema_lock,SchemaId $schema_lock is locked,warn" >> $OUTFILE
-
-done < ${OPDIR}1AZUREDB_AMD_locked_schemas.csv
 
 else
 
 echo "$(date "+%d/%m/%Y %T"),AZDB_schema_lock,No Schemas Locks,ok" >> $OUTFILE
 
 fi
+
+done < ${OPDIR}1AZUREDB_AMD_locked_schemas.csv
 
 echo "$(date "+%d/%m/%Y %T") Check #1 complete" >> $OUTFILE_LOG
 ####################################################### CHECK 2
@@ -84,25 +84,20 @@ echo "$(date "+%d/%m/%Y %T") Connecting to $postgres_db database" >> $OUTFILE_LO
 psql "sslmode=require host=${postgres_host} dbname=${postgres_db} port=${postgres_port} user=${postgres_username} password=${postgres_password}" --file=/sql/2AZUREDB_AMD_locked_keys.sql
 echo "$(date "+%d/%m/%Y %T") SQL for Check #2 has been run" >> $OUTFILE_LOG
 
-if [ -e "${OPDIR}2AZUREDB_AMD_locked_keys.csv" ];then
-
-echo "cat of csv:"
-cat ${OPDIR}2AZUREDB_AMD_locked_keys.csv
-
 while read -r line;do
+
+if [[ `echo $line | awk '{print $1}'` ]];then
 
 key_lock=`echo $line | awk '{print $1}'`
 echo "$(date "+%d/%m/%Y %T"),AZDB_key_lock,Instance Key $key_lock is locked,warn" >> $OUTFILE
 
-done < ${OPDIR}2AZUREDB_AMD_locked_keys.csv
-
 else
 
-echo "!!! this section"
 echo "$(date "+%d/%m/%Y %T"),AZDB_key_lock,No Instance Key Locks,ok" >> $OUTFILE
-echo "$(date "+%d/%m/%Y %T"),AZDB_key_lock,Instance Key 83 is locked,warn" >> $OUTFILE
 
 fi
+
+done < ${OPDIR}2AZUREDB_AMD_locked_keys.csv
 
 echo "$(date "+%d/%m/%Y %T") Check #2 complete" >> $OUTFILE_LOG
 ### Calc the 3 roundtrip ETAs from dac & gw audit tables for purpose of determining the DeliveryTime of each Schema backlog in Check #3
