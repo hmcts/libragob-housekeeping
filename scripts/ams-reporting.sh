@@ -98,6 +98,7 @@ done < ${OPDIR}2AZUREDB_AMD_locked_keys.csv
 
 else
 
+echo "!!! this section"
 echo "$(date "+%d/%m/%Y %T"),AZDB_key_lock,No Instance Key Locks,ok" >> $OUTFILE
 echo "$(date "+%d/%m/%Y %T"),AZDB_key_lock,Instance Key 83 is locked,warn" >> $OUTFILE
 
