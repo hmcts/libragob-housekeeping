@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
 ####################################################### This is the AMD AzureDB Healthcheck Script, and the associated documentation is in Ensemble under the "Libra System Admin Documents" area:
 ####################################################### "GoB Phase 1 - Oracle_Postgres DB Checks_v11.6_MAP.docx" is the latest version as of 18/10/2024
-echo "Script Version 11.9: Check 13 - count missing"
+echo "Script Version 11.9: Check 13 - filenames"
 echo "Designed by Mark A. Porter"
 OPDIR="/tmp/ams-reporting/"
 mkdir $OPDIR
-OUTFILE="${OPDIR}ThemisAZhc"
-OUTFILE_STATS="${OPDIR}ThemisAZstats"
+OUTFILE="${OPDIR}ThemisAZ_hc"
+OUTFILE_STATS="${OPDIR}ThemisAZ_stats"
 OUTFILE_LOG="${OPDIR}ThemisAZ.log"
 echo $(date "+%d/%m/%Y %T") > $OUTFILE
 echo $(date "+%d/%m/%Y %T") > $OUTFILE_STATS
@@ -909,7 +909,7 @@ echo "$(date "+%d/%m/%Y %T") Check #12 complete" >> $OUTFILE_LOG
 #fi
 ####################################################### CHECK 13
 echo "[Check #13: DAC & Gateway message_audit_id INT out of range]" >> $OUTFILE
-echo "DateTime,Tablename,max(message_audit_id),Threshold,Result" >> $OUTFILE
+echo "DateTime,CheckNameTablename,max(message_audit_id),Threshold,Result" >> $OUTFILE
 echo "$(date "+%d/%m/%Y %T") Starting Check #13" >> $OUTFILE_LOG
 echo "$(date "+%d/%m/%Y %T") Connecting to $postgres_db database" >> $OUTFILE_LOG
 psql "sslmode=require host=${postgres_host} dbname=${postgres_db} port=${postgres_port} user=${postgres_username} password=${postgres_password}" --file=/sql/13AZUREDB_AMD_message_audit_id_INT_out_of_range.sql
