@@ -60,7 +60,7 @@ echo "$(date "+%d/%m/%Y %T") Connecting to $event_db database" >> $OUTFILE_LOG
 psql "sslmode=require host=${event_host} dbname=${event_db} port=${event_port} user=${event_username} password=${event_password}" --file=/sql/1AZUREDB_AMD_locked_schemas.sql
 echo "$(date "+%d/%m/%Y %T") SQL for Check #1 has been run" >> $OUTFILE_LOG
 
-[ if -e "${OPDIR}1AZUREDB_AMD_locked_schemas.csv" ];then
+if [ -e "${OPDIR}1AZUREDB_AMD_locked_schemas.csv" ];then
 
 while read -r line;do
 
@@ -84,7 +84,7 @@ echo "$(date "+%d/%m/%Y %T") Connecting to $postgres_db database" >> $OUTFILE_LO
 psql "sslmode=require host=${postgres_host} dbname=${postgres_db} port=${postgres_port} user=${postgres_username} password=${postgres_password}" --file=/sql/2AZUREDB_AMD_locked_keys.sql
 echo "$(date "+%d/%m/%Y %T") SQL for Check #2 has been run" >> $OUTFILE_LOG
 
-[ if -e "${OPDIR}2AZUREDB_AMD_locked_keys.csv" ];then
+if [ -e "${OPDIR}2AZUREDB_AMD_locked_keys.csv" ];then
 
 while read -r line;do
 
