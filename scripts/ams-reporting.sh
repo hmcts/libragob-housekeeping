@@ -909,7 +909,7 @@ echo "$(date "+%d/%m/%Y %T") Check #12 complete" >> $OUTFILE_LOG
 #fi
 ####################################################### CHECK 13
 echo "[Check #13: DAC & Gateway message_audit_id INT out of range]" >> $OUTFILE
-echo "DateTime,CheckNameTablename,max(message_audit_id),Threshold,Result" >> $OUTFILE
+echo "DateTime,CheckName,Tablename,max(message_audit_id),Threshold,Result" >> $OUTFILE
 echo "$(date "+%d/%m/%Y %T") Starting Check #13" >> $OUTFILE_LOG
 echo "$(date "+%d/%m/%Y %T") Connecting to $postgres_db database" >> $OUTFILE_LOG
 psql "sslmode=require host=${postgres_host} dbname=${postgres_db} port=${postgres_port} user=${postgres_username} password=${postgres_password}" --file=/sql/13AZUREDB_AMD_message_audit_id_INT_out_of_range.sql
