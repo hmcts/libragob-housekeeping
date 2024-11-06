@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 ####################################################### This is the AMD AzureDB Healthcheck Script, and the associated documentation is in Ensemble under the "Libra System Admin Documents" area:
 ####################################################### "GoB Phase 1 - Oracle_Postgres DB Checks_v11.6_MAP.docx" is the latest version as of 18/10/2024
-echo "Script Version 12.1: checks 1&2"
+echo "Script Version 12.2: checks 1&2 again"
 echo "Designed by Mark A. Porter"
 OPDIR="/tmp/ams-reporting/"
 mkdir $OPDIR
@@ -68,6 +68,8 @@ schema_lock=`echo $line | awk '{print $1}'`
 echo "$(date "+%d/%m/%Y %T"),AZDB_schema_lock,SchemaId $schema_lock is locked,warn" >> $OUTFILE
 
 done < ${OPDIR}1AZUREDB_AMD_locked_schemas.csv
+
+else
 
 echo "$(date "+%d/%m/%Y %T"),AZDB_schema_lock,No Schema Locks,ok" >> $OUTFILE
 
