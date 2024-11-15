@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 ####################################################### This is the AMD AzureDB Healthcheck Script, and the associated documentation is in Ensemble under the "Libra System Admin Documents" area:
 ####################################################### "GoB Phase 1 - Oracle_Postgres DB Checks_v11.6_MAP.docx" is the latest version as of 18/10/2024
-echo "Script Version 12.2: checks 1&2 gt"
+echo "Script Version 12.3: new amd secrets"
 echo "Designed by Mark A. Porter"
 OPDIR="/tmp/ams-reporting/"
 mkdir $OPDIR
@@ -14,41 +14,44 @@ echo $(date "+%d/%m/%Y %T") > $OUTFILE_STATS
 ### Set-up DB connection variables, extracted from KeyVault ###
 ###############################################################
 # EventDB connection variables
-event_username=$(cat /mnt/secrets/$KV_NAME/event-datasource-username)
-event_password=$(cat /mnt/secrets/$KV_NAME/event-datasource-password)
-event_url=$(cat /mnt/secrets/$KV_NAME/event-datasource-url)
+event_username=$(cat /mnt/secrets/$KV_NAME/amd-event-datasource-username)
+event_password=$(cat /mnt/secrets/$KV_NAME/amd-event-datasource-password)
+event_url=$(cat /mnt/secrets/$KV_NAME/amd-event-datasource-url)
 event_host=`echo $event_url | awk -F"\/\/" {'print $2'} | awk -F":" {'print $1'}`
 event_port=`echo $event_url | awk -F":" {'print $4'} | awk -F"\/" {'print $1'}`
 event_db=`echo $event_url | awk -F":" {'print $4'} | awk -F"\/" {'print $2'}`
 
 # PostgresDB connection variables
-postgres_username=`cat /mnt/secrets/$KV_NAME/themis-gateway-dbusername`
-postgres_password=`cat /mnt/secrets/$KV_NAME/themis-gateway-dbpassword`
-postgres_url=`cat /mnt/secrets/$KV_NAME/themis-gateway-datasourceurl`
+#postgres_username=`cat /mnt/secrets/$KV_NAME/themis-gateway-dbusername`
+#postgres_password=`cat /mnt/secrets/$KV_NAME/themis-gateway-dbpassword`
+#postgres_url=`cat /mnt/secrets/$KV_NAME/themis-gateway-datasourceurl`
+postgres_username=`cat /mnt/secrets/$KV_NAME/amd-postgres-dbusername`
+postgres_password=`cat /mnt/secrets/$KV_NAME/amd-postgres-dbpassword`
+postgres_url=`cat /mnt/secrets/$KV_NAME/amd-postgres-datasourceurl`
 postgres_host=`echo $postgres_url | awk -F"\/\/" {'print $2'} | awk -F":" {'print $1'}`
 postgres_port=`echo $postgres_url | awk -F":" {'print $4'} | awk -F"\/" {'print $1'}`
 postgres_db=`echo $postgres_url | awk -F":" {'print $4'} | awk -F"\/" {'print $2'}`
 
 # ConfiscationDB connection variables
-confiscation_username=$(cat /mnt/secrets/$KV_NAME/confiscation-datasource-username)
-confiscation_password=$(cat /mnt/secrets/$KV_NAME/confiscation-datasource-password)
-confiscation_url=$(cat /mnt/secrets/$KV_NAME/confiscation-datasource-url)
+confiscation_username=$(cat /mnt/secrets/$KV_NAME/amd-confiscation-datasource-username)
+confiscation_password=$(cat /mnt/secrets/$KV_NAME/amd-confiscation-datasource-password)
+confiscation_url=$(cat /mnt/secrets/$KV_NAME/amd-confiscation-datasource-url)
 confiscation_host=`echo $confiscation_url | awk -F"\/\/" {'print $2'} | awk -F":" {'print $1'}`
 confiscation_port=`echo $confiscation_url | awk -F":" {'print $4'} | awk -F"\/" {'print $1'}`
 confiscation_db=`echo $confiscation_url | awk -F":" {'print $4'} | awk -F"\/" {'print $2'}`
 
 # FinesDB connection variables
-fines_username=$(cat /mnt/secrets/$KV_NAME/fines-datasource-username)
-fines_password=$(cat /mnt/secrets/$KV_NAME/fines-datasource-password)
-fines_url=$(cat /mnt/secrets/$KV_NAME/fines-datasource-url)
+fines_username=$(cat /mnt/secrets/$KV_NAME/amd-fines-datasource-username)
+fines_password=$(cat /mnt/secrets/$KV_NAME/amd-fines-datasource-password)
+fines_url=$(cat /mnt/secrets/$KV_NAME/amd-fines-datasource-url)
 fines_host=`echo $fines_url | awk -F"\/\/" {'print $2'} | awk -F":" {'print $1'}`
 fines_port=`echo $fines_url | awk -F":" {'print $4'} | awk -F"\/" {'print $1'}`
 fines_db=`echo $fines_url | awk -F":" {'print $4'} | awk -F"\/" {'print $2'}`
 
 # MaintenanceDB connection variables
-maintenance_username=$(cat /mnt/secrets/$KV_NAME/maintenance-datasource-username)
-maintenance_password=$(cat /mnt/secrets/$KV_NAME/maintenance-datasource-password)
-maintenance_url=$(cat /mnt/secrets/$KV_NAME/maintenance-datasource-url)
+maintenance_username=$(cat /mnt/secrets/$KV_NAME/amd-maintenance-datasource-username)
+maintenance_password=$(cat /mnt/secrets/$KV_NAME/amd-maintenance-datasource-password)
+maintenance_url=$(cat /mnt/secrets/$KV_NAME/amd-maintenance-datasource-url)
 maintenance_host=`echo $maintenance_url | awk -F"\/\/" {'print $2'} | awk -F":" {'print $1'}`
 maintenance_port=`echo $maintenance_url | awk -F":" {'print $4'} | awk -F"\/" {'print $1'}`
 maintenance_db=`echo $maintenance_url | awk -F":" {'print $4'} | awk -F"\/" {'print $2'}`
@@ -988,9 +991,9 @@ mv $OUTFILE_STATS $OUTFILE_STATS.csv
 ############################################################################
 ### Push CSV file to BAIS so it can be ingested and displayed in the AMD ###
 ############################################################################
-#echo "cat of /mnt/secrets/$KV_NAME/sftp-pvt-key KV:"
-#cat /mnt/secrets/$KV_NAME/sftp-pvt-key
-cat /mnt/secrets/$KV_NAME/sftp-pvt-key | sed 's/ /\n/g' > /tmp/ams-reporting/sftp-pvt-key.tmp
+#echo "cat of /mnt/secrets/$KV_NAME/amd-sftp-pvt-key KV:"
+#cat /mnt/secrets/$KV_NAME/amd-sftp-pvt-key
+cat /mnt/secrets/$KV_NAME/amd-sftp-pvt-key | sed 's/ /\n/g' > /tmp/ams-reporting/sftp-pvt-key.tmp
 echo "-----BEGIN OPENSSH PRIVATE KEY-----" > /tmp/ams-reporting/sftp-pvt-key
 grep -Pv "(BEGIN|OPENSSH|PRIVATE|KEY|END)" /tmp/ams-reporting/sftp-pvt-key.tmp >> /tmp/ams-reporting/sftp-pvt-key
 echo  "-----END OPENSSH PRIVATE KEY-----" >> /tmp/ams-reporting/sftp-pvt-key
@@ -1004,10 +1007,10 @@ chmod 600 /tmp/ams-reporting/sftp-pvt-key
 #ls -altr /mnt/secrets/$KV_NAME/
 #ls -altr /tmp/ams-reporting/
 
-if [ -e /mnt/secrets/$KV_NAME/sftp-endpoint ] && [ -e /mnt/secrets/$KV_NAME/sftp-username ];then
+if [ -e /mnt/secrets/$KV_NAME/amd-sftp-endpoint ] && [ -e /mnt/secrets/$KV_NAME/amd-sftp-username ];then
 
-sftp_endpoint=$(cat /mnt/secrets/$KV_NAME/sftp-endpoint)
-sftp_username=$(cat /mnt/secrets/$KV_NAME/sftp-username)
+sftp_username=$(cat /mnt/secrets/$KV_NAME/amd-sftp-username)
+sftp_endpoint=$(cat /mnt/secrets/$KV_NAME/amd-sftp-endpoint)
 #ssh-keygen -vvv -t rsa -b 4096 -f /tmp/ams-reporting/ams-reporting -N ""
 #mv /tmp/ams-reporting/ams-reporting.pub /tmp/ams-reporting/ams-reporting.pub.key
 #mv /tmp/ams-reporting/ams-reporting /tmp/ams-reporting/ams-reporting.pvt.key
