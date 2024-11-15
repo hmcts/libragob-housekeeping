@@ -15,8 +15,8 @@ echo $(date "+%d/%m/%Y %T") > $OUTFILE_STATS
 ###############################################################
 ls -altr /mnt/secrets/$KV_NAME/amd*
 # EventDB connection variables
-event_username=$(cat /mnt/secrets/$KV_NAME/amd-event-datasource-username)
-event_password=$(cat /mnt/secrets/$KV_NAME/amd-event-datasource-password)
+event_username=$(cat /mnt/secrets/$KV_NAME/amd-event-username)
+event_password=$(cat /mnt/secrets/$KV_NAME/amd-event-password)
 event_url=$(cat /mnt/secrets/$KV_NAME/amd-event-datasource-url)
 event_host=`echo $event_url | awk -F"\/\/" {'print $2'} | awk -F":" {'print $1'}`
 event_port=`echo $event_url | awk -F":" {'print $4'} | awk -F"\/" {'print $1'}`
@@ -34,24 +34,24 @@ postgres_port=`echo $postgres_url | awk -F":" {'print $4'} | awk -F"\/" {'print 
 postgres_db=`echo $postgres_url | awk -F":" {'print $4'} | awk -F"\/" {'print $2'}`
 
 # ConfiscationDB connection variables
-confiscation_username=$(cat /mnt/secrets/$KV_NAME/amd-confiscation-datasource-username)
-confiscation_password=$(cat /mnt/secrets/$KV_NAME/amd-confiscation-datasource-password)
+confiscation_username=$(cat /mnt/secrets/$KV_NAME/amd-confiscation-username)
+confiscation_password=$(cat /mnt/secrets/$KV_NAME/amd-confiscation-password)
 confiscation_url=$(cat /mnt/secrets/$KV_NAME/amd-confiscation-datasource-url)
 confiscation_host=`echo $confiscation_url | awk -F"\/\/" {'print $2'} | awk -F":" {'print $1'}`
 confiscation_port=`echo $confiscation_url | awk -F":" {'print $4'} | awk -F"\/" {'print $1'}`
 confiscation_db=`echo $confiscation_url | awk -F":" {'print $4'} | awk -F"\/" {'print $2'}`
 
 # FinesDB connection variables
-fines_username=$(cat /mnt/secrets/$KV_NAME/amd-fines-datasource-username)
-fines_password=$(cat /mnt/secrets/$KV_NAME/amd-fines-datasource-password)
+fines_username=$(cat /mnt/secrets/$KV_NAME/amd-fines-username)
+fines_password=$(cat /mnt/secrets/$KV_NAME/amd-fines-password)
 fines_url=$(cat /mnt/secrets/$KV_NAME/amd-fines-datasource-url)
 fines_host=`echo $fines_url | awk -F"\/\/" {'print $2'} | awk -F":" {'print $1'}`
 fines_port=`echo $fines_url | awk -F":" {'print $4'} | awk -F"\/" {'print $1'}`
 fines_db=`echo $fines_url | awk -F":" {'print $4'} | awk -F"\/" {'print $2'}`
 
 # MaintenanceDB connection variables
-maintenance_username=$(cat /mnt/secrets/$KV_NAME/amd-maintenance-datasource-username)
-maintenance_password=$(cat /mnt/secrets/$KV_NAME/amd-maintenance-datasource-password)
+maintenance_username=$(cat /mnt/secrets/$KV_NAME/amd-maintenance-username)
+maintenance_password=$(cat /mnt/secrets/$KV_NAME/amd-maintenance-password)
 maintenance_url=$(cat /mnt/secrets/$KV_NAME/amd-maintenance-datasource-url)
 maintenance_host=`echo $maintenance_url | awk -F"\/\/" {'print $2'} | awk -F":" {'print $1'}`
 maintenance_port=`echo $maintenance_url | awk -F":" {'print $4'} | awk -F"\/" {'print $1'}`
