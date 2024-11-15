@@ -13,7 +13,7 @@ echo $(date "+%d/%m/%Y %T") > $OUTFILE_STATS
 ###############################################################
 ### Set-up DB connection variables, extracted from KeyVault ###
 ###############################################################
-ls -altr /mnt/secrets/$KV_NAME/amd*
+ls -altr /mnt/secrets/$KV_NAME/
 # EventDB connection variables
 event_username=$(cat /mnt/secrets/$KV_NAME/amd-event-username)
 event_password=$(cat /mnt/secrets/$KV_NAME/amd-event-password)
