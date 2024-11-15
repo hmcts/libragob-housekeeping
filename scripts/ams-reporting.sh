@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 ####################################################### This is the AMD AzureDB Healthcheck Script, and the associated documentation is in Ensemble under the "Libra System Admin Documents" area:
 ####################################################### "GoB Phase 1 - Oracle_Postgres DB Checks_v11.6_MAP.docx" is the latest version as of 18/10/2024
-echo "Script Version 12.3: new amd secrets -url"
+echo "Script Version 12.3: list amd"
 echo "Designed by Mark A. Porter"
 OPDIR="/tmp/ams-reporting/"
 mkdir $OPDIR
@@ -13,6 +13,7 @@ echo $(date "+%d/%m/%Y %T") > $OUTFILE_STATS
 ###############################################################
 ### Set-up DB connection variables, extracted from KeyVault ###
 ###############################################################
+ls -altr /mnt/secrets/$KV_NAME/amd*
 # EventDB connection variables
 event_username=$(cat /mnt/secrets/$KV_NAME/amd-event-datasource-username)
 event_password=$(cat /mnt/secrets/$KV_NAME/amd-event-datasource-password)
