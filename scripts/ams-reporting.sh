@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 ####################################################### This is the AMD AzureDB Healthcheck Script, and the associated documentation is in Ensemble under the "Libra System Admin Documents" area:
 ####################################################### "GoB Phase 1 - Oracle_Postgres DB Checks_v11.6_MAP.docx" is the latest version as of 18/10/2024
-echo "Script Version 12.3: new amd secrets"
+echo "Script Version 12.3: new amd secrets -url"
 echo "Designed by Mark A. Porter"
 OPDIR="/tmp/ams-reporting/"
 mkdir $OPDIR
@@ -27,7 +27,7 @@ event_db=`echo $event_url | awk -F":" {'print $4'} | awk -F"\/" {'print $2'}`
 #postgres_url=`cat /mnt/secrets/$KV_NAME/themis-gateway-datasourceurl`
 postgres_username=`cat /mnt/secrets/$KV_NAME/amd-postgres-dbusername`
 postgres_password=`cat /mnt/secrets/$KV_NAME/amd-postgres-dbpassword`
-postgres_url=`cat /mnt/secrets/$KV_NAME/amd-postgres-datasourceurl`
+postgres_url=`cat /mnt/secrets/$KV_NAME/amd-postgres-datasource-url`
 postgres_host=`echo $postgres_url | awk -F"\/\/" {'print $2'} | awk -F":" {'print $1'}`
 postgres_port=`echo $postgres_url | awk -F":" {'print $4'} | awk -F"\/" {'print $1'}`
 postgres_db=`echo $postgres_url | awk -F":" {'print $4'} | awk -F"\/" {'print $2'}`
