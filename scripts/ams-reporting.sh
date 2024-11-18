@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 ####################################################### This is the AMD AzureDB Healthcheck Script, and the associated documentation is in Ensemble under the "Libra System Admin Documents" area:
 ####################################################### "GoB Phase 1 - Oracle_Postgres DB Checks_v11.6_MAP.docx" is the latest version as of 18/10/2024
-echo "Script Version 12.4: extra recon check"
+echo "Script Version 12.5: prod thresholds"
 echo "Designed by Mark A. Porter"
 OPDIR="/tmp/ams-reporting/"
 mkdir $OPDIR
@@ -564,6 +564,18 @@ echo "$(date "+%d/%m/%Y %T") Check #10 has been run" >> $OUTFILE_LOG
 echo "[Check #11: Table Row Counts]" >> $OUTFILE
 echo "DateTime,CheckName,RowCount,Threshold,Result" >> $OUTFILE
 
+#08:30 10/11/2024
+#1867901
+#2310769
+#4846645
+#52361422
+#869946
+### PROD
+#threshold_count_update_requests=2000000
+#threshold_count_table_updates=2500000
+#threshold_count_message_log=5000000
+#threshold_count_dac_audit=55000000
+#threshold_count_gateway_audit=950000
 threshold_count_update_requests=14000
 threshold_count_table_updates=120000
 threshold_count_message_log=80000
