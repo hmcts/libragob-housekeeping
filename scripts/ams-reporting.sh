@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 ####################################################### This is the AMD AzureDB Healthcheck Script, and the associated documentation is in Ensemble under the "Libra System Admin Documents" area:
 ####################################################### "GoB Phase 1 - Oracle_Postgres DB Checks_v11.6_MAP.docx" is the latest version as of 18/10/2024
-echo "Script Version 12.3: list amd"
+echo "Script Version 12.4: extra recon check"
 echo "Designed by Mark A. Porter"
 OPDIR="/tmp/ams-reporting/"
 mkdir $OPDIR
@@ -26,8 +26,8 @@ event_db=`echo $event_url | awk -F":" {'print $4'} | awk -F"\/" {'print $2'}`
 #postgres_username=`cat /mnt/secrets/$KV_NAME/themis-gateway-dbusername`
 #postgres_password=`cat /mnt/secrets/$KV_NAME/themis-gateway-dbpassword`
 #postgres_url=`cat /mnt/secrets/$KV_NAME/themis-gateway-datasourceurl`
-postgres_username=`cat /mnt/secrets/$KV_NAME/amd-postgres-dbusername`
-postgres_password=`cat /mnt/secrets/$KV_NAME/amd-postgres-dbpassword`
+postgres_username=`cat /mnt/secrets/$KV_NAME/amd-postgres-username`
+postgres_password=`cat /mnt/secrets/$KV_NAME/amd-postgres-password`
 postgres_url=`cat /mnt/secrets/$KV_NAME/amd-postgres-datasource-url`
 postgres_host=`echo $postgres_url | awk -F"\/\/" {'print $2'} | awk -F":" {'print $1'}`
 postgres_port=`echo $postgres_url | awk -F":" {'print $4'} | awk -F"\/" {'print $1'}`
@@ -452,9 +452,14 @@ echo "$(date "+%d/%m/%Y %T") Starting Check #9a" >> $OUTFILE_LOG
 echo "$(date "+%d/%m/%Y %T") Connecting to $confiscation_db database" >> $OUTFILE_LOG
 psql "sslmode=require host=${confiscation_host} dbname=${confiscation_db} port=${confiscation_port} user=${confiscation_username} password=${confiscation_password}" --file=/sql/9aAZUREDB_AMD_confiscation_recon_result.sql
 echo "$(date "+%d/%m/%Y %T") SQL for Check #9a has been run" >> $OUTFILE_LOG
+line_count=`cat ${OPDIR}9aAZUREDB_AMD_confiscation_recon_result.csv | wc -l | xargs`
 error_count=`grep "1$" ${OPDIR}9aAZUREDB_AMD_confiscation_recon_result.csv | wc -l | xargs`
+recon_threshold_count=1
+#recon_threshold_count=8
 
 if [[ `grep "$dt_today" ${OPDIR}9aAZUREDB_AMD_confiscation_recon_result.csv` ]];then
+
+if [[ $line_count -eq $recon_threshold_count ]];then
 
 if [[ $error_count -gt 0 ]];then
 
@@ -468,6 +473,12 @@ fi
 
 else
 
+echo "$(date "+%d/%m/%Y %T"),AZDB_maint_confiscation_recon_status,Recon does not have expected $recon_threshold_count row of results so pls investigate,warn" >> $OUTFILE
+
+fi
+
+else
+
 echo "$(date "+%d/%m/%Y %T"),AZDB_maint_confiscation_recon_status,Recon didn't run today so check ORA recon ran ok,warn" >> $OUTFILE
 
 fi
@@ -476,9 +487,14 @@ echo "$(date "+%d/%m/%Y %T") Connecting to $fines_db database" >> $OUTFILE_LOG
 echo "$(date "+%d/%m/%Y %T") Starting Check #9b" >> $OUTFILE_LOG
 psql "sslmode=require host=${fines_host} dbname=${fines_db} port=${fines_port} user=${fines_username} password=${fines_password}" --file=/sql/9bAZUREDB_AMD_fines_recon_result.sql
 echo "$(date "+%d/%m/%Y %T") SQL for Check #9b has been run" >> $OUTFILE_LOG
+line_count=`cat ${OPDIR}9bAZUREDB_AMD_fines_recon_result.csv | wc -l | xargs`
 error_count=`grep "1$" ${OPDIR}9bAZUREDB_AMD_fines_recon_result.csv | wc -l | xargs`
+recon_threshold_count=1
+#recon_threshold_count=46
 
 if [[ `grep "$dt_today" ${OPDIR}9bAZUREDB_AMD_fines_recon_result.csv` ]];then
+
+if [[ $line_count -eq $recon_threshold_count ]];then
 
 if [[ $error_count -gt 0 ]];then
 
@@ -492,6 +508,12 @@ fi
 
 else
 
+echo "$(date "+%d/%m/%Y %T"),AZDB_maint_fines_recon_status,Recon does not have expected $recon_threshold_count row of results so pls investigate,warn" >> $OUTFILE
+
+fi
+
+else
+
 echo "$(date "+%d/%m/%Y %T"),AZDB_maint_fines_recon_status,Recon didn't run today so check ORA recon ran ok,warn" >> $OUTFILE
 
 fi
@@ -500,9 +522,14 @@ echo "$(date "+%d/%m/%Y %T") Connecting to $maintenance_db database" >> $OUTFILE
 echo "$(date "+%d/%m/%Y %T") Starting Check #9c" >> $OUTFILE_LOG
 psql "sslmode=require host=${maintenance_host} dbname=${maintenance_db} port=${maintenance_port} user=${maintenance_username} password=${maintenance_password}" --file=/sql/9cAZUREDB_AMD_maintenance_recon_result.sql
 echo "$(date "+%d/%m/%Y %T") SQL for Check #9c has been run" >> $OUTFILE_LOG
+line_count=`cat ${OPDIR}9cAZUREDB_AMD_maintenance_recon_result.csv | wc -l | xargs`
 error_count=`grep "1$" ${OPDIR}9cAZUREDB_AMD_maintenance_recon_result.csv | wc -l | xargs`
+recon_threshold_count=1
+#recon_threshold_count=3
 
 if [[ `grep "$dt_today" ${OPDIR}9cAZUREDB_AMD_maintenance_recon_result.csv` ]];then
+
+if [[ $line_count -eq $recon_threshold_count ]];then
 
 if [[ $error_count -gt 0 ]];then
 
@@ -511,6 +538,12 @@ echo "$(date "+%d/%m/%Y %T"),AZDB_maint_maintenance_recon,Recon has errors so pl
 else
 
 echo "$(date "+%d/%m/%Y %T"),AZDB_maint_maintenance_recon_status,Recon ran with no errors,ok" >> $OUTFILE
+
+fi
+
+else
+
+echo "$(date "+%d/%m/%Y %T"),AZDB_maint_maintenance_recon_status,Recon does not have expected $recon_threshold_count row of results so pls investigate,warn" >> $OUTFILE
 
 fi
 
