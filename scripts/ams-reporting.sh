@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 ####################################################### This is the AMD AzureDB Healthcheck Script, and the associated documentation is in Ensemble under the "Libra System Admin Documents" area:
 ####################################################### "GoB Phase 1 - Oracle_Postgres DB Checks_v11.6_MAP.docx" is the latest version as of 18/10/2024
-echo "Script Version 12.7: recon alert fix"
+echo "Script Version 12.8: recon alert fix #2"
 echo "Designed by Mark A. Porter"
 OPDIR="/tmp/ams-reporting/"
 mkdir $OPDIR
@@ -454,6 +454,10 @@ line_count=`cat ${OPDIR}9aAZUREDB_AMD_confiscation_recon_result.csv | wc -l | xa
 error_count=`grep "1$" ${OPDIR}9aAZUREDB_AMD_confiscation_recon_result.csv | wc -l | xargs`
 recon_threshold_count=1
 #recon_threshold_count=8
+echo $line_count
+echo $error_count
+echo "cat of ${OPDIR}9aAZUREDB_AMD_confiscation_recon_result.csv:"
+cat ${OPDIR}9aAZUREDB_AMD_confiscation_recon_result.csv
 
 #if [[ `grep "$dt_today" ${OPDIR}9aAZUREDB_AMD_confiscation_recon_result.csv` ]];then
 
