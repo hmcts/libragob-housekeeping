@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 ####################################################### This is the AMD AzureDB Healthcheck Script, and the associated documentation is in Ensemble under the "Libra System Admin Documents" area:
 ####################################################### "GoB Phase 1 - Oracle_Postgres DB Checks_v11.6_MAP.docx" is the latest version as of 18/10/2024
-echo "Script Version 12.6: prod recon sql"
+echo "Script Version 12.7: recon alert fix"
 echo "Designed by Mark A. Porter"
 OPDIR="/tmp/ams-reporting/"
 mkdir $OPDIR
@@ -13,7 +13,6 @@ echo $(date "+%d/%m/%Y %T") > $OUTFILE_STATS
 ###############################################################
 ### Set-up DB connection variables, extracted from KeyVault ###
 ###############################################################
-ls -altr /mnt/secrets/$KV_NAME/
 # EventDB connection variables
 event_username=$(cat /mnt/secrets/$KV_NAME/amd-event-username)
 event_password=$(cat /mnt/secrets/$KV_NAME/amd-event-password)
@@ -23,9 +22,6 @@ event_port=`echo $event_url | awk -F":" {'print $4'} | awk -F"\/" {'print $1'}`
 event_db=`echo $event_url | awk -F":" {'print $4'} | awk -F"\/" {'print $2'}`
 
 # PostgresDB connection variables
-#postgres_username=`cat /mnt/secrets/$KV_NAME/themis-gateway-dbusername`
-#postgres_password=`cat /mnt/secrets/$KV_NAME/themis-gateway-dbpassword`
-#postgres_url=`cat /mnt/secrets/$KV_NAME/themis-gateway-datasourceurl`
 postgres_username=`cat /mnt/secrets/$KV_NAME/amd-postgres-username`
 postgres_password=`cat /mnt/secrets/$KV_NAME/amd-postgres-password`
 postgres_url=`cat /mnt/secrets/$KV_NAME/amd-postgres-datasource-url`
@@ -459,7 +455,7 @@ error_count=`grep "1$" ${OPDIR}9aAZUREDB_AMD_confiscation_recon_result.csv | wc 
 recon_threshold_count=1
 #recon_threshold_count=8
 
-if [[ `grep "$dt_today" ${OPDIR}9aAZUREDB_AMD_confiscation_recon_result.csv` ]];then
+#if [[ `grep "$dt_today" ${OPDIR}9aAZUREDB_AMD_confiscation_recon_result.csv` ]];then
 
 if [[ $line_count -eq $recon_threshold_count ]];then
 
@@ -479,11 +475,11 @@ echo "$(date "+%d/%m/%Y %T"),AZDB_maint_confiscation_recon_status,Recon does not
 
 fi
 
-else
+#else
 
-echo "$(date "+%d/%m/%Y %T"),AZDB_maint_confiscation_recon_status,Recon didn't run today so check ORA recon ran ok,warn" >> $OUTFILE
+#echo "$(date "+%d/%m/%Y %T"),AZDB_maint_confiscation_recon_status,Recon didn't run today so check ORA recon ran ok,warn" >> $OUTFILE
 
-fi
+#fi
 
 echo "$(date "+%d/%m/%Y %T") Connecting to $fines_db database" >> $OUTFILE_LOG
 echo "$(date "+%d/%m/%Y %T") Starting Check #9b" >> $OUTFILE_LOG
