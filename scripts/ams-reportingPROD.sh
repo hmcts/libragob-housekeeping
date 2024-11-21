@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 ####################################################### This is the AMD AzureDB Healthcheck Script, and the associated documentation is in Ensemble under the "Libra System Admin Documents" area:
 ####################################################### "GoB Phase 1 - Oracle_Postgres DB Checks_v11.6_MAP.docx" is the latest version as of 18/10/2024
-echo "Script Version 13.3: complete"
+echo "Script Version 13.4: commented overrides"
 echo "Designed by Mark A. Porter"
 OPDIR="/tmp/ams-reporting/"
 mkdir $OPDIR
@@ -990,10 +990,10 @@ echo "$(date "+%d/%m/%Y %T") Check #13 complete" >> $OUTFILE_LOG
 ####################
 cp $OUTFILE $OUTFILE.orig ### creates a copy of the current output file
 override_file=${OPDIR}ams-reporting_overrides_list.dat
-echo "AZDB_update_processing_backlog73" > $override_file
-echo "AZDB_update_processing_backlog77" >> $override_file
+#echo "AZDB_update_processing_backlog73" > $override_file
+#echo "AZDB_update_processing_backlog77" >> $override_file
 #echo "AZDB_db_message_log_error73" >> $override_file
-echo "message_log.*Reconciliation run mismatch occurred.*73" >> $override_file
+#echo "message_log.*Reconciliation run mismatch occurred.*73" >> $override_file
 testit=`cat $override_file | wc -l | xargs`
 
 if [[ $testit -gt 0 ]];then
