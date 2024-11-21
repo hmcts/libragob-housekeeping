@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 ####################################################### This is the AMD AzureDB Healthcheck Script, and the associated documentation is in Ensemble under the "Libra System Admin Documents" area:
 ####################################################### "GoB Phase 1 - Oracle_Postgres DB Checks_v11.6_MAP.docx" is the latest version as of 18/10/2024
-echo "Script Version 13.4: test&prod control"
+echo "Script Version 13.5: env overrides"
 echo "Designed by Mark A. Porter"
 
 if [[ `echo $KV_NAME | grep "test"` ]];then
@@ -1021,10 +1021,22 @@ echo "$(date "+%d/%m/%Y %T") Check #13 complete" >> $OUTFILE_LOG
 ####################
 cp $OUTFILE $OUTFILE.orig ### creates a copy of the current output file
 override_file=${OPDIR}ams-reporting_overrides_list.dat
-echo "AZDB_update_processing_backlog73" > $override_file
-echo "AZDB_update_processing_backlog77" >> $override_file
+
+if [[ $op_env == test ]];then
+
+dummy=0
+
+#echo "AZDB_update_processing_backlog73" > $override_file
+#echo "AZDB_update_processing_backlog77" >> $override_file
 #echo "AZDB_db_message_log_error73" >> $override_file
-echo "message_log.*Reconciliation run mismatch occurred.*73" >> $override_file
+#echo "message_log.*Reconciliation run mismatch occurred.*73" >> $override_file
+
+else
+
+dummy=0
+
+fi
+
 testit=`cat $override_file | wc -l | xargs`
 
 if [[ $testit -gt 0 ]];then
@@ -1062,33 +1074,42 @@ mv $OUTFILE_STATS $OUTFILE_STATS.csv
 ############################################################################
 ### Push CSV file to BAIS so it can be ingested and displayed in the AMD ###
 ############################################################################
-#echo "cat of /mnt/secrets/$KV_NAME/amd-sftp-pvt-key KV:"
-#cat /mnt/secrets/$KV_NAME/amd-sftp-pvt-key
+if [[ $op_env == prod ]];then
+echo "cat of /mnt/secrets/$KV_NAME/amd-sftp-pvt-key KV:"
+cat /mnt/secrets/$KV_NAME/amd-sftp-pvt-key
+fi
+
 cat /mnt/secrets/$KV_NAME/amd-sftp-pvt-key | sed 's/ /\n/g' > /tmp/ams-reporting/sftp-pvt-key.tmp
 echo "-----BEGIN OPENSSH PRIVATE KEY-----" > /tmp/ams-reporting/sftp-pvt-key
 grep -Pv "(BEGIN|OPENSSH|PRIVATE|KEY|END)" /tmp/ams-reporting/sftp-pvt-key.tmp >> /tmp/ams-reporting/sftp-pvt-key
 echo  "-----END OPENSSH PRIVATE KEY-----" >> /tmp/ams-reporting/sftp-pvt-key
 chmod 600 /tmp/ams-reporting/sftp-pvt-key
-#echo "cat of /tmp/ams-reporting/sftp-pvt-key REBUILT:"
-#cat /tmp/ams-reporting/sftp-pvt-key
-#cat /tmp/ams-reporting/sftp-pvt-key | sed 's/[\t ]//g;/^$/d' > /tmp/ams-reporting/sftp-pvt-key
-#echo "cat of /tmp/ams-reporting/sftp-pvt-key CLEANED:"
-#cat /tmp/ams-reporting/sftp-pvt-key
-#printf "\n"
-#ls -altr /mnt/secrets/$KV_NAME/
-#ls -altr /tmp/ams-reporting/
+
+if [[ $op_env == prod ]];then
+echo "cat of /tmp/ams-reporting/sftp-pvt-key REBUILT:"
+cat /tmp/ams-reporting/sftp-pvt-key
+cat /tmp/ams-reporting/sftp-pvt-key | sed 's/[\t ]//g;/^$/d' > /tmp/ams-reporting/sftp-pvt-key
+echo "cat of /tmp/ams-reporting/sftp-pvt-key CLEANED:"
+cat /tmp/ams-reporting/sftp-pvt-key
+printf "\n"
+ls -altr /mnt/secrets/$KV_NAME/
+ls -altr /tmp/ams-reporting/
+fi
 
 if [ -e /mnt/secrets/$KV_NAME/amd-sftp-endpoint ] && [ -e /mnt/secrets/$KV_NAME/amd-sftp-username ];then
 
 sftp_username=$(cat /mnt/secrets/$KV_NAME/amd-sftp-username)
 sftp_endpoint=$(cat /mnt/secrets/$KV_NAME/amd-sftp-endpoint)
-#ssh-keygen -vvv -t rsa -b 4096 -f /tmp/ams-reporting/ams-reporting -N ""
-#mv /tmp/ams-reporting/ams-reporting.pub /tmp/ams-reporting/ams-reporting.pub.key
-#mv /tmp/ams-reporting/ams-reporting /tmp/ams-reporting/ams-reporting.pvt.key
-#echo "cat of ams-reporting.pub.key:"
-#cat /tmp/ams-reporting/ams-reporting.pub.key
-#echo "cat of ams-reporting.pvt.key:"
-#cat /tmp/ams-reporting/ams-reporting.pvt.key
+
+if [[ $op_env == prod ]];then
+ssh-keygen -vvv -t rsa -b 4096 -f /tmp/ams-reporting/ams-reporting -N ""
+mv /tmp/ams-reporting/ams-reporting.pub /tmp/ams-reporting/ams-reporting.pub.key
+mv /tmp/ams-reporting/ams-reporting /tmp/ams-reporting/ams-reporting.pvt.key
+echo "cat of ams-reporting.pub.key:"
+cat /tmp/ams-reporting/ams-reporting.pub.key
+echo "cat of ams-reporting.pvt.key:"
+cat /tmp/ams-reporting/ams-reporting.pvt.key
+fi
 
 echo "$(date "+%d/%m/%Y %T") Uploading the CSV to BAIS" >> $OUTFILE_LOG
 sftp -oStrictHostKeyChecking=no -oHostKeyAlgorithms=+ssh-rsa -i /tmp/ams-reporting/sftp-pvt-key ${sftp_username}@${sftp_endpoint} << EOF
