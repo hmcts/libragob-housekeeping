@@ -10,8 +10,6 @@ else
 op_env=prod
 fi
 
-echo "echo of op_env: $op_env"
-
 OPDIR="/tmp/ams-reporting/"
 mkdir $OPDIR
 OUTFILE="${OPDIR}ThemisAZ_hc"
