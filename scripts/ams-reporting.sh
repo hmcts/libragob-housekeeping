@@ -1,8 +1,17 @@
 #!/usr/bin/env bash
 ####################################################### This is the AMD AzureDB Healthcheck Script, and the associated documentation is in Ensemble under the "Libra System Admin Documents" area:
 ####################################################### "GoB Phase 1 - Oracle_Postgres DB Checks_v11.6_MAP.docx" is the latest version as of 18/10/2024
-echo "Script Version 13.3: complete"
+echo "Script Version 13.4: test&prod control"
 echo "Designed by Mark A. Porter"
+
+if [[ `echo $KV_NAME | grep "test"` ]];then
+op_env=test
+else
+op_env=prod
+fi
+
+echo "echo of op_env: $op_env"
+
 OPDIR="/tmp/ams-reporting/"
 mkdir $OPDIR
 OUTFILE="${OPDIR}ThemisAZ_hc"
@@ -382,7 +391,6 @@ echo "t_in_1900=$t_in_1900_processing"
 echo "t_delta_secs=$t_delta_secs"
 echo "t_delta_threshold_secs=$t_delta_threshold_secs"
 echo "======================================================================================================"
-
 if [[ $t_delta_secs_unprocessed -gt $t_delta_threshold_secs ]] || [[ $last_check_unprocessed -gt $t_delta_threshold_secs ]] || [[ $t_delta_secs_processing -gt $t_delta_threshold_secs ]] || [[ $last_check_processing -gt $t_delta_threshold_secs ]];then
 echo "$(date "+%d/%m/%Y %T"),AZDB_update_processing_backlog${schema_id},${t_delta_threshold_mins}minsStaleness,$earliest_unprocessed,$latest_complete,$latest_processing,warn" >> $OUTFILE
 else
@@ -446,8 +454,13 @@ echo "DateTime,CheckName,Status,Result" >> $OUTFILE
 dt_today=$(date "+%Y-%m-%d")
 echo "$(date "+%d/%m/%Y %T") Starting Check #9a" >> $OUTFILE_LOG
 echo "$(date "+%d/%m/%Y %T") Connecting to $confiscation_db database" >> $OUTFILE_LOG
+
+if [[ $op_env == test ]];then
 psql "sslmode=require host=${confiscation_host} dbname=${confiscation_db} port=${confiscation_port} user=${confiscation_username} password=${confiscation_password}" --file=/sql/9aAZUREDB_AMD_confiscation_recon_result.sql
-#psql "sslmode=require host=${confiscation_host} dbname=${confiscation_db} port=${confiscation_port} user=${confiscation_username} password=${confiscation_password}" --file=/sql/PROD___9aAZUREDB_AMD_confiscation_recon_result.sql
+else
+psql "sslmode=require host=${confiscation_host} dbname=${confiscation_db} port=${confiscation_port} user=${confiscation_username} password=${confiscation_password}" --file=/sql/PROD___9aAZUREDB_AMD_confiscation_recon_result.sql
+fi
+
 echo "$(date "+%d/%m/%Y %T") SQL for Check #9a has been run" >> $OUTFILE_LOG
 line_count=`cat ${OPDIR}9aAZUREDB_AMD_confiscation_recon_result.csv | grep "." | grep "$dt_today" | wc -l`
 error_count=`grep "1$" ${OPDIR}9aAZUREDB_AMD_confiscation_recon_result.csv | wc -l`
@@ -482,8 +495,13 @@ fi
 
 echo "$(date "+%d/%m/%Y %T") Connecting to $fines_db database" >> $OUTFILE_LOG
 echo "$(date "+%d/%m/%Y %T") Starting Check #9b" >> $OUTFILE_LOG
+
+if [[ $op_env == test ]];then
 psql "sslmode=require host=${fines_host} dbname=${fines_db} port=${fines_port} user=${fines_username} password=${fines_password}" --file=/sql/9bAZUREDB_AMD_fines_recon_result.sql
-#psql "sslmode=require host=${fines_host} dbname=${fines_db} port=${fines_port} user=${fines_username} password=${fines_password}" --file=/sql/PROD___9bAZUREDB_AMD_fines_recon_result.sql
+else
+psql "sslmode=require host=${fines_host} dbname=${fines_db} port=${fines_port} user=${fines_username} password=${fines_password}" --file=/sql/PROD___9bAZUREDB_AMD_fines_recon_result.sql
+fi
+
 echo "$(date "+%d/%m/%Y %T") SQL for Check #9b has been run" >> $OUTFILE_LOG
 line_count=`cat ${OPDIR}9bAZUREDB_AMD_fines_recon_result.csv | grep "." | grep "$dt_today" | wc -l`
 error_count=`grep "1$" ${OPDIR}9bAZUREDB_AMD_fines_recon_result.csv | wc -l`
@@ -518,8 +536,13 @@ fi
 
 echo "$(date "+%d/%m/%Y %T") Connecting to $maintenance_db database" >> $OUTFILE_LOG
 echo "$(date "+%d/%m/%Y %T") Starting Check #9c" >> $OUTFILE_LOG
+
+if [[ $op_env == test ]];then
 psql "sslmode=require host=${maintenance_host} dbname=${maintenance_db} port=${maintenance_port} user=${maintenance_username} password=${maintenance_password}" --file=/sql/9cAZUREDB_AMD_maintenance_recon_result.sql
-#psql "sslmode=require host=${maintenance_host} dbname=${maintenance_db} port=${maintenance_port} user=${maintenance_username} password=${maintenance_password}" --file=/sql/PROD___9cAZUREDB_AMD_maintenance_recon_result.sql
+else
+psql "sslmode=require host=${maintenance_host} dbname=${maintenance_db} port=${maintenance_port} user=${maintenance_username} password=${maintenance_password}" --file=/sql/PROD___9cAZUREDB_AMD_maintenance_recon_result.sql
+fi
+
 echo "$(date "+%d/%m/%Y %T") SQL for Check #9c has been run" >> $OUTFILE_LOG
 line_count=`cat ${OPDIR}9cAZUREDB_AMD_maintenance_recon_result.csv | grep "." | grep "$dt_today" | wc -l`
 error_count=`grep "1$" ${OPDIR}9cAZUREDB_AMD_maintenance_recon_result.csv | wc -l`
@@ -563,6 +586,7 @@ echo "$(date "+%d/%m/%Y %T") Check #10 has been run" >> $OUTFILE_LOG
 echo "[Check #11: Table Row Counts]" >> $OUTFILE
 echo "DateTime,CheckName,RowCount,Threshold,Result" >> $OUTFILE
 
+### PROD
 #08:30 10/11/2024
 #1867901
 #2310769
@@ -570,16 +594,20 @@ echo "DateTime,CheckName,RowCount,Threshold,Result" >> $OUTFILE
 #52361422
 #869946
 ### PROD
-#threshold_count_update_requests=2000000
-#threshold_count_table_updates=2500000
-#threshold_count_message_log=5000000
-#threshold_count_dac_audit=55000000
-#threshold_count_gateway_audit=950000
+
+if [[ $op_env == test ]];then
 threshold_count_update_requests=14000
 threshold_count_table_updates=120000
 threshold_count_message_log=80000
 threshold_count_dac_audit=55000000
 threshold_count_gateway_audit=50000
+else
+threshold_count_update_requests=2000000
+threshold_count_table_updates=2500000
+threshold_count_message_log=5000000
+threshold_count_dac_audit=55000000
+threshold_count_gateway_audit=950000
+fi
 
 echo "$(date "+%d/%m/%Y %T") Starting Check #11a" >> $OUTFILE_LOG
 echo "$(date "+%d/%m/%Y %T") Connecting to $event_db database" >> $OUTFILE_LOG
