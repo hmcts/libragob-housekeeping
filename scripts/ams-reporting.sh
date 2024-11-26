@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 ####################################################### This is the AMD AzureDB Healthcheck Script, and the associated documentation is in Ensemble under the "Libra System Admin Documents" area:
 ####################################################### "GoB Phase 1 - Oracle_Postgres DB Checks_v11.7_MAP.docx" is the latest version as of 25/11/2024
-echo "Script Version 13.7: remove stats descriptions on echo"
+echo "Script Version 13.8: recon op_env"
 echo "Designed by Mark A. Porter"
 
 if [[ `echo $KV_NAME | grep "test"` ]];then
@@ -462,8 +462,12 @@ fi
 echo "$(date "+%d/%m/%Y %T") SQL for Check #9a has been run" >> $OUTFILE_LOG
 line_count=`cat ${OPDIR}9aAZUREDB_AMD_confiscation_recon_result.csv | grep "." | grep "$dt_today" | wc -l`
 error_count=`grep "1$" ${OPDIR}9aAZUREDB_AMD_confiscation_recon_result.csv | wc -l`
+
+if [[ $op_env == test ]];then
 recon_threshold_count=1
-#recon_threshold_count=8
+else
+recon_threshold_count=8
+fi
 
 if [[ `grep "$dt_today" ${OPDIR}9aAZUREDB_AMD_confiscation_recon_result.csv` ]];then
 
@@ -503,8 +507,12 @@ fi
 echo "$(date "+%d/%m/%Y %T") SQL for Check #9b has been run" >> $OUTFILE_LOG
 line_count=`cat ${OPDIR}9bAZUREDB_AMD_fines_recon_result.csv | grep "." | grep "$dt_today" | wc -l`
 error_count=`grep "1$" ${OPDIR}9bAZUREDB_AMD_fines_recon_result.csv | wc -l`
+
+if [[ $op_env == test ]];then
 recon_threshold_count=1
-#recon_threshold_count=46
+else
+recon_threshold_count=46
+fi
 
 if [[ `grep "$dt_today" ${OPDIR}9bAZUREDB_AMD_fines_recon_result.csv` ]];then
 
@@ -544,8 +552,12 @@ fi
 echo "$(date "+%d/%m/%Y %T") SQL for Check #9c has been run" >> $OUTFILE_LOG
 line_count=`cat ${OPDIR}9cAZUREDB_AMD_maintenance_recon_result.csv | grep "." | grep "$dt_today" | wc -l`
 error_count=`grep "1$" ${OPDIR}9cAZUREDB_AMD_maintenance_recon_result.csv | wc -l`
+
+if [[ $op_env == test ]];then
 recon_threshold_count=1
-#recon_threshold_count=3
+else
+recon_threshold_count=3
+fi
 
 if [[ `grep "$dt_today" ${OPDIR}9cAZUREDB_AMD_maintenance_recon_result.csv` ]];then
 
