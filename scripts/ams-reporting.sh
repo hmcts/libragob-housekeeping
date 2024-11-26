@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 ####################################################### This is the AMD AzureDB Healthcheck Script, and the associated documentation is in Ensemble under the "Libra System Admin Documents" area:
 ####################################################### "GoB Phase 1 - Oracle_Postgres DB Checks_v11.7_MAP.docx" is the latest version as of 25/11/2024
-echo "Script Version 13.8: recon op_env"
+echo "Script Version 13.9: prod sftp KV"
 echo "Designed by Mark A. Porter"
 
 if [[ `echo $KV_NAME | grep "test"` ]];then
@@ -1097,6 +1097,7 @@ grep -Pv "(BEGIN|OPENSSH|PRIVATE|KEY|END)" /tmp/ams-reporting/sftp-pvt-key.tmp >
 echo  "-----END OPENSSH PRIVATE KEY-----" >> /tmp/ams-reporting/sftp-pvt-key
 chmod 600 /tmp/ams-reporting/sftp-pvt-key
 
+if [[ 0 == 1 ]];
 if [[ $op_env == prod ]];then
 echo "cat of /tmp/ams-reporting/sftp-pvt-key REBUILT:"
 cat /tmp/ams-reporting/sftp-pvt-key
@@ -1107,12 +1108,14 @@ printf "\n"
 ls -altr /mnt/secrets/$KV_NAME/
 ls -altr /tmp/ams-reporting/
 fi
+fi
 
 if [ -e /mnt/secrets/$KV_NAME/amd-sftp-endpoint ] && [ -e /mnt/secrets/$KV_NAME/amd-sftp-username ];then
 
 sftp_username=$(cat /mnt/secrets/$KV_NAME/amd-sftp-username)
 sftp_endpoint=$(cat /mnt/secrets/$KV_NAME/amd-sftp-endpoint)
 
+if [[ 0 == 1 ]];then
 if [[ $op_env == prod ]];then
 ssh-keygen -vvv -t rsa -b 4096 -f /tmp/ams-reporting/ams-reporting -N ""
 mv /tmp/ams-reporting/ams-reporting.pub /tmp/ams-reporting/ams-reporting.pub.key
@@ -1121,6 +1124,7 @@ echo "cat of ams-reporting.pub.key:"
 cat /tmp/ams-reporting/ams-reporting.pub.key
 echo "cat of ams-reporting.pvt.key:"
 cat /tmp/ams-reporting/ams-reporting.pvt.key
+fi
 fi
 
 echo "$(date "+%d/%m/%Y %T") Uploading the CSV to BAIS" >> $OUTFILE_LOG
