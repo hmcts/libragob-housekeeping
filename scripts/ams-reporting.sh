@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 ####################################################### This is the AMD AzureDB Healthcheck Script, and the associated documentation is in Ensemble under the "Libra System Admin Documents" area:
 ####################################################### "GoB Phase 1 - Oracle_Postgres DB Checks_v11.7_MAP.docx" is the latest version as of 25/11/2024
-echo "Script Version 14.0: prod sftp KV"
+echo "Script Version 14.1: prod sftp KV cat disable"
 echo "Designed by Mark A. Porter"
 
 if [[ `echo $KV_NAME | grep "test"` ]];then
@@ -1086,9 +1086,11 @@ mv $OUTFILE_STATS $OUTFILE_STATS.csv
 ############################################################################
 ### Push CSV file to BAIS so it can be ingested and displayed in the AMD ###
 ############################################################################
+if [[ 0 == 1 ]];then
 if [[ $op_env == prod ]];then
 echo "cat of /mnt/secrets/$KV_NAME/amd-sftp-pvt-key KV:"
 cat /mnt/secrets/$KV_NAME/amd-sftp-pvt-key
+fi
 fi
 
 cat /mnt/secrets/$KV_NAME/amd-sftp-pvt-key | sed 's/ /\n/g' > /tmp/ams-reporting/sftp-pvt-key.tmp
