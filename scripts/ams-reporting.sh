@@ -273,7 +273,7 @@ nonidle_threshold=10
 while read -r line;do
 
 if [[ `echo $line | grep "^,"` ]];then
-state=null
+state=idle # null in the sql result
 else
 state=`echo $line | awk -F"," '{print $1}'`
 fi
