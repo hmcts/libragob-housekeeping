@@ -1045,7 +1045,7 @@ dummy=0
 else
 
 dummy=0
-echo "AZDB_msg_backlog129.*	42500" >> $override_file
+echo "AZDB_msg_backlog129.*42500" >> $override_file
 
 fi
 
