@@ -238,6 +238,10 @@ else
 adj_delivery_rate=$adj_delivery_rate_tmp
 fi
 
+if [[ $schema_id == 77 ]];then
+backlog_adaptive_threshold=$(($backlog_adaptive_threshold*2))
+fi
+
 if [[ $status != ERROR ]];then
 
 if [[ $sum_number_of_table_updates -gt $backlog_adaptive_threshold ]];then
@@ -1045,7 +1049,7 @@ dummy=0
 else
 
 dummy=0
-echo "29/11/2024.*AZDB_msg_backlog77" >> $override_file
+#echo "29/11/2024.*AZDB_msg_backlog77" >> $override_file
 
 fi
 
