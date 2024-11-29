@@ -393,10 +393,14 @@ echo "t_in_1900=$t_in_1900_processing"
 echo "t_delta_secs=$t_delta_secs"
 echo "t_delta_threshold_secs=$t_delta_threshold_secs"
 echo "======================================================================================================"
+if [[ $earliest_unprocessed != '' ]] || [[ $latest_processing != '' ]];then
+
 if [[ $t_delta_secs_unprocessed -gt $t_delta_threshold_secs ]] || [[ $last_check_unprocessed -gt $t_delta_threshold_secs ]] || [[ $t_delta_secs_processing -gt $t_delta_threshold_secs ]] || [[ $last_check_processing -gt $t_delta_threshold_secs ]];then
 echo "$(date "+%d/%m/%Y %T"),AZDB_update_processing_backlog${schema_id},${t_delta_threshold_mins}minsStaleness,$earliest_unprocessed,$latest_complete,$latest_processing,warn" >> $OUTFILE
 else
 echo "$(date "+%d/%m/%Y %T"),AZDB_update_processing_backlog${schema_id},${t_delta_threshold_mins}minsStaleness,$earliest_unprocessed,$latest_complete,$latest_processing,ok" >> $OUTFILE
+fi
+
 fi
 
 done < ${OPDIR}6AZUREDB_AMD_update_processing_backlog.csv
