@@ -167,11 +167,13 @@ echo "$(date "+%d/%m/%Y %T") Connecting to $event_db database" >> $OUTFILE_LOG
 psql "sslmode=require host=${event_host} dbname=${event_db} port=${event_port} user=${event_username} password=${event_password}" --file=/sql/3AZUREDB_AMD_message_backlogs.sql
 echo "$(date "+%d/%m/%Y %T") SQL for Check #3 has been run" >> $OUTFILE_LOG
 
-backlog_threshold=850000 # 50K allowable backlog at 17:xx
+backlog_threshold=850000 # 50K allowable backlog at 17:xx, but all hourly thresholds have now been doubled-up for MET77 as biggest hitter
 roundtrip_threshold=2000
 dt_hr=$(date "+%H")
 dt_hr1=`echo $dt_hr | cut -b 1`
 dt_hr2=`echo $dt_hr | cut -b 2`
+
+while read -r line;do
 
 if [[ $dt_hr == 00 ]];then
 backlog_adaptive_threshold=$backlog_threshold
@@ -180,8 +182,6 @@ backlog_adaptive_threshold=$(($backlog_threshold/$dt_hr2))
 else
 backlog_adaptive_threshold=$(($backlog_threshold/$dt_hr))
 fi
-
-while read -r line;do
 
 schema_id=`echo $line | awk -F"," '{print $1}'`
 status=`echo $line | awk -F"," '{print $2}'`
