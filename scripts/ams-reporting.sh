@@ -483,7 +483,7 @@ echo "$(date "+%d/%m/%Y %T"),AZDB_maint_confiscation_recon,Recon has errors so p
 
 else
 
-echo "$(date "+%d/%m/%Y %T"),AZDB_maint_confiscation_recon_status,Recon ran with no errors,ok" >> $OUTFILE
+echo "$(date "+%d/%m/%Y %T"),AZDB_maint_confiscation_recon_status,$recon_threshold_count Recon METs ran with no errors,ok" >> $OUTFILE
 
 fi
 
@@ -528,7 +528,7 @@ echo "$(date "+%d/%m/%Y %T"),AZDB_maint_fines_recon,Recon has errors so pls inve
 
 else
 
-echo "$(date "+%d/%m/%Y %T"),AZDB_maint_fines_recon_status,Recon ran with no errors,ok" >> $OUTFILE
+echo "$(date "+%d/%m/%Y %T"),AZDB_maint_fines_recon_status,$recon_threshold_count Recon METs ran with no errors,ok" >> $OUTFILE
 
 fi
 
@@ -573,7 +573,7 @@ echo "$(date "+%d/%m/%Y %T"),AZDB_maint_maintenance_recon,Recon has errors so pl
 
 else
 
-echo "$(date "+%d/%m/%Y %T"),AZDB_maint_maintenance_recon_status,Recon ran with no errors,ok" >> $OUTFILE
+echo "$(date "+%d/%m/%Y %T"),AZDB_maint_maintenance_recon_status,$recon_threshold_count Recon METs ran with no errors,ok" >> $OUTFILE
 
 fi
 
