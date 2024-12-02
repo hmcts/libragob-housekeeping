@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 ####################################################### This is the AMD AzureDB Healthcheck Script, and the associated documentation is in Ensemble under the "Libra System Admin Documents" area:
 ####################################################### "GoB Phase 1 - Oracle_Postgres DB Checks_v11.7_MAP.docx" is the latest version as of 25/11/2024
-echo "Script Version 14.4: recon msg & check 7"
+echo "Script Version 14.5: recon msg & check 7"
 echo "Designed by Mark A. Porter"
 
 if [[ `echo $KV_NAME | grep "test"` ]];then
@@ -487,7 +487,7 @@ echo "$(date "+%d/%m/%Y %T"),AZDB_maint_confiscation_recon,Recon has errors so p
 
 else
 
-echo "$(date "+%d/%m/%Y %T"),AZDB_maint_confiscation_recon_status,$line_count Recon METs ran with no errors,ok" >> $OUTFILE
+echo "$(date "+%d/%m/%Y %T"),AZDB_maint_confiscation_recon_status,$line_count/$recon_threshold_count Recon METs ran with no errors,ok" >> $OUTFILE
 
 fi
 
@@ -532,7 +532,7 @@ echo "$(date "+%d/%m/%Y %T"),AZDB_maint_fines_recon,Recon has errors so pls inve
 
 else
 
-echo "$(date "+%d/%m/%Y %T"),AZDB_maint_fines_recon_status,$line_count Recon METs ran with no errors,ok" >> $OUTFILE
+echo "$(date "+%d/%m/%Y %T"),AZDB_maint_fines_recon_status,$line_count/$recon_threshold_count Recon METs ran with no errors,ok" >> $OUTFILE
 
 fi
 
@@ -577,7 +577,7 @@ echo "$(date "+%d/%m/%Y %T"),AZDB_maint_maintenance_recon,Recon has errors so pl
 
 else
 
-echo "$(date "+%d/%m/%Y %T"),AZDB_maint_maintenance_recon_status,$line_count Recon METs ran with no errors,ok" >> $OUTFILE
+echo "$(date "+%d/%m/%Y %T"),AZDB_maint_maintenance_recon_status,$line_count/$recon_threshold_count Recon METs ran with no errors,ok" >> $OUTFILE
 
 fi
 
