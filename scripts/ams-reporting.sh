@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 ####################################################### This is the AMD AzureDB Healthcheck Script, and the associated documentation is in Ensemble under the "Libra System Admin Documents" area:
 ####################################################### "GoB Phase 1 - Oracle_Postgres DB Checks_v11.7_MAP.docx" is the latest version as of 25/11/2024
-echo "Script Version 14.5: recon msg & check 7"
+echo "Script Version 14.6: recon msg & check 7"
 echo "Designed by Mark A. Porter"
 
 if [[ `echo $KV_NAME | grep "test"` ]];then
@@ -418,6 +418,8 @@ psql "sslmode=require host=${event_host} dbname=${event_db} port=${event_port} u
 echo "$(date "+%d/%m/%Y %T") SQL for Check #7 has been run" >> $OUTFILE_LOG
 bundled_print_threshold=95000 # 92513 seen 12:00 24/10/2024
 
+head -10 ${OPDIR}7AZUREDB_AMD_max_daily_update_counts_by_schemaid.csv > ${OPDIR}7AZUREDB_AMD_max_daily_update_counts_by_schemaid.tmp
+
 while read -r line;do
 
 schema_id=`echo $line | awk -F"," '{print $1}'`
@@ -431,7 +433,7 @@ else
 echo "$(date "+%d/%m/%Y %T"),AZDB_max_updates${schema_id},$count_updates,$sum_number_of_table_updates,$max_number_of_table_updates,$bundled_print_threshold,ok" >> $OUTFILE
 fi
 
-done < head -10 ${OPDIR}7AZUREDB_AMD_max_daily_update_counts_by_schemaid.csv
+done < ${OPDIR}7AZUREDB_AMD_max_daily_update_counts_by_schemaid.tmp
 
 echo "$(date "+%d/%m/%Y %T") Check #7 complete" >> $OUTFILE_LOG
 ####################################################### CHECK 8
