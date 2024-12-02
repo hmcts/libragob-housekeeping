@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 ####################################################### This is the AMD AzureDB Healthcheck Script, and the associated documentation is in Ensemble under the "Libra System Admin Documents" area:
 ####################################################### "GoB Phase 1 - Oracle_Postgres DB Checks_v11.7_MAP.docx" is the latest version as of 25/11/2024
-echo "Script Version 14.3: regex override 40476"
+echo "Script Version 14.4: recon msg & check 7"
 echo "Designed by Mark A. Porter"
 
 if [[ `echo $KV_NAME | grep "test"` ]];then
@@ -431,7 +431,7 @@ else
 echo "$(date "+%d/%m/%Y %T"),AZDB_max_updates${schema_id},$count_updates,$sum_number_of_table_updates,$max_number_of_table_updates,$bundled_print_threshold,ok" >> $OUTFILE
 fi
 
-done < ${OPDIR}7AZUREDB_AMD_max_daily_update_counts_by_schemaid.csv
+done < head -10 ${OPDIR}7AZUREDB_AMD_max_daily_update_counts_by_schemaid.csv
 
 echo "$(date "+%d/%m/%Y %T") Check #7 complete" >> $OUTFILE_LOG
 ####################################################### CHECK 8
@@ -493,7 +493,7 @@ fi
 
 else
 
-echo "$(date "+%d/%m/%Y %T"),AZDB_maint_confiscation_recon_status,Recon does not have expected $recon_threshold_count row of results so pls investigate,warn" >> $OUTFILE
+echo "$(date "+%d/%m/%Y %T"),AZDB_maint_confiscation_recon_status,Recon only has expected $line_count/$recon_threshold_count rows of results so pls investigate,warn" >> $OUTFILE
 
 fi
 
@@ -538,7 +538,7 @@ fi
 
 else
 
-echo "$(date "+%d/%m/%Y %T"),AZDB_maint_fines_recon_status,Recon does not have expected $recon_threshold_count row of results so pls investigate,warn" >> $OUTFILE
+echo "$(date "+%d/%m/%Y %T"),AZDB_maint_fines_recon_status,Recon only has expected $line_count/$recon_threshold_count rows of results so pls investigate,warn" >> $OUTFILE
 
 fi
 
@@ -583,7 +583,7 @@ fi
 
 else
 
-echo "$(date "+%d/%m/%Y %T"),AZDB_maint_maintenance_recon_status,Recon does not have expected $recon_threshold_count row of results so pls investigate,warn" >> $OUTFILE
+echo "$(date "+%d/%m/%Y %T"),AZDB_maint_maintenance_recon_status,Recon only has expected $line_count/$recon_threshold_count rows of results so pls investigate,warn" >> $OUTFILE
 
 fi
 
