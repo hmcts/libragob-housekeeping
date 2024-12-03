@@ -622,11 +622,11 @@ threshold_count_message_log=80000
 threshold_count_dac_audit=55000000
 threshold_count_gateway_audit=50000
 else
-threshold_count_update_requests=3500000
-threshold_count_table_updates=7000000
-threshold_count_message_log=6000000
-threshold_count_dac_audit=70000000
-threshold_count_gateway_audit=1500000
+threshold_count_update_requests=4000000
+threshold_count_table_updates=8000000
+threshold_count_message_log=7000000
+threshold_count_dac_audit=65000000
+threshold_count_gateway_audit=1000000
 fi
 
 echo "$(date "+%d/%m/%Y %T") Starting Check #11a" >> $OUTFILE_LOG
