@@ -606,15 +606,6 @@ echo "$(date "+%d/%m/%Y %T") Check #10 has been run" >> $OUTFILE_LOG
 echo "[Check #11: Table Row Counts]" >> $OUTFILE
 echo "DateTime,CheckName,RowCount,Threshold,Result" >> $OUTFILE
 
-### PROD
-#08:30 10/11/2024
-#1867901
-#2310769
-#4846645
-#52361422
-#869946
-### PROD
-
 if [[ $op_env == test ]];then
 threshold_count_update_requests=14000
 threshold_count_table_updates=120000
