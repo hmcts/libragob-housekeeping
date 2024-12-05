@@ -238,8 +238,11 @@ else
 adj_delivery_rate=$adj_delivery_rate_tmp
 fi
 
-if [[ $schema_id == 77 ]] || [[ $schema_id == 82 ]];then
+if [[ $schema_id == 77 ]];then
 backlog_adaptive_threshold=$(($backlog_adaptive_threshold*6))
+fi
+if [[ $schema_id == 82 ]];then
+backlog_adaptive_threshold=$(($backlog_adaptive_threshold*2))
 fi
 
 if [[ $status != ERROR ]];then
@@ -393,7 +396,7 @@ echo "t_in_1900=$t_in_1900_processing"
 echo "t_delta_secs=$t_delta_secs"
 echo "t_delta_threshold_secs=$t_delta_threshold_secs"
 echo "======================================================================================================"
-if [[ $earliest_unprocessed != '' ]] && [[ $latest_processing != '' ]];then
+if [[ `echo $earliest_unprocessed` ]] || [[ `echo $latest_processing` ]];then
 
 if [[ $t_delta_secs_unprocessed -gt $t_delta_threshold_secs ]] || [[ $last_check_unprocessed -gt $t_delta_threshold_secs ]] || [[ $t_delta_secs_processing -gt $t_delta_threshold_secs ]] || [[ $last_check_processing -gt $t_delta_threshold_secs ]];then
 echo "$(date "+%d/%m/%Y %T"),AZDB_update_processing_backlog${schema_id},${t_delta_threshold_mins}minsStaleness,$earliest_unprocessed,$latest_complete,$latest_processing,warn" >> $OUTFILE
