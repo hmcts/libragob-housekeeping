@@ -488,7 +488,7 @@ if [[ $line_count -eq $recon_threshold_count ]];then
 
 if [[ $error_count -gt 0 ]];then
 
-echo "$(date "+%d/%m/%Y %T"),AZDB_maint_confiscation_recon,Recon has errors so pls investigate,warn" >> $OUTFILE
+echo "$(date "+%d/%m/%Y %T"),AZDB_maint_confiscation_recon,Recon has $error_count errors so pls investigate,warn" >> $OUTFILE
 
 else
 
@@ -533,7 +533,7 @@ if [[ $line_count -eq $recon_threshold_count ]];then
 
 if [[ $error_count -gt 0 ]];then
 
-echo "$(date "+%d/%m/%Y %T"),AZDB_maint_fines_recon,Recon has errors so pls investigate,warn" >> $OUTFILE
+echo "$(date "+%d/%m/%Y %T"),AZDB_maint_fines_recon,Recon has $error_count errors so pls investigate,warn" >> $OUTFILE
 
 else
 
@@ -578,7 +578,7 @@ if [[ $line_count -eq $recon_threshold_count ]];then
 
 if [[ $error_count -gt 0 ]];then
 
-echo "$(date "+%d/%m/%Y %T"),AZDB_maint_maintenance_recon,Recon has errors so pls investigate,warn" >> $OUTFILE
+echo "$(date "+%d/%m/%Y %T"),AZDB_maint_maintenance_recon,Recon has $error_count errors so pls investigate,warn" >> $OUTFILE
 
 else
 
