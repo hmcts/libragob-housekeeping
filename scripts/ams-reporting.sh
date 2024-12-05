@@ -1053,6 +1053,7 @@ echo "03/12/2024.*recon_status" >> $override_file
 echo "03/12/2024.*AZDB_table_updates_row_count" >> $override_file
 echo "03/12/2024.*AZDB_update_requests_row_count" >> $override_file
 echo "04/12/2024.*fines_recon_status" >> $override_file
+echo "05/12/2024.*fines_recon_status" >> $override_file
 
 fi
 
