@@ -239,7 +239,7 @@ adj_delivery_rate=$adj_delivery_rate_tmp
 fi
 
 if [[ $schema_id == 77 ]] || [[ $schema_id == 82 ]];then
-backlog_adaptive_threshold=$(($backlog_adaptive_threshold*4))
+backlog_adaptive_threshold=$(($backlog_adaptive_threshold*6))
 fi
 
 if [[ $status != ERROR ]];then
