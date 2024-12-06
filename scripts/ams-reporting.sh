@@ -374,7 +374,7 @@ echo "CAT of ${OPDIR}earliest_processing_timestamps.tmp"
 cat ${OPDIR}earliest_processing_timestamps.tmp
 
 t_delta_threshold_mins=90
-t_delta_threshold_secs=$(($t_delta_threshold_mins*60*60)) # 90mins is 324000secs
+t_delta_threshold_secs=$(($t_delta_threshold_mins*60)) # 90mins is 5400secs
 
 dt_now=$(date "+%T %Y-%m-%d")
 
