@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 ####################################################### This is the AMD AzureDB Healthcheck Script, and the associated documentation is in Ensemble under the "Libra System Admin Documents" area:
 ####################################################### "GoB Phase 1 - Oracle_Postgres DB Checks_v11.7_MAP.docx" is the latest version as of 25/11/2024
-echo "Script Version 14.8: recon status"
+echo "Script Version 14.9 MET 77 duplicate recon error"
 echo "Designed by Mark A. Porter"
 
 if [[ `echo $KV_NAME | grep "test"` ]];then
@@ -1059,7 +1059,7 @@ echo "04/12/2024.*fines_recon_status" >> $override_file
 echo "05/12/2024.*fines_recon" >> $override_file
 echo "05/12/2024.*AZDB_msg_backlog77" >> $override_file
 echo "06/12/2024.*so check ORA recon ran" >> $override_file
-echo "06/12/2024.*AZDB_db_message_log_error77" >> $override_file
+echo "06/12/2024.*AZDB_db_message_log_error77.*duplicate" >> $override_file
 
 fi
 
