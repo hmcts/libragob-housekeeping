@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 ####################################################### This is the AMD AzureDB Healthcheck Script, and the associated documentation is in Ensemble under the "Libra System Admin Documents" area:
 ####################################################### "GoB Phase 1 - Oracle_Postgres DB Checks_v11.7_MAP.docx" is the latest version as of 25/11/2024
-echo "Script Version 14.9 MET 77 duplicate recon error"
+echo "Script Version 15.0 Check #6 fix"
 echo "Designed by Mark A. Porter"
 
 if [[ `echo $KV_NAME | grep "test"` ]];then
@@ -277,9 +277,6 @@ echo "$(date "+%d/%m/%Y %T") SQL for Check #4 has been run" >> $OUTFILE_LOG
 idle_threshold=450
 nonidle_threshold=10
 
-echo "cat of check4 csv:"
-cat ${OPDIR}4AZUREDB_AMD_thread_status_counts.csv
-
 while read -r line;do
 
 if [[ `echo $line | grep "^,"` ]];then
@@ -289,10 +286,6 @@ state=`echo $line | awk -F"," '{print $1}'`
 fi
 
 count=`echo $line | awk -F"," '{print $2}'`
-
-echo "state=$state"
-echo "count=$count"
-
 
 if [[ $state == idle ]];then
 
@@ -383,24 +376,24 @@ t_delta_threshold_secs=$(($t_delta_threshold_mins*60*60)) # 90mins is 324000secs
 
 dt_now=$(date "+%Y-%m-%d %T")
 
-t_out_1900=$(date '+%s' -d "$dt_now")
+t_out_1900_unprocessed=$(date '+%s' -d "$dt_now")
 t_in_1900_unprocessed=$(date '+%s' -d "$dt_earliest_unprocessed")
-t_delta_secs_unprocessed=`expr $t_out_1900 - $t_in_1900_unprocessed`
+t_delta_secs_unprocessed=`expr $t_out_1900_unprocessed - $t_in_1900_unprocessed`
 
 echo "dt_now=$dt_now"
-echo "t_out_1900=$t_out_1900"
-echo "t_in_1900=$t_in_1900_unprocessed"
-echo "t_delta_secs=$t_delta_secs"
+echo "t_out_1900_unprocessed=$t_out_1900_unprocessed"
+echo "t_in_1900_unprocessed=$t_in_1900_unprocessed"
+echo "t_delta_secs_unprocessed=$t_delta_secs_unprocessed"
 echo "t_delta_threshold_secs=$t_delta_threshold_secs"
 
-t_out_1900=$(date '+%s' -d "$dt_now")
+t_out_1900_processing=$(date '+%s' -d "$dt_now")
 t_in_1900_processing=$(date '+%s' -d "$dt_earliest_processing")
-t_delta_secs_processing=`expr $t_out_1900 - $t_in_1900_processing`
+t_delta_secs_processing=`expr $t_out_1900_processing - $t_in_1900_processing`
 
 echo "dt_now=$dt_now"
-echo "t_out_1900=$t_out_1900"
-echo "t_in_1900=$t_in_1900_processing"
-echo "t_delta_secs=$t_delta_secs"
+echo "t_out_1900_processing=$t_out_1900_processing"
+echo "t_in_1900_processing=$t_in_1900_processing"
+echo "t_delta_secs=$t_delta_secs_processing"
 echo "t_delta_threshold_secs=$t_delta_threshold_secs"
 echo "======================================================================================================"
 if [[ `echo $earliest_unprocessed` ]] || [[ `echo $latest_processing` ]];then
