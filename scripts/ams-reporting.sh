@@ -376,7 +376,7 @@ cat ${OPDIR}earliest_processing_timestamps.tmp
 t_delta_threshold_mins=90
 t_delta_threshold_secs=$(($t_delta_threshold_mins*60*60)) # 90mins is 324000secs
 
-dt_now=$(date "%T +%Y-%m-%d")
+dt_now=$(date "+%T %Y-%m-%d")
 
 t_out_1900_unprocessed=$(date '+%s' -d "$dt_now")
 t_in_1900_unprocessed=$(date '+%s' -d "$dt_earliest_unprocessed")
