@@ -346,11 +346,11 @@ echo "line=$line"
 schema_id=`echo $line | awk -F"," '{print $1}'`
 earliest_unprocessed=`echo $line | awk -F"," '{print $2}'`
 dt_earliest_unprocessed_tmp=`echo $earliest_unprocessed | awk -F"." '{print $1}'`
-dt_earliest_unprocessed=`echo $earliest_unprocessed_tmp | awk -F" " '{print $2" "$1}'`
+dt_earliest_unprocessed=`echo $dt_earliest_unprocessed_tmp | awk -F" " '{print $2" "$1}'`
 latest_complete=`echo $line | awk -F"," '{print $3}'`
 latest_processing=`echo $line | awk -F"," '{print $4}'`
 dt_latest_processing_tmp=`echo $latest_processing | awk -F"." '{print $1}'`
-dt_latest_processing=`echo $latest_processing_tmp | awk -F" " '{print $2" "$1}'`
+dt_latest_processing=`echo $dt_latest_processing_tmp | awk -F" " '{print $2" "$1}'`
 
 echo "schema_id=$schema_id"
 echo "earliest_unprocessed=$earliest_unprocessed"
