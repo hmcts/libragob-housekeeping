@@ -277,6 +277,9 @@ echo "$(date "+%d/%m/%Y %T") SQL for Check #4 has been run" >> $OUTFILE_LOG
 idle_threshold=450
 nonidle_threshold=10
 
+echo "cat of check4 csv:"
+cat ${OPDIR}4AZUREDB_AMD_thread_status_counts.csv
+
 while read -r line;do
 
 if [[ `echo $line | grep "^,"` ]];then
@@ -286,6 +289,10 @@ state=`echo $line | awk -F"," '{print $1}'`
 fi
 
 count=`echo $line | awk -F"," '{print $2}'`
+
+echo "state=$state"
+echo "count=$count"
+
 
 if [[ $state == idle ]];then
 
