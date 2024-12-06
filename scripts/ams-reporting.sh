@@ -1058,6 +1058,8 @@ echo "03/12/2024.*AZDB_update_requests_row_count" >> $override_file
 echo "04/12/2024.*fines_recon_status" >> $override_file
 echo "05/12/2024.*fines_recon" >> $override_file
 echo "05/12/2024.*AZDB_msg_backlog77" >> $override_file
+echo "06/12/2024.*so check ORA recon ran" >> $override_file
+echo "06/12/2024.*AZDB_db_message_log_error77" >> $override_file
 
 fi
 
