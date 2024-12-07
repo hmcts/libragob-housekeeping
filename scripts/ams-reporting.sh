@@ -277,6 +277,9 @@ echo "$(date "+%d/%m/%Y %T") SQL for Check #4 has been run" >> $OUTFILE_LOG
 idle_threshold=450
 nonidle_threshold=10
 
+echo "cat of ${OPDIR}4AZUREDB_AMD_thread_status_counts.csv:"
+cat ${OPDIR}4AZUREDB_AMD_thread_status_counts.csv
+
 while read -r line;do
 
 if [[ `echo $line | grep "^,"` ]];then
@@ -286,6 +289,9 @@ state=`echo $line | awk -F"," '{print $1}'`
 fi
 
 count=`echo $line | awk -F"," '{print $2}'`
+
+echo "state=$state"
+echo "count=$count"
 
 if [[ $state == idle ]];then
 
@@ -1043,15 +1049,11 @@ override_file=${OPDIR}ams-reporting_overrides_list.dat
 if [[ $op_env == test ]];then
 
 dummy=0
-#echo "AZDB_update_processing_backlog73" > $override_file
-#echo "AZDB_update_processing_backlog77" >> $override_file
-#echo "AZDB_db_message_log_error73" >> $override_file
-#echo "message_log.*Reconciliation run mismatch occurred.*73" >> $override_file
 
 else
 
 dummy=0
-#echo "29/11/2024.*AZDB_msg_backlog77" >> $override_file
+echo "29/11/2024.*AZDB_msg_backlog77" >> $override_file
 echo "02/12/2024.*AZDB_table_updates_row_count" >> $override_file
 echo "02/12/2024.*AZDB_update_requests_row_count" >> $override_file
 echo "03/12/2024.*recon_status" >> $override_file
@@ -1062,6 +1064,7 @@ echo "05/12/2024.*fines_recon" >> $override_file
 echo "05/12/2024.*AZDB_msg_backlog77" >> $override_file
 echo "06/12/2024.*so check ORA recon ran" >> $override_file
 echo "06/12/2024.*AZDB_db_message_log_error77.*duplicate" >> $override_file
+echo "07/12/2024.*so check ORA recon ran" >> $override_file
 
 fi
 
