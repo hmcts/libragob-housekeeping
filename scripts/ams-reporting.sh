@@ -366,7 +366,8 @@ echo "latest_complete=$latest_complete"
 echo "latest_processing=$latest_processing"
 echo "dt_earliest_processing=$dt_earliest_processing"
 
-dt_now=$(date "+%T %Y-%m-%d")
+#dt_now=$(date "+%T %Y-%m-%d")
+dt_now=$(date "+%Y-%m-%d %T")
 echo "dt_now=$dt_now"
 
 t_out_1900_unprocessed=$(date '+%s' -d "$dt_now")
