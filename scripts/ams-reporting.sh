@@ -241,7 +241,7 @@ fi
 if [[ $schema_id == 77 ]];then
 backlog_adaptive_threshold=$(($backlog_adaptive_threshold*6))
 fi
-if [[ $schema_id == 82 ]];then
+if [[ $schema_id == 82 ]] || [[ $schema_id == 99 ]];then
 backlog_adaptive_threshold=$(($backlog_adaptive_threshold*2))
 fi
 
@@ -403,9 +403,19 @@ echo "t_delta_secs_processing=$t_delta_secs_processing"
 fi
 echo "======================================================================================================"
 t_delta_threshold_mins=90
+
+if [[ $schema_id == 77 ]];then
+t_delta_threshold_mins=$((90*6))
+fi
+
+if [[ $schema_id == 44 ]] || [[ $schema_id == 77 ]];then
+t_delta_threshold_mins=$((90*2))
+fi
+
 t_delta_threshold_secs=$(($t_delta_threshold_mins*60)) # 90mins is 5400secs
 echo "t_delta_threshold_mins=$t_delta_threshold_mins"
 echo "t_delta_threshold_secs=$t_delta_threshold_secs"
+
 if [[ `echo $earliest_unprocessed` ]] || [[ `echo $latest_processing` ]];then
 
 if [[ $t_delta_secs_unprocessed -gt $t_delta_threshold_secs ]] || [[ $t_delta_secs_processing -gt $t_delta_threshold_secs ]];then
