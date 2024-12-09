@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 ####################################################### This is the AMD AzureDB Healthcheck Script, and the associated documentation is in Ensemble under the "Libra System Admin Documents" area:
 ####################################################### "GoB Phase 1 - Oracle_Postgres DB Checks_v11.7_MAP.docx" is the latest version as of 25/11/2024
-echo "Script Version 15.5 Check #6 variable resets"
+echo "Script Version 15.6 sftp debug"
 echo "Designed by Mark A. Porter"
 
 if [[ `echo $KV_NAME | grep "test"` ]];then
@@ -408,7 +408,11 @@ if [[ $schema_id == 77 ]];then
 t_delta_threshold_mins=$((90*6))
 fi
 
-if [[ $schema_id == 44 ]] || [[ $schema_id == 99 ]];then
+if [[ $schema_id == 99 ]];then
+t_delta_threshold_mins=$((90*3))
+fi
+
+if [[ $schema_id == 44 ]];then
 t_delta_threshold_mins=$((90*2))
 fi
 
@@ -1158,7 +1162,7 @@ fi
 fi
 
 echo "$(date "+%d/%m/%Y %T") Uploading the CSV to BAIS" >> $OUTFILE_LOG
-sftp -oStrictHostKeyChecking=no -oHostKeyAlgorithms=+ssh-rsa -i /tmp/ams-reporting/sftp-pvt-key ${sftp_username}@${sftp_endpoint} << EOF
+sftp -vvv -oStrictHostKeyChecking=no -oHostKeyAlgorithms=+ssh-rsa -i /tmp/ams-reporting/sftp-pvt-key ${sftp_username}@${sftp_endpoint} << EOF
 put $OUTFILE.csv
 put $OUTFILE_STATS.csv
 quit
