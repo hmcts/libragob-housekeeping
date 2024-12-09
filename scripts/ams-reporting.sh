@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 ####################################################### This is the AMD AzureDB Healthcheck Script, and the associated documentation is in Ensemble under the "Libra System Admin Documents" area:
 ####################################################### "GoB Phase 1 - Oracle_Postgres DB Checks_v11.7_MAP.docx" is the latest version as of 25/11/2024
-echo "Script Version 15.4 Check #6 variable resets"
+echo "Script Version 15.5 Check #6 variable resets"
 echo "Designed by Mark A. Porter"
 
 if [[ `echo $KV_NAME | grep "test"` ]];then
@@ -389,7 +389,7 @@ fi
 if [[ `echo $latest_processing` ]];then
 
 t_out_1900_processing=$(date '+%s' -d "$dt_now")
-t_in_1900_processing=$(date '+%s' -d "$dt_earliest_processing")
+t_in_1900_processing=$(date '+%s' -d "$dt_latest_processing")
 t_delta_secs_processing=`expr $t_out_1900_processing - $t_in_1900_processing`
 echo "t_out_1900_processing=$t_out_1900_processing"
 echo "t_in_1900_processing=$t_in_1900_processing"
