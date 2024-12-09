@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 ####################################################### This is the AMD AzureDB Healthcheck Script, and the associated documentation is in Ensemble under the "Libra System Admin Documents" area:
 ####################################################### "GoB Phase 1 - Oracle_Postgres DB Checks_v11.7_MAP.docx" is the latest version as of 25/11/2024
-echo "Script Version 15.1 Check #6 remove debug"
+echo "Script Version 15.2 Check #6 conditional statement"
 echo "Designed by Mark A. Porter"
 
 if [[ `echo $KV_NAME | grep "test"` ]];then
@@ -364,7 +364,7 @@ echo "earliest_unprocessed=$earliest_unprocessed"
 echo "dt_earliest_unprocessed=$dt_earliest_unprocessed"
 echo "latest_complete=$latest_complete"
 echo "latest_processing=$latest_processing"
-echo "dt_earliest_processing=$dt_earliest_processing"
+echo "dt_latest_processing=$dt_latest_processing"
 
 #dt_now=$(date "+%T %Y-%m-%d")
 dt_now=$(date "+%Y-%m-%d %T")
@@ -382,7 +382,7 @@ t_in_1900_processing=$(date '+%s' -d "$dt_earliest_processing")
 t_delta_secs_processing=`expr $t_out_1900_processing - $t_in_1900_processing`
 echo "t_out_1900_processing=$t_out_1900_processing"
 echo "t_in_1900_processing=$t_in_1900_processing"
-echo "t_delta_secs=$t_delta_secs_processing"
+echo "t_delta_secs_processing=$t_delta_secs_processing"
 echo "======================================================================================================"
 t_delta_threshold_mins=90
 t_delta_threshold_secs=$(($t_delta_threshold_mins*60)) # 90mins is 5400secs
@@ -390,7 +390,7 @@ echo "t_delta_threshold_mins=$t_delta_threshold_mins"
 echo "t_delta_threshold_secs=$t_delta_threshold_secs"
 if [[ `echo $earliest_unprocessed` ]] || [[ `echo $latest_processing` ]];then
 
-if [[ $t_delta_secs_unprocessed -gt $t_delta_threshold_secs ]] || [[ $last_check_unprocessed -gt $t_delta_threshold_secs ]] || [[ $t_delta_secs_processing -gt $t_delta_threshold_secs ]] || [[ $last_check_processing -gt $t_delta_threshold_secs ]];then
+if [[ $t_delta_secs_unprocessed -gt $t_delta_threshold_secs ]] || [[ $t_delta_secs_processing -gt $t_delta_threshold_secs ]];then
 echo "$(date "+%d/%m/%Y %T"),AZDB_update_processing_backlog${schema_id},${t_delta_threshold_mins}minsStaleness,$earliest_unprocessed,$latest_complete,$latest_processing,warn" >> $OUTFILE
 else
 echo "$(date "+%d/%m/%Y %T"),AZDB_update_processing_backlog${schema_id},${t_delta_threshold_mins}minsStaleness,$earliest_unprocessed,$latest_complete,$latest_processing,ok" >> $OUTFILE
