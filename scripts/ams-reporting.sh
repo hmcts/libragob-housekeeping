@@ -12,8 +12,8 @@ fi
 
 OPDIR="/tmp/ams-reporting/"
 mkdir $OPDIR
-OUTFILE="${OPDIR}ThemisAZ_hc"
-OUTFILE_STATS="${OPDIR}ThemisAZ_stats"
+OUTFILE="${OPDIR}ThemisAZ_hc.csv"
+OUTFILE_STATS="${OPDIR}ThemisAZ_stats.csv"
 OUTFILE_LOG="${OPDIR}ThemisAZ.log"
 echo $(date "+%d/%m/%Y %T") > $OUTFILE
 echo $(date "+%d/%m/%Y %T") > $OUTFILE_STATS
@@ -1115,6 +1115,8 @@ echo "confiscation_username: $confiscation_username" >> $OUTFILE_LOG
 echo "fines_username: $fines_username" >> $OUTFILE_LOG
 echo "maintenance_username: $maintenance_username" >> $OUTFILE_LOG
 echo "sftp_username: $sftp_username" >> $OUTFILE_LOG
+echo "sftp_endpoint: $sftp_endpoint" >> $OUTFILE_LOG
+echo "sftp_port: $sft_port" >> $OUTFILE_LOG
 
 if [[ 0 == 1 ]];then
 if [[ $op_env == prod ]];then
@@ -1129,7 +1131,7 @@ cat /tmp/ams-reporting/ams-reporting.pvt.key
 fi
 fi
 
-echo "$(date "+%d/%m/%Y %T") Uploading the CSV to BAIS" >> $OUTFILE_LOG
+echo "$(date "+%d/%m/%Y %T") Uploading the CSVs to BAIS" >> $OUTFILE_LOG
 #sftp -vvv -oStrictHostKeyChecking=no -oHostKeyAlgorithms=+ssh-rsa -i /tmp/ams-reporting/sftp-pvt-key ${sftp_username}@${sftp_endpoint}:${sftp_port} << EOF
 sftp -oStrictHostKeyChecking=no -oHostKeyAlgorithms=+ssh-rsa -i /tmp/ams-reporting/sftp-pvt-key ${sftp_username}@${sftp_endpoint}:${sftp_port} << EOF
 put $OUTFILE.csv
@@ -1137,7 +1139,7 @@ put $OUTFILE_STATS.csv
 quit
 EOF
 
-echo "$(date "+%d/%m/%Y %T") The CSV has been successfully uploaded to BAIS" >> $OUTFILE_LOG
+echo "$(date "+%d/%m/%Y %T") The CSVs have been successfully uploaded to BAIS" >> $OUTFILE_LOG
 
 else
 
@@ -1151,6 +1153,3 @@ echo "cat of $OUTFILE_STATS:"
 cat $OUTFILE_STATS
 echo "cat of $OUTFILE_LOG:"
 cat $OUTFILE_LOG
-
-mv $OUTFILE $OUTFILE.csv
-mv $OUTFILE_STATS $OUTFILE_STATS.csv
