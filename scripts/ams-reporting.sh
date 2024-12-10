@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 ####################################################### This is the AMD AzureDB Healthcheck Script, and the associated documentation is in Ensemble under the "Libra System Admin Documents" area:
 ####################################################### "GoB Phase 1 - Oracle_Postgres DB Checks_v11.7_MAP.docx" is the latest version as of 25/11/2024
-echo "Script Version 15.6 sftp debug"
+echo "Script Version 15.7 removed Check #6 debug"
 echo "Designed by Mark A. Porter"
 
 if [[ `echo $KV_NAME | grep "test"` ]];then
@@ -351,38 +351,20 @@ echo "line=$line"
 schema_id=`echo $line | awk -F"," '{print $1}'`
 earliest_unprocessed=`echo $line | awk -F"," '{print $2}'`
 dt_earliest_unprocessed=`echo $earliest_unprocessed | awk -F"." '{print $1}'`
-#dt_earliest_unprocessed_tmp=`echo $earliest_unprocessed | awk -F"." '{print $1}'`
-#dt_earliest_unprocessed=`echo $dt_earliest_unprocessed_tmp | awk -F" " '{print $2" "$1}'`
 latest_complete=`echo $line | awk -F"," '{print $3}'`
 latest_processing=`echo $line | awk -F"," '{print $4}'`
 dt_latest_processing=`echo $latest_processing | awk -F"." '{print $1}'`
-#dt_latest_processing_tmp=`echo $latest_processing | awk -F"." '{print $1}'`
-#dt_latest_processing=`echo $dt_latest_processing_tmp | awk -F" " '{print $2" "$1}'`
-
-echo "schema_id=$schema_id"
-echo "earliest_unprocessed=$earliest_unprocessed"
-echo "dt_earliest_unprocessed=$dt_earliest_unprocessed"
-echo "latest_complete=$latest_complete"
-echo "latest_processing=$latest_processing"
-echo "dt_latest_processing=$dt_latest_processing"
-
-#dt_now=$(date "+%T %Y-%m-%d")
 dt_now=$(date "+%Y-%m-%d %T")
-echo "dt_now=$dt_now"
 
 if [[ `echo $earliest_unprocessed` ]];then
 
 t_out_1900_unprocessed=$(date '+%s' -d "$dt_now")
 t_in_1900_unprocessed=$(date '+%s' -d "$dt_earliest_unprocessed")
 t_delta_secs_unprocessed=`expr $t_out_1900_unprocessed - $t_in_1900_unprocessed`
-echo "t_out_1900_unprocessed=$t_out_1900_unprocessed"
-echo "t_in_1900_unprocessed=$t_in_1900_unprocessed"
-echo "t_delta_secs_unprocessed=$t_delta_secs_unprocessed"
 
 else
 
 t_delta_secs_unprocessed=0
-echo "t_delta_secs_unprocessed=$t_delta_secs_unprocessed"
 
 fi
 
@@ -391,17 +373,13 @@ if [[ `echo $latest_processing` ]];then
 t_out_1900_processing=$(date '+%s' -d "$dt_now")
 t_in_1900_processing=$(date '+%s' -d "$dt_latest_processing")
 t_delta_secs_processing=`expr $t_out_1900_processing - $t_in_1900_processing`
-echo "t_out_1900_processing=$t_out_1900_processing"
-echo "t_in_1900_processing=$t_in_1900_processing"
-echo "t_delta_secs_processing=$t_delta_secs_processing"
 
 else
 
 t_delta_secs_processing=0
-echo "t_delta_secs_processing=$t_delta_secs_processing"
 
 fi
-echo "======================================================================================================"
+
 t_delta_threshold_mins=90
 
 if [[ $schema_id == 77 ]];then
@@ -417,8 +395,6 @@ t_delta_threshold_mins=$((90*2))
 fi
 
 t_delta_threshold_secs=$(($t_delta_threshold_mins*60)) # 90mins is 5400secs
-echo "t_delta_threshold_mins=$t_delta_threshold_mins"
-echo "t_delta_threshold_secs=$t_delta_threshold_secs"
 
 if [[ `echo $earliest_unprocessed` ]] || [[ `echo $latest_processing` ]];then
 
