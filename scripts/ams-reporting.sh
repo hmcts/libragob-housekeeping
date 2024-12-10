@@ -59,12 +59,6 @@ maintenance_url=$(cat /mnt/secrets/$KV_NAME/amd-maintenance-datasource-url)
 maintenance_host=`echo $maintenance_url | awk -F"\/\/" {'print $2'} | awk -F":" {'print $1'}`
 maintenance_port=`echo $maintenance_url | awk -F":" {'print $4'} | awk -F"\/" {'print $1'}`
 maintenance_db=`echo $maintenance_url | awk -F":" {'print $4'} | awk -F"\/" {'print $2'}`
-
-echo "event_username: $event_username" >> $OUTFILE_LOG
-echo "postgres_username: $postgres_username" >> $OUTFILE_LOG
-echo "confiscation_username: $confiscation_username" >> $OUTFILE_LOG
-echo "fines_username: $fines_username" >> $OUTFILE_LOG
-echo "maintenance_username: $maintenance_username" >> $OUTFILE_LOG
 ####################################################### CHECK 1
 echo "[Check #1: Locked Schemas]" >> $OUTFILE
 echo "DateTime,CheckName,Status,Result" >> $OUTFILE
@@ -1154,6 +1148,12 @@ if [ -e /mnt/secrets/$KV_NAME/amd-sftp-endpoint ] && [ -e /mnt/secrets/$KV_NAME/
 
 sftp_username=$(cat /mnt/secrets/$KV_NAME/amd-sftp-username)
 sftp_endpoint=$(cat /mnt/secrets/$KV_NAME/amd-sftp-endpoint)
+
+echo "event_username: $event_username" >> $OUTFILE_LOG
+echo "postgres_username: $postgres_username" >> $OUTFILE_LOG
+echo "confiscation_username: $confiscation_username" >> $OUTFILE_LOG
+echo "fines_username: $fines_username" >> $OUTFILE_LOG
+echo "maintenance_username: $maintenance_username" >> $OUTFILE_LOG
 echo "sftp_usernamee: $sftp_username_username" >> $OUTFILE_LOG
 
 if [[ 0 == 1 ]];then
