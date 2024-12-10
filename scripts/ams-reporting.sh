@@ -1116,7 +1116,7 @@ echo "fines_username: $fines_username" >> $OUTFILE_LOG
 echo "maintenance_username: $maintenance_username" >> $OUTFILE_LOG
 echo "sftp_username: $sftp_username" >> $OUTFILE_LOG
 echo "sftp_endpoint: $sftp_endpoint" >> $OUTFILE_LOG
-echo "sftp_port: $sft_port" >> $OUTFILE_LOG
+echo "sftp_port: $sftp_port" >> $OUTFILE_LOG
 
 if [[ 0 == 1 ]];then
 if [[ $op_env == prod ]];then
