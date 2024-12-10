@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 ####################################################### This is the AMD AzureDB Healthcheck Script, and the associated documentation is in Ensemble under the "Libra System Admin Documents" area:
 ####################################################### "GoB Phase 1 - Oracle_Postgres DB Checks_v11.7_MAP.docx" is the latest version as of 25/11/2024
-echo "Script Version 15.8 cat log at very end"
+echo "Script Version 15.9 sftp port 22"
 echo "Designed by Mark A. Porter"
 
 if [[ `echo $KV_NAME | grep "test"` ]];then
@@ -1107,6 +1107,7 @@ if [ -e /mnt/secrets/$KV_NAME/amd-sftp-endpoint ] && [ -e /mnt/secrets/$KV_NAME/
 
 sftp_username=$(cat /mnt/secrets/$KV_NAME/amd-sftp-username)
 sftp_endpoint=$(cat /mnt/secrets/$KV_NAME/amd-sftp-endpoint)
+sftp_port=22 # 2200
 
 echo "event_username: $event_username" >> $OUTFILE_LOG
 echo "postgres_username: $postgres_username" >> $OUTFILE_LOG
@@ -1129,8 +1130,8 @@ fi
 fi
 
 echo "$(date "+%d/%m/%Y %T") Uploading the CSV to BAIS" >> $OUTFILE_LOG
-#sftp -vvv -oStrictHostKeyChecking=no -oHostKeyAlgorithms=+ssh-rsa -i /tmp/ams-reporting/sftp-pvt-key ${sftp_username}@${sftp_endpoint} << EOF
-sftp -oStrictHostKeyChecking=no -oHostKeyAlgorithms=+ssh-rsa -i /tmp/ams-reporting/sftp-pvt-key ${sftp_username}@${sftp_endpoint} << EOF
+#sftp -vvv -oStrictHostKeyChecking=no -oHostKeyAlgorithms=+ssh-rsa -i /tmp/ams-reporting/sftp-pvt-key ${sftp_username}@${sftp_endpoint}:${sftp_port} << EOF
+sftp -oStrictHostKeyChecking=no -oHostKeyAlgorithms=+ssh-rsa -i /tmp/ams-reporting/sftp-pvt-key ${sftp_username}@${sftp_endpoint}:${sftp_port} << EOF
 put $OUTFILE.csv
 put $OUTFILE_STATS.csv
 quit
