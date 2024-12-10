@@ -303,7 +303,7 @@ fi
 
 else
 
-if [[ $count -gt $nonidle_threshold ]] || [[ $state == null ]];then
+if [[ $count -gt $nonidle_threshold ]];then
 echo "$(date "+%d/%m/%Y %T"),AZDB_db_threads,$state,$nonidle_threshold,$count,warn" >> $OUTFILE
 else
 echo "$(date "+%d/%m/%Y %T"),AZDB_db_threads,$state,$nonidle_threshold,$count,ok" >> $OUTFILE
