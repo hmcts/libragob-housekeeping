@@ -1158,7 +1158,8 @@ echo "sftp_usernamee: $sftp_username_username" >> $OUTFILE_LOG
 
 if [[ 0 == 1 ]];then
 if [[ $op_env == prod ]];then
-ssh-keygen -vvv -t rsa -b 4096 -f /tmp/ams-reporting/ams-reporting -N ""
+#ssh-keygen -vvv -t rsa -b 4096 -f /tmp/ams-reporting/ams-reporting -N ""
+ssh-keygen -t rsa -b 4096 -f /tmp/ams-reporting/ams-reporting -N ""
 mv /tmp/ams-reporting/ams-reporting.pub /tmp/ams-reporting/ams-reporting.pub.key
 mv /tmp/ams-reporting/ams-reporting /tmp/ams-reporting/ams-reporting.pvt.key
 echo "cat of ams-reporting.pub.key:"
@@ -1169,6 +1170,7 @@ fi
 fi
 
 echo "$(date "+%d/%m/%Y %T") Uploading the CSV to BAIS" >> $OUTFILE_LOG
+#sftp -vvv -oStrictHostKeyChecking=no -oHostKeyAlgorithms=+ssh-rsa -i /tmp/ams-reporting/sftp-pvt-key ${sftp_username}@${sftp_endpoint} << EOF
 sftp -vvv -oStrictHostKeyChecking=no -oHostKeyAlgorithms=+ssh-rsa -i /tmp/ams-reporting/sftp-pvt-key ${sftp_username}@${sftp_endpoint} << EOF
 put $OUTFILE.csv
 put $OUTFILE_STATS.csv
