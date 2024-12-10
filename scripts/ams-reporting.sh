@@ -59,6 +59,12 @@ maintenance_url=$(cat /mnt/secrets/$KV_NAME/amd-maintenance-datasource-url)
 maintenance_host=`echo $maintenance_url | awk -F"\/\/" {'print $2'} | awk -F":" {'print $1'}`
 maintenance_port=`echo $maintenance_url | awk -F":" {'print $4'} | awk -F"\/" {'print $1'}`
 maintenance_db=`echo $maintenance_url | awk -F":" {'print $4'} | awk -F"\/" {'print $2'}`
+
+echo "event_username: $event_username" >> $OUTFILE_LOG
+echo "postgres_username: $postgres_username" >> $OUTFILE_LOG
+echo "confiscation_username: $confiscation_username" >> $OUTFILE_LOG
+echo "fines_username: $fines_username" >> $OUTFILE_LOG
+echo "maintenance_username: $maintenance_username" >> $OUTFILE_LOG
 ####################################################### CHECK 1
 echo "[Check #1: Locked Schemas]" >> $OUTFILE
 echo "DateTime,CheckName,Status,Result" >> $OUTFILE
@@ -241,7 +247,7 @@ fi
 if [[ $schema_id == 77 ]];then
 backlog_adaptive_threshold=$(($backlog_adaptive_threshold*6))
 fi
-if [[ $schema_id == 82 ]] || [[ $schema_id == 99 ]];then
+if [[ $schema_id == 82 ]] || [[ $schema_id == 99 ]] || [[ $schema_id == 130 ]];then
 backlog_adaptive_threshold=$(($backlog_adaptive_threshold*2))
 fi
 
@@ -275,7 +281,7 @@ psql "sslmode=require host=${event_host} dbname=${event_db} port=${event_port} u
 echo "$(date "+%d/%m/%Y %T") SQL for Check #4 has been run" >> $OUTFILE_LOG
 
 idle_threshold=450
-nonidle_threshold=10
+nonidle_threshold=12
 
 echo "cat of ${OPDIR}4AZUREDB_AMD_thread_status_counts.csv:"
 cat ${OPDIR}4AZUREDB_AMD_thread_status_counts.csv
@@ -283,7 +289,7 @@ cat ${OPDIR}4AZUREDB_AMD_thread_status_counts.csv
 while read -r line;do
 
 if [[ `echo $line | grep "^,"` ]];then
-state=idle # null in the sql result
+state=null # null in the sql result
 else
 state=`echo $line | awk -F"," '{print $1}'`
 fi
@@ -293,7 +299,7 @@ count=`echo $line | awk -F"," '{print $2}'`
 echo "state=$state"
 echo "count=$count"
 
-if [[ $state == idle ]];then
+if [[ $state == idle ]] || [[ $state == null ]];then
 
 if [[ $count -gt $idle_threshold ]];then
 echo "$(date "+%d/%m/%Y %T"),AZDB_db_threads,$state,$idle_threshold,$count,warn" >> $OUTFILE
@@ -1148,6 +1154,7 @@ if [ -e /mnt/secrets/$KV_NAME/amd-sftp-endpoint ] && [ -e /mnt/secrets/$KV_NAME/
 
 sftp_username=$(cat /mnt/secrets/$KV_NAME/amd-sftp-username)
 sftp_endpoint=$(cat /mnt/secrets/$KV_NAME/amd-sftp-endpoint)
+echo "sftp_usernamee: $sftp_username_username" >> $OUTFILE_LOG
 
 if [[ 0 == 1 ]];then
 if [[ $op_env == prod ]];then
