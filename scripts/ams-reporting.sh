@@ -293,7 +293,7 @@ count=`echo $line | awk -F"," '{print $2}'`
 echo "state=$state"
 echo "count=$count"
 
-if [[ $state == idle ]] || [[ $state == null ]];then
+if [[ $state == idle ]];then
 
 if [[ $count -gt $idle_threshold ]];then
 echo "$(date "+%d/%m/%Y %T"),AZDB_db_threads,$state,$idle_threshold,$count,warn" >> $OUTFILE
@@ -303,7 +303,7 @@ fi
 
 else
 
-if [[ $count -gt $nonidle_threshold ]];then
+if [[ $count -gt $nonidle_threshold ]] || [[ $state == null ]];then
 echo "$(date "+%d/%m/%Y %T"),AZDB_db_threads,$state,$nonidle_threshold,$count,warn" >> $OUTFILE
 else
 echo "$(date "+%d/%m/%Y %T"),AZDB_db_threads,$state,$nonidle_threshold,$count,ok" >> $OUTFILE
@@ -412,7 +412,7 @@ if [[ $schema_id == 99 ]];then
 t_delta_threshold_mins=$((90*3))
 fi
 
-if [[ $schema_id == 44 ]];then
+if [[ $schema_id == 44 ]] || [[ $schema_id == 130 ]];then
 t_delta_threshold_mins=$((90*2))
 fi
 
