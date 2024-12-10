@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 ####################################################### This is the AMD AzureDB Healthcheck Script, and the associated documentation is in Ensemble under the "Libra System Admin Documents" area:
 ####################################################### "GoB Phase 1 - Oracle_Postgres DB Checks_v11.7_MAP.docx" is the latest version as of 25/11/2024
-echo "Script Version 15.7 removed Check #6 debug"
+echo "Script Version 15.8 cat log at very end"
 echo "Designed by Mark A. Porter"
 
 if [[ `echo $KV_NAME | grep "test"` ]];then
@@ -277,9 +277,6 @@ echo "$(date "+%d/%m/%Y %T") SQL for Check #4 has been run" >> $OUTFILE_LOG
 idle_threshold=450
 nonidle_threshold=15
 
-echo "cat of ${OPDIR}4AZUREDB_AMD_thread_status_counts.csv:"
-cat ${OPDIR}4AZUREDB_AMD_thread_status_counts.csv
-
 while read -r line;do
 
 if [[ `echo $line | grep "^,"` ]];then
@@ -289,9 +286,6 @@ state=`echo $line | awk -F"," '{print $1}'`
 fi
 
 count=`echo $line | awk -F"," '{print $2}'`
-
-echo "state=$state"
-echo "count=$count"
 
 if [[ $state == idle ]];then
 
@@ -345,8 +339,6 @@ psql "sslmode=require host=${event_host} dbname=${event_db} port=${event_port} u
 echo "$(date "+%d/%m/%Y %T") SQL for Check #6 has been run" >> $OUTFILE_LOG
 
 while read -r line;do
-
-echo "line=$line"
 
 schema_id=`echo $line | awk -F"," '{print $1}'`
 earliest_unprocessed=`echo $line | awk -F"," '{print $2}'`
@@ -1082,15 +1074,6 @@ mv $OUTFILE.temp $OUTFILE
 
 fi
 
-echo "cat of $OUTFILE:"
-cat $OUTFILE
-echo "cat of $OUTFILE_STATS:"
-cat $OUTFILE_STATS
-echo "cat of $OUTFILE_LOG:"
-cat $OUTFILE_LOG
-
-mv $OUTFILE $OUTFILE.csv
-mv $OUTFILE_STATS $OUTFILE_STATS.csv
 ############################################################################
 ### Push CSV file to BAIS so it can be ingested and displayed in the AMD ###
 ############################################################################
@@ -1160,3 +1143,13 @@ else
 echo "Cannot access BAIS KeyVault connection variables"
 
 fi
+
+echo "cat of $OUTFILE:"
+cat $OUTFILE
+echo "cat of $OUTFILE_STATS:"
+cat $OUTFILE_STATS
+echo "cat of $OUTFILE_LOG:"
+cat $OUTFILE_LOG
+
+mv $OUTFILE $OUTFILE.csv
+mv $OUTFILE_STATS $OUTFILE_STATS.csv
