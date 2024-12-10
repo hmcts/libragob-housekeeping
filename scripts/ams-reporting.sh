@@ -1154,7 +1154,7 @@ echo "postgres_username: $postgres_username" >> $OUTFILE_LOG
 echo "confiscation_username: $confiscation_username" >> $OUTFILE_LOG
 echo "fines_username: $fines_username" >> $OUTFILE_LOG
 echo "maintenance_username: $maintenance_username" >> $OUTFILE_LOG
-echo "sftp_usernamee: $sftp_username_username" >> $OUTFILE_LOG
+echo "sftp_username: $sftp_username" >> $OUTFILE_LOG
 
 if [[ 0 == 1 ]];then
 if [[ $op_env == prod ]];then
