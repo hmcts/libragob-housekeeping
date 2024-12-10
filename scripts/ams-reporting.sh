@@ -275,7 +275,7 @@ psql "sslmode=require host=${event_host} dbname=${event_db} port=${event_port} u
 echo "$(date "+%d/%m/%Y %T") SQL for Check #4 has been run" >> $OUTFILE_LOG
 
 idle_threshold=450
-nonidle_threshold=12
+nonidle_threshold=15
 
 echo "cat of ${OPDIR}4AZUREDB_AMD_thread_status_counts.csv:"
 cat ${OPDIR}4AZUREDB_AMD_thread_status_counts.csv
