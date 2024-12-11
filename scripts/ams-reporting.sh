@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 ####################################################### This is the AMD AzureDB Healthcheck Script, and the associated documentation is in Ensemble under the "Libra System Admin Documents" area:
 ####################################################### "GoB Phase 1 - Oracle_Postgres DB Checks_v11.7_MAP.docx" is the latest version as of 25/11/2024
-echo "Script Version 16.0 sftp port 2200"
+echo "Script Version 16.1 sftp port 2200 with debug log"
 echo "Designed by Mark A. Porter"
 
 if [[ `echo $KV_NAME | grep "test"` ]];then
@@ -1133,6 +1133,7 @@ fi
 
 echo "$(date "+%d/%m/%Y %T") Uploading the CSVs to BAIS" >> $OUTFILE_LOG
 #sftp -vvv -P ${sftp_port} -oStrictHostKeyChecking=no -oHostKeyAlgorithms=+ssh-rsa -i /tmp/ams-reporting/sftp-pvt-key ${sftp_username}@${sftp_endpoint} << EOF
+echo "$(date "+%d/%m/%Y %T") Fired sftp conn"
 sftp -P ${sftp_port} -oStrictHostKeyChecking=no -oHostKeyAlgorithms=+ssh-rsa -i /tmp/ams-reporting/sftp-pvt-key ${sftp_username}@${sftp_endpoint} << EOF
 put $OUTFILE
 put $OUTFILE_STATS
