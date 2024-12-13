@@ -1140,11 +1140,11 @@ fi
 fi
 
 echo "$(date "+%d/%m/%Y %T") Uploading the CSVs to BAIS" >> $OUTFILE_LOG
-#sftp -vvv -P ${sftp_port} -oStrictHostKeyChecking=no -oHostKeyAlgorithms=+ssh-rsa -i /tmp/ams-reporting/sftp-pvt-key ${sftp_username}@${sftp_endpoint} << EOF
 #tracert $sftp_endpoint >> $OUTFILE_LOG
 #traceroute $sftp_endpoint >> $OUTFILE_LOG
 #tracepath $sftp_endpoint >> $OUTFILE_LOG
 echo "Firing off the sftp connection to BAIS..."
+#sftp -vvv -P ${sftp_port} -oStrictHostKeyChecking=no -oHostKeyAlgorithms=+ssh-rsa -i /tmp/ams-reporting/sftp-pvt-key ${sftp_username}@${sftp_endpoint} << EOF
 sftp -P ${sftp_port} -oStrictHostKeyChecking=no -oHostKeyAlgorithms=+ssh-rsa -i /tmp/ams-reporting/sftp-pvt-key ${sftp_username}@${sftp_endpoint} << EOF
 put $OUTFILE
 put $OUTFILE_STATS
@@ -1154,7 +1154,7 @@ EOF
 if [ $? -eq 0 ];then
 echo "$(date "+%d/%m/%Y %T") The CSVs have been successfully uploaded to BAIS" >> $OUTFILE_LOG
 else
-echo "$(date "+%d/%m/%Y %T") Connection to BAIS has timed out" >> $OUTFILE_LOG
+echo "$(date "+%d/%m/%Y %T") Connection to BAIS has most probably timed out, turn on -vvv debug to diagnose further as necessary" >> $OUTFILE_LOG
 fi
 
 else
