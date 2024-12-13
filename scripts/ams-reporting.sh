@@ -1110,8 +1110,8 @@ if [ -e /mnt/secrets/$KV_NAME/amd-sftp-endpoint ] && [ -e /mnt/secrets/$KV_NAME/
 
 sftp_username=$(cat /mnt/secrets/$KV_NAME/amd-sftp-username)
 sftp_endpoint=$(cat /mnt/secrets/$KV_NAME/amd-sftp-endpoint)
-#LB=10.224.251.4
-sftp_endpoint=10.225.251.4 #n1
+#LB KV IP=10.224.251.4
+#sftp_endpoint=10.225.251.4 #n1
 #sftp_endpoint=10.25.251.4 #n2
 sftp_port=2200 # 22
 
