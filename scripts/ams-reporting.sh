@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
-####################################################### This is the AMD AzureDB Healthcheck Script, and the associated documentation is in Ensemble under the "Libra System Admin Documents" area:
-####################################################### "GoB Phase 1 - Oracle_Postgres DB Checks_v11.7_MAP.docx" is the latest version as of 25/11/2024
+############################################################### This is the AMD AzureDB HealthCheck script, and the associated documentation is in Ensemble under the "Libra System Admin Documents" area:
+############################################################### "GoB Phase 1 - Oracle_Postgres DB Checks_v11.7_MAP.docx" is the latest version as of 25/11/2024
 echo "Script Version 16.6 internal VIP sftp"
 echo "Designed by Mark A. Porter"
 
@@ -17,9 +17,7 @@ OUTFILE_STATS="${OPDIR}ThemisAZ_stats.csv"
 OUTFILE_LOG="${OPDIR}ThemisAZ.log"
 echo $(date "+%d/%m/%Y %T") > $OUTFILE
 echo $(date "+%d/%m/%Y %T") > $OUTFILE_STATS
-###############################################################
-### Set-up DB connection variables, extracted from KeyVault ###
-###############################################################
+############################################################### Set-up DB connection variables, extracted from KeyVault
 # EventDB connection variables
 event_username=$(cat /mnt/secrets/$KV_NAME/amd-event-username)
 event_password=$(cat /mnt/secrets/$KV_NAME/amd-event-password)
@@ -1146,7 +1144,7 @@ echo "$(date "+%d/%m/%Y %T") Uploading the CSVs to BAIS" >> $OUTFILE_LOG
 #tracert $sftp_endpoint >> $OUTFILE_LOG
 #traceroute $sftp_endpoint >> $OUTFILE_LOG
 #tracepath $sftp_endpoint >> $OUTFILE_LOG
-echo "$(date "+%d/%m/%Y %T") Fired sftp conn"
+echo "Firing off the sftp connection to BAIS..."
 sftp -P ${sftp_port} -oStrictHostKeyChecking=no -oHostKeyAlgorithms=+ssh-rsa -i /tmp/ams-reporting/sftp-pvt-key ${sftp_username}@${sftp_endpoint} << EOF
 put $OUTFILE
 put $OUTFILE_STATS
@@ -1161,7 +1159,7 @@ fi
 
 else
 
-echo "Cannot access BAIS KeyVault connection variables"
+echo "$(date "+%d/%m/%Y %T") Cannot access BAIS KeyVault connection variables" >> $OUTFILE_LOG
 
 fi
 
