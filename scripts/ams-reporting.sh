@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 ####################################################### This is the AMD AzureDB Healthcheck Script, and the associated documentation is in Ensemble under the "Libra System Admin Documents" area:
 ####################################################### "GoB Phase 1 - Oracle_Postgres DB Checks_v11.7_MAP.docx" is the latest version as of 25/11/2024
-echo "Script Version 16.6 n1"
+echo "Script Version 16.6 61 Tier 2"
 echo "Designed by Mark A. Porter"
 
 if [[ `echo $KV_NAME | grep "test"` ]];then
@@ -382,7 +382,7 @@ if [[ $schema_id == 99 ]] || [[ $schema_id == 130 ]];then
 t_delta_threshold_mins=$((90*3))
 fi
 
-if [[ $schema_id == 44 ]];then
+if [[ $schema_id == 44 ]] || [[ $schema_id == 61 ]];then
 t_delta_threshold_mins=$((90*2))
 fi
 
