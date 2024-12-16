@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 ############################################################### This is the AMD AzureDB HealthCheck script, and the associated documentation is in Ensemble under the "Libra System Admin Documents" area:
 ############################################################### "GoB Phase 1 - Oracle_Postgres DB Checks_v11.7_MAP.docx" is the latest version as of 25/11/2024
-echo "Script Version 16.7 44 270mins"
+echo "Script Version 16.8 Check #14"
 echo "Designed by Mark A. Porter"
 
 if [[ `echo $KV_NAME | grep "test"` ]];then
@@ -1152,8 +1152,10 @@ quit
 EOF
 
 if [ $? -eq 0 ];then
+bais_upload_errors=0
 echo "$(date "+%d/%m/%Y %T") The CSVs have been successfully uploaded to BAIS" >> $OUTFILE_LOG
 else
+bais_upload_errors=1
 echo "$(date "+%d/%m/%Y %T") Connection to BAIS has most probably timed out, turn on -vvv debug to diagnose further as necessary" >> $OUTFILE_LOG
 fi
 
@@ -1162,7 +1164,18 @@ else
 echo "$(date "+%d/%m/%Y %T") Cannot access BAIS KeyVault connection variables" >> $OUTFILE_LOG
 
 fi
+####################################################### CHECK 14
+echo "[Check #14: Critical Logfile Errors]" >> $OUTFILE
+echo "DateTime,CheckName,Status,Result" >> $OUTFILE
+echo "$(date "+%d/%m/%Y %T") Starting Check #14" >> $OUTFILE_LOG
 
+if [[ $bais_upload_errors == 1 ]];then
+echo "$(date "+%d/%m/%Y %T"),AZDB_bais_upload,$bais_upload_errors,warn" >> $OUTFILE
+else
+echo "$(date "+%d/%m/%Y %T"),AZDB_bais_upload,$bais_upload_errors,ok" >> $OUTFILE
+fi
+echo "$(date "+%d/%m/%Y %T") Check #14 complete" >> $OUTFILE_LOG
+############################################################### Script END ###############################################################
 echo "cat of $OUTFILE:"
 cat $OUTFILE
 echo "cat of $OUTFILE_STATS:"
