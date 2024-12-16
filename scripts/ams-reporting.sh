@@ -239,7 +239,10 @@ fi
 if [[ $schema_id == 77 ]];then
 backlog_adaptive_threshold=$(($backlog_adaptive_threshold*6))
 fi
-if [[ $schema_id == 82 ]] || [[ $schema_id == 99 ]] || [[ $schema_id == 130 ]] || [[ $schema_id == 135 ]];then
+if  [[ $schema_id == 135 ]];then
+backlog_adaptive_threshold=$(($backlog_adaptive_threshold*3))
+fi
+if [[ $schema_id == 82 ]] || [[ $schema_id == 99 ]] || [[ $schema_id == 130 ]];then
 backlog_adaptive_threshold=$(($backlog_adaptive_threshold*2))
 fi
 
