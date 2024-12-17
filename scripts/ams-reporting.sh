@@ -1061,7 +1061,6 @@ echo "12/12/2024.*AZDB_update_processing_backlog92" >> $override_file
 echo "12/12/2024.*fines_recon_status" >> $override_file
 echo "13/12/2024.*AZDB_max_updates77" >> $override_file
 echo "17/12/2024.*so check ORA recon ran" >> $override_file
-echo "17/12/2024.*AZDB_update_processing_backlog135" >> $override_file
 
 fi
 
