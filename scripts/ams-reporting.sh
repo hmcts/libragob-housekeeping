@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 ############################################################### This is the AMD AzureDB HealthCheck script, and the associated documentation is in Ensemble under the "Libra System Admin Documents" area:
 ############################################################### "GoB Phase 1 - Oracle_Postgres DB Checks_v11.7_MAP.docx" is the latest version as of 25/11/2024
-echo "Script Version 17.0 Check #5 warnTEST to ok"
+echo "Script Version 17.1 new TEST sftp_endpoint"
 echo "Designed by Mark A. Porter"
 
 if [[ `echo $KV_NAME | grep "test"` ]];then
@@ -1126,7 +1126,11 @@ sftp_endpoint=$(cat /mnt/secrets/$KV_NAME/amd-sftp-endpoint)
 sftp_port=2200 # 22
 ### PROD ###
 #LB KV IP=10.224.251.4
+if [[ $op_env == prod ]];then
 sftp_endpoint=10.224.251.134 # Internal port 2200
+else
+sftp_endpoint=10.225.251.134
+fi
 ### TEST ###
 #sftp_endpoint=10.225.251.4 #n1
 #sftp_endpoint=10.25.251.4 #n2
