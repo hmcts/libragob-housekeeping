@@ -326,7 +326,8 @@ if [ ! -z $schema_id ];then
   if [[ `cat ${OPDIR}1AZUREDB_AMD_locked_schemas.csv | grep $schema_id` ]];then
     echo "$(date "+%d/%m/%Y %T"),AZDB_db_message_log_error${schema_id},$error_message,warn" >> $OUTFILE
   else
-    if [[ `echo $error_message | grep "AESD-0004"` ]] && [[ `cat ${OPDIR}3AZUREDB_AMD_message_backlogs.csv | grep "message_log_error${schema_id}" | awk -F"," '{print $4}'` < 400 ]];then
+    #if [[ `echo $error_message | grep "AESD-0004"` ]] && [[ `cat ${OPDIR}3AZUREDB_AMD_message_backlogs.csv | grep "message_log_error${schema_id}" | awk -F"," '{print $4}'` < 400 ]];then
+    if [[ `echo $error_message | grep "AESD-0003"` ]] || [[ `echo $error_message | grep "AESD-0004"` ]];then
       echo "$(date "+%d/%m/%Y %T"),AZDB_db_message_log_error${schema_id},$error_message,ok" >> $OUTFILE
     else
       echo "$(date "+%d/%m/%Y %T"),AZDB_db_message_log_error${schema_id},$error_message,warn" >> $OUTFILE
@@ -393,7 +394,7 @@ if [[ $schema_id == 99 ]] || [[ $schema_id == 130 ]] || [[ $schema_id == 44 ]] |
 t_delta_threshold_mins=$((90*3))
 fi
 
-if [[ $schema_id == 61 ]];then
+if [[ $schema_id == 61 ]] || [[ $schema_id == 139 ]];then
 t_delta_threshold_mins=$((90*2))
 fi
 
