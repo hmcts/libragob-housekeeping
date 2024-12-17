@@ -389,11 +389,11 @@ if [[ $schema_id == 135 ]];then
 t_delta_threshold_mins=$((90*4))
 fi
 
-if [[ $schema_id == 99 ]] || [[ $schema_id == 130 ]] || [[ $schema_id == 44 ]];then
+if [[ $schema_id == 99 ]] || [[ $schema_id == 130 ]] || [[ $schema_id == 44 ]] || [[ $schema_id == 126 ]];then
 t_delta_threshold_mins=$((90*3))
 fi
 
-if [[ $schema_id == 61 ]] || [[ $schema_id == 126 ]];then
+if [[ $schema_id == 61 ]];then
 t_delta_threshold_mins=$((90*2))
 fi
 
