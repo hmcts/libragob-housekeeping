@@ -393,7 +393,7 @@ if [[ $schema_id == 99 ]] || [[ $schema_id == 130 ]] || [[ $schema_id == 44 ]];t
 t_delta_threshold_mins=$((90*3))
 fi
 
-if [[ $schema_id == 61 ]];then
+if [[ $schema_id == 61 ]] || [[ $schema_id == 126 ]];then
 t_delta_threshold_mins=$((90*2))
 fi
 
