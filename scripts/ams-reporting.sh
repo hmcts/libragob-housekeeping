@@ -317,6 +317,8 @@ fi
 
 fi
 
+fi
+
 done < ${OPDIR}4AZUREDB_AMD_thread_status_counts.csv
 
 echo "$(date "+%d/%m/%Y %T") Check #4 complete" >> $OUTFILE_LOG
