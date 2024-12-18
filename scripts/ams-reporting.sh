@@ -296,30 +296,26 @@ if [[ $state == "idle" ]];then
   else
     echo "$(date "+%d/%m/%Y %T"),AZDB_db_threads,$state,$idle_threshold,$count,ok" >> $OUTFILE
   fi
-fi
-
-if [[ $state == "idle in transaction" ]];then
+elif [[ $state == "idle in transaction" ]];then
   if [[ $count -gt $idle_in_trans_threshold ]];then
     echo "$(date "+%d/%m/%Y %T"),AZDB_db_threads,$state,$idle_in_trans_threshold,$count,warn" >> $OUTFILE
   else
     echo "$(date "+%d/%m/%Y %T"),AZDB_db_threads,$state,$idle_in_trans_threshold,$count,ok" >> $OUTFILE
   fi
-fi
-
-if [[ $state == "active" ]];then
+elif [[ $state == "active" ]];then
   if [[ $count -gt $active_threshold ]];then
     echo "$(date "+%d/%m/%Y %T"),AZDB_db_threads,$state,$active_threshold,$count,warn" >> $OUTFILE
   else
     echo "$(date "+%d/%m/%Y %T"),AZDB_db_threads,$state,$active_threshold,$count,ok" >> $OUTFILE
   fi
-fi
-
-if [[ $state == "null" ]];then
+elif [[ $state == "null" ]];then
   if [[ $count -gt $null_threshold ]];then
     echo "$(date "+%d/%m/%Y %T"),AZDB_db_threads,$state,$null_threshold,$count,warn" >> $OUTFILE
   else
     echo "$(date "+%d/%m/%Y %T"),AZDB_db_threads,$state,$null_threshold,$count,ok" >> $OUTFILE
   fi
+else
+  echo "$(date "+%d/%m/%Y %T"),AZDB_db_threads,${state}NEVERseenBEFORE,N/A,$count,warn" >> $OUTFILE
 fi
 
 done < ${OPDIR}4AZUREDB_AMD_thread_status_counts.csv
