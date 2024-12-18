@@ -301,7 +301,7 @@ fi
 
 if [[ $state == active ]];then
 
-if [[ $count -gt $nonidle_threshold ]];then
+if [[ $count -gt $active_threshold ]];then
 echo "$(date "+%d/%m/%Y %T"),AZDB_db_threads,$state,$active_threshold,$count,warn" >> $OUTFILE
 else
 echo "$(date "+%d/%m/%Y %T"),AZDB_db_threads,$state,$active_threshold,$count,ok" >> $OUTFILE
