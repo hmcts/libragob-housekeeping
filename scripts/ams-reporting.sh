@@ -276,8 +276,9 @@ psql "sslmode=require host=${event_host} dbname=${event_db} port=${event_port} u
 echo "$(date "+%d/%m/%Y %T") SQL for Check #4 has been run" >> $OUTFILE_LOG
 
 idle_threshold=465
-nonidle_threshold=15
+idle_in_trans_threshold=15
 active_threshold=18
+null_threshold=15
 
 while read -r line;do
 
@@ -289,32 +290,36 @@ fi
 
 count=`echo $line | awk -F"," '{print $2}'`
 
-if [[ $state == idle ]];then
-
-if [[ $count -gt $idle_threshold ]];then
-echo "$(date "+%d/%m/%Y %T"),AZDB_db_threads,$state,$idle_threshold,$count,warn" >> $OUTFILE
-else
-echo "$(date "+%d/%m/%Y %T"),AZDB_db_threads,$state,$idle_threshold,$count,ok" >> $OUTFILE
+if [[ $state == "idle" ]];then
+  if [[ $count -gt $idle_threshold ]];then
+    echo "$(date "+%d/%m/%Y %T"),AZDB_db_threads,$state,$idle_threshold,$count,warn" >> $OUTFILE
+  else
+    echo "$(date "+%d/%m/%Y %T"),AZDB_db_threads,$state,$idle_threshold,$count,ok" >> $OUTFILE
+  fi
 fi
 
+if [[ $state == "idle in transaction" ]];then
+  if [[ $count -gt $idle_in_trans_threshold ]];then
+    echo "$(date "+%d/%m/%Y %T"),AZDB_db_threads,$state,$idle_in_trans_threshold,$count,warn" >> $OUTFILE
+  else
+    echo "$(date "+%d/%m/%Y %T"),AZDB_db_threads,$state,$idle_in_trans_threshold,$count,ok" >> $OUTFILE
+  fi
 fi
 
-if [[ $state == active ]];then
-
-if [[ $count -gt $active_threshold ]];then
-echo "$(date "+%d/%m/%Y %T"),AZDB_db_threads,$state,$active_threshold,$count,warn" >> $OUTFILE
-else
-echo "$(date "+%d/%m/%Y %T"),AZDB_db_threads,$state,$active_threshold,$count,ok" >> $OUTFILE
+if [[ $state == "active" ]];then
+  if [[ $count -gt $active_threshold ]];then
+    echo "$(date "+%d/%m/%Y %T"),AZDB_db_threads,$state,$active_threshold,$count,warn" >> $OUTFILE
+  else
+    echo "$(date "+%d/%m/%Y %T"),AZDB_db_threads,$state,$active_threshold,$count,ok" >> $OUTFILE
+  fi
 fi
 
-else
-
-if [[ $count -gt $nonidle_threshold ]];then
-echo "$(date "+%d/%m/%Y %T"),AZDB_db_threads,$state,$nonidle_threshold,$count,warn" >> $OUTFILE
-else
-echo "$(date "+%d/%m/%Y %T"),AZDB_db_threads,$state,$nonidle_threshold,$count,ok" >> $OUTFILE
-fi
-
+if [[ $state == "null" ]];then
+  if [[ $count -gt $null_threshold ]];then
+    echo "$(date "+%d/%m/%Y %T"),AZDB_db_threads,$state,$null_threshold,$count,warn" >> $OUTFILE
+  else
+    echo "$(date "+%d/%m/%Y %T"),AZDB_db_threads,$state,$null_threshold,$count,ok" >> $OUTFILE
+  fi
 fi
 
 done < ${OPDIR}4AZUREDB_AMD_thread_status_counts.csv
