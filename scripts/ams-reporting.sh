@@ -277,7 +277,7 @@ echo "$(date "+%d/%m/%Y %T") SQL for Check #4 has been run" >> $OUTFILE_LOG
 
 idle_threshold=465
 idle_in_trans_threshold=15
-active_threshold=18
+active_threshold=25 # 23 seen at 12:40 19/12/2024 when two big bundled updates on 105 & 112 were playing in so tuned from 18 to 25
 null_threshold=15
 
 while read -r line;do
