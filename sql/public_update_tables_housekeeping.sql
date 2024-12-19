@@ -111,13 +111,18 @@ WHERE
 INSERT INTO public.table_updates_backup
 SELECT *
 FROM public.table_updates
-WHERE created_date < CURRENT_DATE - INTERVAL '5 days';
-DELETE FROM public.table_updates
-WHERE created_date < CURRENT_DATE - INTERVAL '5 days';
+WHERE update_request_id IN 
+(SELECT update_request_id FROM public.update_requests
+WHERE created_date < CURRENT_DATE - INTERVAL '5 days');
 INSERT INTO public.update_requests_backup
 SELECT *
 FROM public.update_requests
 WHERE created_date < CURRENT_DATE - INTERVAL '5 days';
+
+DELETE FROM public.table_updates
+WHERE update_request_id IN
+(SELECT update_request_id FROM public.update_requests
+WHERE created_date < CURRENT_DATE - INTERVAL '5 days');
 DELETE FROM public.update_requests
 WHERE created_date < CURRENT_DATE - INTERVAL '5 days';
 DELETE FROM public.table_updates_backup
