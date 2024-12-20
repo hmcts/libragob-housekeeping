@@ -78,7 +78,7 @@ done < ${OPDIR}1AZUREDB_AMD_locked_schemas.csv
 
 #echo "$(date "+%d/%m/%Y %T"),AZDB_schema_lock,No Schema Locks,ok" >> $OUTFILE
 
-#fi
+fi
 
 echo "$(date "+%d/%m/%Y %T") Check #1 complete" >> $OUTFILE_LOG
 ####################################################### CHECK 2
@@ -102,7 +102,7 @@ done < ${OPDIR}2AZUREDB_AMD_locked_keys.csv
 
 #echo "$(date "+%d/%m/%Y %T"),AZDB_key_lock,No Instance Key Locks,ok" >> $OUTFILE
 
-#fi
+fi
 
 echo "$(date "+%d/%m/%Y %T") Check #2 complete" >> $OUTFILE_LOG
 ### Calc the 3 roundtrip ETAs from dac & gw audit tables for purpose of determining the DeliveryTime of each Schema backlog in Check #3
