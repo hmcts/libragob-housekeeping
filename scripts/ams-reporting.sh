@@ -1126,7 +1126,7 @@ fi
 
 if [ -e /mnt/secrets/$KV_NAME/amd-sftp-endpoint ] && [ -e /mnt/secrets/$KV_NAME/amd-sftp-username ];then
 
-sftp_username=$(cat /mnt/secrets/$KV_NAME/amd-sftp-username)
+sftp_username=`cat /mnt/secrets/$KV_NAME/amd-sftp-username`
 sftp_endpoint=`cat /mnt/secrets/$KV_NAME/amd-sftp-endpoint | awk -F":" '{print $1}'`
 sftp_port=`cat /mnt/secrets/$KV_NAME/amd-sftp-endpoint | awk -F":" '{print $2}'`
 
