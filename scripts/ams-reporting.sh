@@ -66,18 +66,10 @@ psql "sslmode=require host=${event_host} dbname=${event_db} port=${event_port} u
 echo "$(date "+%d/%m/%Y %T") SQL for Check #1 has been run" >> $OUTFILE_LOG
 
 if [[ `cat ${OPDIR}1AZUREDB_AMD_locked_schemas.csv | wc -l` -gt 0 ]];then
-
-while read -r line;do
-
-schema_lock=`echo $line | awk '{print $1}'`
-echo "$(date "+%d/%m/%Y %T"),AZDB_schema_lock,SchemaId $schema_lock is locked,warn" >> $OUTFILE
-
-done < ${OPDIR}1AZUREDB_AMD_locked_schemas.csv
-
-#else
-
-#echo "$(date "+%d/%m/%Y %T"),AZDB_schema_lock,No Schema Locks,ok" >> $OUTFILE
-
+  while read -r line;do
+    schema_lock=`echo $line | awk '{print $1}'`
+    echo "$(date "+%d/%m/%Y %T"),AZDB_schema_lock,SchemaId $schema_lock is locked,warn" >> $OUTFILE
+  done < ${OPDIR}1AZUREDB_AMD_locked_schemas.csv
 fi
 
 echo "$(date "+%d/%m/%Y %T") Check #1 complete" >> $OUTFILE_LOG
@@ -90,18 +82,10 @@ psql "sslmode=require host=${postgres_host} dbname=${postgres_db} port=${postgre
 echo "$(date "+%d/%m/%Y %T") SQL for Check #2 has been run" >> $OUTFILE_LOG
 
 if [[ `cat ${OPDIR}2AZUREDB_AMD_locked_keys.csv | wc -l` -gt 0 ]];then
-
-while read -r line;do
-
-key_lock=`echo $line | awk '{print $1}'`
-echo "$(date "+%d/%m/%Y %T"),AZDB_key_lock,Instance Key $key_lock is locked,warn" >> $OUTFILE
-
-done < ${OPDIR}2AZUREDB_AMD_locked_keys.csv
-
-#else
-
-#echo "$(date "+%d/%m/%Y %T"),AZDB_key_lock,No Instance Key Locks,ok" >> $OUTFILE
-
+  while read -r line;do
+    key_lock=`echo $line | awk '{print $1}'`
+    echo "$(date "+%d/%m/%Y %T"),AZDB_key_lock,Instance Key $key_lock is locked,warn" >> $OUTFILE
+  done < ${OPDIR}2AZUREDB_AMD_locked_keys.csv
 fi
 
 echo "$(date "+%d/%m/%Y %T") Check #2 complete" >> $OUTFILE_LOG
