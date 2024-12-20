@@ -1128,18 +1128,15 @@ if [ -e /mnt/secrets/$KV_NAME/amd-sftp-endpoint ] && [ -e /mnt/secrets/$KV_NAME/
 
 sftp_username=$(cat /mnt/secrets/$KV_NAME/amd-sftp-username)
 sftp_endpoint=$(cat /mnt/secrets/$KV_NAME/amd-sftp-endpoint)
+#sftp_endpoint=$(cat /mnt/secrets/$KV_NAME/amd-sftp-endpoint | awk -F":" '{print $1}'`)
+#sftp_port=$(cat /mnt/secrets/$KV_NAME/amd-sftp-endpoint | awk -F":" '{print $2}'`)
 sftp_port=2200 # 22
-### PROD ###
-#LB KV IP=10.224.251.4
+
 if [[ $op_env == prod ]];then
 sftp_endpoint=10.224.251.134 # Internal port 2200
 else
 sftp_endpoint=10.225.251.134
 fi
-### TEST ###
-#sftp_endpoint=10.225.251.4 #n1
-#sftp_endpoint=10.25.251.4 #n2
-
 
 echo "event_username: $event_username" >> $OUTFILE_LOG
 echo "postgres_username: $postgres_username" >> $OUTFILE_LOG
