@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 ############################################################### This is the AMD AzureDB HealthCheck script, and the associated documentation is in Ensemble under the "Libra System Admin Documents" area:
 ############################################################### "GoB Phase 1 - Oracle_Postgres DB Checks_v11.7_MAP.docx" is the latest version as of 25/11/2024
-echo "Script Version 17.3 active threads to 18"
+echo "Script Version 17.4 sftp_endpointKV"
 echo "Designed by Mark A. Porter"
 
 if [[ `echo $KV_NAME | grep "test"` ]];then
@@ -1127,8 +1127,10 @@ fi
 if [ -e /mnt/secrets/$KV_NAME/amd-sftp-endpoint ] && [ -e /mnt/secrets/$KV_NAME/amd-sftp-username ];then
 
 sftp_username=$(cat /mnt/secrets/$KV_NAME/amd-sftp-username)
-sftp_endpoint=$(cat /mnt/secrets/$KV_NAME/amd-sftp-endpoint | awk -F":" '{print $1}'`)
-sftp_port=$(cat /mnt/secrets/$KV_NAME/amd-sftp-endpoint | awk -F":" '{print $2}'`)
+sftp_endpointKV=$(cat /mnt/secrets/$KV_NAME/amd-sftp-endpoint)
+echo "sftp_endpointKV=$sftp_endpointKV"
+sftp_endpoint=`echo $sftp_endpointKV | awk -F":" '{print $1}'`
+sftp_port=`echo $sftp_endpointKV | awk -F":" '{print $2}'`
 
 echo "event_username: $event_username" >> $OUTFILE_LOG
 echo "postgres_username: $postgres_username" >> $OUTFILE_LOG
