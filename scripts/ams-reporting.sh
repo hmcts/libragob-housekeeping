@@ -221,13 +221,11 @@ adj_delivery_rate=$adj_delivery_rate_tmp
 fi
 
 if [[ $schema_id == 77 ]];then
-backlog_adaptive_threshold=$(($backlog_adaptive_threshold*6))
-fi
-if  [[ $schema_id == 135 ]] || [[ $schema_id == 105 ]];then
-backlog_adaptive_threshold=$(($backlog_adaptive_threshold*3))
-fi
-if [[ $schema_id == 82 ]] || [[ $schema_id == 99 ]] || [[ $schema_id == 130 ]] || [[ $schema_id == 126 ]] || [[ $schema_id == 112 ]] || [[ $schema_id == 47 ]] || [[ $schema_id == 36 ]] || [[ $schema_id == 31 ]];then
-backlog_adaptive_threshold=$(($backlog_adaptive_threshold*2))
+  backlog_adaptive_threshold=$(($backlog_adaptive_threshold*5))
+elif  [[ $schema_id == 135 ]] || [[ $schema_id == 105 ]];then
+  backlog_adaptive_threshold=$(($backlog_adaptive_threshold*3))
+elif [[ $schema_id == 82 ]] || [[ $schema_id == 99 ]] || [[ $schema_id == 130 ]] || [[ $schema_id == 126 ]] || [[ $schema_id == 112 ]] || [[ $schema_id == 47 ]] || [[ $schema_id == 36 ]] || [[ $schema_id == 31 ]];then
+  backlog_adaptive_threshold=$(($backlog_adaptive_threshold*2))
 fi
 
 if [[ $status != ERROR ]];then
@@ -378,19 +376,13 @@ fi
 t_delta_threshold_mins=90
 
 if [[ $schema_id == 77 ]];then
-t_delta_threshold_mins=$((90*6))
-fi
-
-if [[ $schema_id == 135 ]] || [[ $schema_id == 112 ]] || [[ $schema_id == 105 ]];then
-t_delta_threshold_mins=$((90*4))
-fi
-
-if [[ $schema_id == 99 ]] || [[ $schema_id == 130 ]] || [[ $schema_id == 44 ]] || [[ $schema_id == 126 ]] || [[ $schema_id == 36 ]] || [[ $schema_id == 31 ]];then
-t_delta_threshold_mins=$((90*3))
-fi
-
-if [[ $schema_id == 61 ]] || [[ $schema_id == 139 ]] || [[ $schema_id == 57 ]] || [[ $schema_id == 47 ]];then
-t_delta_threshold_mins=$((90*2))
+  t_delta_threshold_mins=$((90*5))
+elif [[ $schema_id == 135 ]] || [[ $schema_id == 112 ]] || [[ $schema_id == 105 ]];then
+  t_delta_threshold_mins=$((90*4))
+elif [[ $schema_id == 99 ]] || [[ $schema_id == 130 ]] || [[ $schema_id == 44 ]] || [[ $schema_id == 126 ]] || [[ $schema_id == 36 ]] || [[ $schema_id == 31 ]];then
+  t_delta_threshold_mins=$((90*3))
+elif [[ $schema_id == 61 ]] || [[ $schema_id == 139 ]] || [[ $schema_id == 57 ]] || [[ $schema_id == 47 ]];then
+  t_delta_threshold_mins=$((90*2))
 fi
 
 t_delta_threshold_secs=$(($t_delta_threshold_mins*60)) # 90mins is 5400secs
