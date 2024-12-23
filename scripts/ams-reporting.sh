@@ -1070,6 +1070,8 @@ echo "20/12/2024.*so check ORA recon ran" >> $override_file
 
 echo "23/12/2024.*so check ORA recon ran" >> $override_file
 echo "23/12/2024.*AZDB_update_processing_backlog119" >> $override_file
+echo "23/12/2024.*fines_recon_status" >> $override_file
+
 
 fi
 
