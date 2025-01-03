@@ -1067,6 +1067,7 @@ echo "23/12/2024.*AZDB_update_processing_backlog119" >> $override_file
 echo "23/12/2024.*fines_recon_status" >> $override_file
 
 echo "30/12/2024.*confiscation_recon_status" >> $override_file
+echo "03/01/2025.*AZDB_db_message_log_error77.*duplicate" >> $override_file
 
 fi
 
