@@ -224,7 +224,7 @@ if [[ $schema_id == 77 ]];then
   backlog_adaptive_threshold=$(($backlog_adaptive_threshold*5))
 elif  [[ $schema_id == 135 ]] || [[ $schema_id == 105 ]];then
   backlog_adaptive_threshold=$(($backlog_adaptive_threshold*3))
-elif [[ $schema_id == 82 ]] || [[ $schema_id == 99 ]] || [[ $schema_id == 130 ]] || [[ $schema_id == 126 ]] || [[ $schema_id == 112 ]] || [[ $schema_id == 47 ]] || [[ $schema_id == 36 ]] || [[ $schema_id == 31 ]];then
+elif [[ $schema_id == 82 ]] || [[ $schema_id == 99 ]] || [[ $schema_id == 130 ]] || [[ $schema_id == 126 ]] || [[ $schema_id == 112 ]] || [[ $schema_id == 47 ]] || [[ $schema_id == 36 ]] || [[ $schema_id == 31 ]] || [[ $schema_id == 103 ]];then
   backlog_adaptive_threshold=$(($backlog_adaptive_threshold*2))
 fi
 
@@ -1070,7 +1070,6 @@ echo "30/12/2024.*confiscation_recon_status" >> $override_file
 
 echo "03/01/2025.*AZDB_db_message_log_error77.*duplicate" >> $override_file
 echo "03/01/2025.*AZDB_maint.*Recon didn't run" >> $override_file
-
 
 fi
 
