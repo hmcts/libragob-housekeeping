@@ -1071,6 +1071,9 @@ echo "30/12/2024.*confiscation_recon_status" >> $override_file
 echo "03/01/2025.*AZDB_db_message_log_error77.*duplicate" >> $override_file
 echo "03/01/2025.*AZDB_maint.*Recon didn't run" >> $override_file
 
+echo "06/01/2025.*AZDB_maint_fines_recon_status*" >> $override_file
+echo "06/01/2025.*AZDB_update_processing_backlog77" >> $override_file
+
 fi
 
 testit=`cat $override_file | wc -l | xargs`
