@@ -1076,6 +1076,7 @@ echo "06/01/2025.*AZDB_update_processing_backlog77" >> $override_file
 echo "06/01/2025.*AZDB_db_message_log_error77.*23505.*duplicate key value violates unique constraint" >> $override_file
 
 echo "07/01/2025.*fines_recon_status" >> $override_file
+echo "07/01/2025.*AZDB_update_processing_backlog77" >> $override_file
 
 fi
 
