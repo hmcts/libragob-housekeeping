@@ -1080,8 +1080,6 @@ echo "07/01/2025.*AZDB_update_processing_backlog77" >> $override_file
 
 echo "09/01/2025.*fines_recon_status" >> $override_file
 echo "09/01/2025.*AZDB_update_processing_backlog106" >> $override_file
-echo "09/01/2025.*SchemaId 106 is locked" >> $override_file
-echo "09/01/2025.*AZDB_db_message_log_error106.*AESD-0002" >> $override_file
 
 fi
 
