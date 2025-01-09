@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 ############################################################### This is the AMD AzureDB HealthCheck script, and the associated documentation is in Ensemble under the "Libra System Admin Documents" area:
 ############################################################### "GoB Phase 1 - Oracle_Postgres DB Checks_v11.7_MAP.docx" is the latest version as of 25/11/2024
-echo "Script Version 18.3 106 overrides"
+echo "Script Version 18.4 106 overrides removed"
 echo "Designed by Mark A. Porter"
 
 if [[ `echo $KV_NAME | grep "test"` ]];then
@@ -1077,9 +1077,6 @@ echo "06/01/2025.*AZDB_db_message_log_error77.*23505.*duplicate key value violat
 
 echo "07/01/2025.*fines_recon_status" >> $override_file
 echo "07/01/2025.*AZDB_update_processing_backlog77" >> $override_file
-
-echo "09/01/2025.*fines_recon_status" >> $override_file
-echo "09/01/2025.*AZDB_update_processing_backlog106" >> $override_file
 
 fi
 
