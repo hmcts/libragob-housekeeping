@@ -1080,6 +1080,8 @@ echo "07/01/2025.*AZDB_update_processing_backlog77" >> $override_file
 
 echo "10/01/2025.*so check ORA recon ran" >> $override_file
 
+echo "13/01/2025.*_recon_status" >> $override_file
+
 fi
 
 testit=`cat $override_file | wc -l | xargs`
