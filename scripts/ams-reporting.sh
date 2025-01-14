@@ -1082,7 +1082,7 @@ echo "10/01/2025.*so check ORA recon ran" >> $override_file
 
 echo "13/01/2025.*_recon_status" >> $override_file
 
-echo "14/01/2025.*_recon_status" >> $override_file
+echo "14/01/2025.*_recon_status" >> $override_file 
 
 fi
 
