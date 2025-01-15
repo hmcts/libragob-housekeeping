@@ -82,7 +82,6 @@ echo "confiscation-datasource-url:";cat /mnt/secrets/$KV_NAME/confiscation-datas
 echo "servicebus-connectionstring:";cat /mnt/secrets/$KV_NAME/servicebus-connectionstring
 echo "cacerts:";cat /mnt/secrets/$KV_NAME/cacerts
 echo "cacerts-password:";cat /mnt/secrets/$KV_NAME/cacerts-password
-
 fi
 ####################################################### CHECK 1
 echo "[Check #1: Locked Schemas]" >> $OUTFILE
