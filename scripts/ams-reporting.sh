@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 ############################################################### This is the AMD AzureDB HealthCheck script, and the associated documentation is in Ensemble under the "Libra System Admin Documents" area:
 ############################################################### "GoB Phase 1 - Oracle_Postgres DB Checks_v11.7_MAP.docx" is the latest version as of 25/11/2024
-echo "Script Version 19.2 KV debug"
+echo "Script Version 19.3 KV debug #2"
 echo "Designed by Mark A. Porter"
 
 if [[ `echo $KV_NAME | grep "test"` ]];then
@@ -61,6 +61,29 @@ maintenance_db=`echo $maintenance_url | awk -F":" {'print $4'} | awk -F"\/" {'pr
 if [[ $op_env == test ]];then
 ls -altr /mnt/secrets/$KV_NAME/
 echo "themis-gateway-keystorebase64:";cat /mnt/secrets/$KV_NAME/themis-gateway-keystorebase64
+
+echo "themis-gateway-dbpassword:";cat /mnt/secrets/$KV_NAME/themis-gateway-dbpassword
+echo "themis-gateway-dbusername:";cat /mnt/secrets/$KV_NAME/themis-gateway-dbusername
+echo "themis-gateway-datasourceurl:";cat /mnt/secrets/$KV_NAME/themis-gateway-datasourceurl
+echo "dac-datasource-password:";cat /mnt/secrets/$KV_NAME/dac-datasource-password
+echo "dac-datasource-username:";cat /mnt/secrets/$KV_NAME/dac-datasource-username
+echo "dac-datasource-url:";cat /mnt/secrets/$KV_NAME/dac-datasource-url
+echo "event-datasource-password:";cat /mnt/secrets/$KV_NAME/event-datasource-password
+echo "event-datasource-username:";cat /mnt/secrets/$KV_NAME/event-datasource-username
+echo "event-datasource-url:";cat /mnt/secrets/$KV_NAME/event-datasource-url
+echo "fines-datasource-password:";cat /mnt/secrets/$KV_NAME/fines-datasource-password
+echo "fines-datasource-username:";cat /mnt/secrets/$KV_NAME/fines-datasource-username
+echo "fines-datasource-url:";cat /mnt/secrets/$KV_NAME/fines-datasource-url
+echo "maintenance-datasource-password:";cat /mnt/secrets/$KV_NAME/maintenance-datasource-password
+echo "maintenance-datasource-username:";cat /mnt/secrets/$KV_NAME/maintenance-datasource-username
+echo "maintenance-datasource-url:";cat /mnt/secrets/$KV_NAME/maintenance-datasource-url
+echo "confiscation-datasource-password:";cat /mnt/secrets/$KV_NAME/confiscation-datasource-password
+echo "confiscation-datasource-username:";cat /mnt/secrets/$KV_NAME/confiscation-datasource-username
+echo "confiscation-datasource-url:";cat /mnt/secrets/$KV_NAME/confiscation-datasource-url
+echo "servicebus-connectionstring:";cat /mnt/secrets/$KV_NAME/servicebus-connectionstring
+echo "cacerts:";cat /mnt/secrets/$KV_NAME/cacerts
+echo "cacerts-password:";cat /mnt/secrets/$KV_NAME/cacerts-password
+
 fi
 ####################################################### CHECK 1
 echo "[Check #1: Locked Schemas]" >> $OUTFILE
