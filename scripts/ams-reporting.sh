@@ -61,7 +61,6 @@ maintenance_db=`echo $maintenance_url | awk -F":" {'print $4'} | awk -F"\/" {'pr
 if [[ $op_env == test ]];then
 ls -altr /mnt/secrets/$KV_NAME/
 echo "themis-gateway-keystorebase64:";cat /mnt/secrets/$KV_NAME/themis-gateway-keystorebase64
-
 echo "themis-gateway-dbpassword:";cat /mnt/secrets/$KV_NAME/themis-gateway-dbpassword
 echo "themis-gateway-dbusername:";cat /mnt/secrets/$KV_NAME/themis-gateway-dbusername
 echo "themis-gateway-datasourceurl:";cat /mnt/secrets/$KV_NAME/themis-gateway-datasourceurl
