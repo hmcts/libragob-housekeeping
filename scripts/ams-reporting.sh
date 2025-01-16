@@ -1117,6 +1117,7 @@ echo "14/01/2025.*_recon_status" >> $override_file
 echo "15/01/2025.*fines_recon_status" >> $override_file
 
 echo "16/01/2025.*_recon_status" >> $override_file
+echo "16/01/2025.*AZDB_db_message_log_error(105|106).*23505.*duplicate key value violates unique constraint.*update_requests_pk" >> $override_file
 
 fi
 
