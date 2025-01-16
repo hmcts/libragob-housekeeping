@@ -407,9 +407,9 @@ elif [[ $schema_id == 77 ]];then
   t_delta_threshold_mins=$((90*6))
 elif [[ $schema_id == 44 ]] || [[ $schema_id == 31 ]] || [[ $schema_id == 82 ]] || [[ $schema_id == 105 ]] || [[ $schema_id == 135 ]] || [[ $schema_id == 89 ]];then
   t_delta_threshold_mins=$((90*5))
-elif [[ $schema_id == 112 ]] || [[ $schema_id == 61 ]] || [[ $schema_id == 130 ]] || [[ $schema_id == 124 ]] || [[ $schema_id == 47 ]] || [[ $schema_id == 99 ]] || [[ $schema_id == 36 ]];then
+elif [[ $schema_id == 112 ]] || [[ $schema_id == 61 ]] || [[ $schema_id == 130 ]] || [[ $schema_id == 124 ]] || [[ $schema_id == 47 ]] || [[ $schema_id == 99 ]] || [[ $schema_id == 36 ]] || [[ $schema_id == 106 ]];then
   t_delta_threshold_mins=$((90*4))
-elif [[ $schema_id == 126 ]] || [[ $schema_id == 57 ]] || [[ $schema_id == 103 ]] || [[ $schema_id == 92 ]] || [[ $schema_id == 26 ]] || [[ $schema_id == 119 ]] || [[ $schema_id == 28 ]] || [[ $schema_id == 60 ]] || [[ $schema_id == 106 ]];then
+elif [[ $schema_id == 126 ]] || [[ $schema_id == 57 ]] || [[ $schema_id == 103 ]] || [[ $schema_id == 92 ]] || [[ $schema_id == 26 ]] || [[ $schema_id == 119 ]] || [[ $schema_id == 28 ]] || [[ $schema_id == 60 ]];then
   t_delta_threshold_mins=$((90*3))
 elif [[ $schema_id == 139 ]] || [[ $schema_id == 8 ]] || [[ $schema_id == 138 ]] || [[ $schema_id == 96 ]] || [[ $schema_id == 30 ]] || [[ $schema_id == 21 ]] || [[ $schema_id == 10 ]] || [[ $schema_id == 22 ]] || [[ $schema_id == 5 ]] || [[ $schema_id == 12 ]] || [[ $schema_id == 14 ]];then
   t_delta_threshold_mins=$((90*2))
