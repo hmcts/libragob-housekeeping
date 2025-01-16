@@ -248,7 +248,9 @@ fi
 
 if [[ $schema_id == 77 ]];then
   backlog_adaptive_threshold=$(($backlog_adaptive_threshold*5))
-elif  [[ $schema_id == 135 ]] || [[ $schema_id == 105 ]] || [[ $schema_id == 129 ]] || [[ $schema_id == 38 ]];then
+elif [[ $schema_id == 38 ]];then
+  backlog_adaptive_threshold=$(($backlog_adaptive_threshold*4))
+elif [[ $schema_id == 135 ]] || [[ $schema_id == 105 ]] || [[ $schema_id == 129 ]];then
   backlog_adaptive_threshold=$(($backlog_adaptive_threshold*3))
 elif [[ $schema_id == 82 ]] || [[ $schema_id == 99 ]] || [[ $schema_id == 130 ]] || [[ $schema_id == 126 ]] || [[ $schema_id == 112 ]] || [[ $schema_id == 47 ]] || [[ $schema_id == 36 ]] || [[ $schema_id == 31 ]] || [[ $schema_id == 103 ]] || [[ $schema_id == 124 ]] || [[ $schema_id == 106 ]];then
   backlog_adaptive_threshold=$(($backlog_adaptive_threshold*2))
@@ -402,7 +404,7 @@ fi
 t_delta_threshold_mins=90
 
 if [[ $schema_id == 38 ]] || [[ $schema_id == 129 ]];then
-  t_delta_threshold_mins=$((90*8))
+  t_delta_threshold_mins=$((90*7))
 elif [[ $schema_id == 77 ]];then
   t_delta_threshold_mins=$((90*6))
 elif [[ $schema_id == 44 ]] || [[ $schema_id == 31 ]] || [[ $schema_id == 82 ]] || [[ $schema_id == 105 ]] || [[ $schema_id == 135 ]] || [[ $schema_id == 89 ]];then
