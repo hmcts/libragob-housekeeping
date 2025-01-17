@@ -513,7 +513,34 @@ if [[ `grep "$dt_today" ${OPDIR}9aAZUREDB_AMD_confiscation_recon_result.csv` ]];
       echo "$(date "+%d/%m/%Y %T"),AZDB_maint_confiscation_recon_status,$line_count/$recon_threshold_count Recon METs ran with no errors,ok" >> $OUTFILE
     fi
   else
-    echo "$(date "+%d/%m/%Y %T"),AZDB_maint_confiscation_recon_status,Recon only has unexpected $line_count/$recon_threshold_count rows of results so pls investigate,warn" >> $OUTFILE
+    echo "$(date "+%d/%m/%Y %T") Connecting to $event_db database to run Confiscation queued rec check 9d" >> $OUTFILE_LOG
+    psql "sslmode=require host=${event_host} dbname=${event_db} port=${event_port} user=${event_username} password=${event_password}" --file=/sql/9dAZUREDB_AMD_queued_recs.sql
+    echo "$(date "+%d/%m/%Y %T") SQL for Check #9d on $event_db for Confiscation has been run" >> $OUTFILE_LOG
+    queued_rec_count=`cat ${OPDIR}9dAZUREDB_AMD_queued_recs.csv | wc -l`
+    missing_rec_count=$(($recon_threshold_count-$line_count))
+    actual_queued_rec_count=0
+
+    while read -r line;do
+      if [[ `echo $line | grep "SCHEMA_ID"` ]];then
+        met_rec_queued=`echo $line | awk -F"," '{print $8}' | awk -F"SCHEMA_ID" '{print $2}' | awk -F"NewValue>" '{print $2}' | awk -F"<" '{print $1}'`
+      else
+        met_rec_queued=''
+      fi
+
+      if [[ ! -z $met_rec_queued ]];then
+        if [[ `cat ${OPDIR}fines_mets | grep "$met_rec_queued"` ]];then
+          actual_queued_rec_count=$((actual_queued_rec_count+1))
+        fi
+      fi
+    done < ${OPDIR}9dAZUREDB_AMD_queued_recs.csv
+
+    if [[ $actual_queued_rec_count == $missing_rec_count ]];then
+      echo "$(date "+%d/%m/%Y %T"),AZDB_maint_confiscation_recon_status,Recon only has unexpected $line_count/$recon_threshold_count rows of results but $actual_queued_rec_count rec(s) are queued up due to overnight locks so OK,ok" >> $OUTFILE
+    else
+      echo "$(date "+%d/%m/%Y %T"),AZDB_maint_confiscation_recon_status,Recon only has unexpected $line_count/$recon_threshold_count rows of results and these are not queued up due to overnight locks so pls investigate,warn" >> $OUTFILE
+    fi
+
+    echo "$(date "+%d/%m/%Y %T") Check #9d on $event_db for Confiscation is complete" >> $OUTFILE_LOG
   fi
 else
   echo "$(date "+%d/%m/%Y %T"),AZDB_maint_confiscation_recon_status,Recon didn't run today so check ORA recon ran ok,warn" >> $OUTFILE
@@ -561,8 +588,7 @@ if [[ `grep "$dt_today" ${OPDIR}9bAZUREDB_AMD_fines_recon_result.csv` ]];then
       fi
 
       if [[ ! -z $met_rec_queued ]];then
-        if [[ `cat ${OPDIR}fines_mets | grep "111"` ]];then
-#        if [[ `cat ${OPDIR}fines_mets | grep "$met_rec_queued"` ]];then
+        if [[ `cat ${OPDIR}fines_mets | grep "$met_rec_queued"` ]];then
           actual_queued_rec_count=$((actual_queued_rec_count+1))
         fi
       fi
@@ -607,7 +633,34 @@ if [[ `grep "$dt_today" ${OPDIR}9cAZUREDB_AMD_maintenance_recon_result.csv` ]];t
       echo "$(date "+%d/%m/%Y %T"),AZDB_maint_maintenance_recon_status,$line_count/$recon_threshold_count Recon METs ran with no errors,ok" >> $OUTFILE
     fi
   else
-    echo "$(date "+%d/%m/%Y %T"),AZDB_maint_maintenance_recon_status,Recon only has unexpected $line_count/$recon_threshold_count rows of results so pls investigate,warn" >> $OUTFILE
+    echo "$(date "+%d/%m/%Y %T") Connecting to $event_db database to run Maintenance queued rec check 9d" >> $OUTFILE_LOG
+    psql "sslmode=require host=${event_host} dbname=${event_db} port=${event_port} user=${event_username} password=${event_password}" --file=/sql/9dAZUREDB_AMD_queued_recs.sql
+    echo "$(date "+%d/%m/%Y %T") SQL for Check #9d on $event_db for Maintenance has been run" >> $OUTFILE_LOG
+    queued_rec_count=`cat ${OPDIR}9dAZUREDB_AMD_queued_recs.csv | wc -l`
+    missing_rec_count=$(($recon_threshold_count-$line_count))
+    actual_queued_rec_count=0
+
+    while read -r line;do
+      if [[ `echo $line | grep "SCHEMA_ID"` ]];then
+        met_rec_queued=`echo $line | awk -F"," '{print $8}' | awk -F"SCHEMA_ID" '{print $2}' | awk -F"NewValue>" '{print $2}' | awk -F"<" '{print $1}'`
+      else
+        met_rec_queued=''
+      fi
+
+      if [[ ! -z $met_rec_queued ]];then
+        if [[ `cat ${OPDIR}fines_mets | grep "$met_rec_queued"` ]];then
+          actual_queued_rec_count=$((actual_queued_rec_count+1))
+        fi
+      fi
+    done < ${OPDIR}9dAZUREDB_AMD_queued_recs.csv
+
+    if [[ $actual_queued_rec_count == $missing_rec_count ]];then
+      echo "$(date "+%d/%m/%Y %T"),AZDB_maint_maintenance_recon_status,Recon only has unexpected $line_count/$recon_threshold_count rows of results but $actual_queued_rec_count rec(s) are queued up due to overnight locks so OK,ok" >> $OUTFILE
+    else
+      echo "$(date "+%d/%m/%Y %T"),AZDB_maint_maintenance_recon_status,Recon only has unexpected $line_count/$recon_threshold_count rows of results and these are not queued up due to overnight locks so pls investigate,warn" >> $OUTFILE
+    fi
+
+    echo "$(date "+%d/%m/%Y %T") Check #9d on $event_db for Maintenance is complete" >> $OUTFILE_LOG
   fi
 else
   echo "$(date "+%d/%m/%Y %T"),AZDB_maint_maintenance_recon_status,Recon didn't run today so check ORA recon ran ok,warn" >> $OUTFILE
