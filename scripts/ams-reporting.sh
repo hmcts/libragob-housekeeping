@@ -518,7 +518,7 @@ fi
 
 else
 
-echo "$(date "+%d/%m/%Y %T"),AZDB_maint_confiscation_recon_status,Recon only has expected $line_count/$recon_threshold_count rows of results so pls investigate,warn" >> $OUTFILE
+echo "$(date "+%d/%m/%Y %T"),AZDB_maint_confiscation_recon_status,Recon only has unexpected $line_count/$recon_threshold_count rows of results so pls investigate,warn" >> $OUTFILE
 
 fi
 
@@ -562,9 +562,9 @@ if [[ `grep "$dt_today" ${OPDIR}9bAZUREDB_AMD_fines_recon_result.csv` ]];then
     missing_rec_count=$(($recon_threshold_count-$line_count))
 
     if [[ $queued_rec_count == $missing_rec_count ]];then
-      echo "$(date "+%d/%m/%Y %T"),AZDB_maint_fines_recon_status,Recon only has expected $line_count/$recon_threshold_count rows of results but $queued_rec_count rec(s) are queued up due to overnight locks so OK,warn" >> $OUTFILE
+      echo "$(date "+%d/%m/%Y %T"),AZDB_maint_fines_recon_status,Recon only has unexpected $line_count/$recon_threshold_count rows of results but $queued_rec_count rec(s) are queued up due to overnight locks so OK,warn" >> $OUTFILE
     else
-      echo "$(date "+%d/%m/%Y %T"),AZDB_maint_fines_recon_status,Recon only has expected $line_count/$recon_threshold_count rows of results and these are not queued up due to overnight locks so pls investigate,warn" >> $OUTFILE
+      echo "$(date "+%d/%m/%Y %T"),AZDB_maint_fines_recon_status,Recon only has unexpected $line_count/$recon_threshold_count rows of results and these are not queued up due to overnight locks so pls investigate,warn" >> $OUTFILE
     fi
  
     echo "$(date "+%d/%m/%Y %T") Check #9d on $fines_db is complete" >> $OUTFILE_LOG
@@ -608,7 +608,7 @@ fi
 
 else
 
-echo "$(date "+%d/%m/%Y %T"),AZDB_maint_maintenance_recon_status,Recon only has expected $line_count/$recon_threshold_count rows of results so pls investigate,warn" >> $OUTFILE
+echo "$(date "+%d/%m/%Y %T"),AZDB_maint_maintenance_recon_status,Recon only has unexpected $line_count/$recon_threshold_count rows of results so pls investigate,warn" >> $OUTFILE
 
 fi
 
