@@ -487,9 +487,9 @@ echo "$(date "+%d/%m/%Y %T") Starting Check #9a" >> $OUTFILE_LOG
 echo "$(date "+%d/%m/%Y %T") Connecting to $confiscation_db database" >> $OUTFILE_LOG
 
 if [[ $op_env == test ]];then
-psql "sslmode=require host=${confiscation_host} dbname=${confiscation_db} port=${confiscation_port} user=${confiscation_username} password=${confiscation_password}" --file=/sql/9aAZUREDB_AMD_confiscation_recon_result.sql
+  psql "sslmode=require host=${confiscation_host} dbname=${confiscation_db} port=${confiscation_port} user=${confiscation_username} password=${confiscation_password}" --file=/sql/9aAZUREDB_AMD_confiscation_recon_result.sql
 else
-psql "sslmode=require host=${confiscation_host} dbname=${confiscation_db} port=${confiscation_port} user=${confiscation_username} password=${confiscation_password}" --file=/sql/PROD___9aAZUREDB_AMD_confiscation_recon_result.sql
+  psql "sslmode=require host=${confiscation_host} dbname=${confiscation_db} port=${confiscation_port} user=${confiscation_username} password=${confiscation_password}" --file=/sql/PROD___9aAZUREDB_AMD_confiscation_recon_result.sql
 fi
 
 echo "$(date "+%d/%m/%Y %T") SQL for Check #9a has been run" >> $OUTFILE_LOG
@@ -497,44 +497,32 @@ line_count=`cat ${OPDIR}9aAZUREDB_AMD_confiscation_recon_result.csv | grep "." |
 error_count=`grep "1$" ${OPDIR}9aAZUREDB_AMD_confiscation_recon_result.csv | wc -l`
 
 if [[ $op_env == test ]];then
-recon_threshold_count=1
+  recon_threshold_count=1
 else
-recon_threshold_count=8
+  recon_threshold_count=8
 fi
 
 if [[ `grep "$dt_today" ${OPDIR}9aAZUREDB_AMD_confiscation_recon_result.csv` ]];then
-
-if [[ $line_count -eq $recon_threshold_count ]];then
-
-if [[ $error_count -gt 0 ]];then
-
-echo "$(date "+%d/%m/%Y %T"),AZDB_maint_confiscation_recon,Recon has $error_count error(s) so pls investigate,warn" >> $OUTFILE
-
+  if [[ $line_count -eq $recon_threshold_count ]];then
+    if [[ $error_count -gt 0 ]];then
+      echo "$(date "+%d/%m/%Y %T"),AZDB_maint_confiscation_recon,Recon has $error_count error(s) so pls investigate,warn" >> $OUTFILE
+    else
+      echo "$(date "+%d/%m/%Y %T"),AZDB_maint_confiscation_recon_status,$line_count/$recon_threshold_count Recon METs ran with no errors,ok" >> $OUTFILE
+    fi
+  else
+    echo "$(date "+%d/%m/%Y %T"),AZDB_maint_confiscation_recon_status,Recon only has unexpected $line_count/$recon_threshold_count rows of results so pls investigate,warn" >> $OUTFILE
+  fi
 else
-
-echo "$(date "+%d/%m/%Y %T"),AZDB_maint_confiscation_recon_status,$line_count/$recon_threshold_count Recon METs ran with no errors,ok" >> $OUTFILE
-
-fi
-
-else
-
-echo "$(date "+%d/%m/%Y %T"),AZDB_maint_confiscation_recon_status,Recon only has unexpected $line_count/$recon_threshold_count rows of results so pls investigate,warn" >> $OUTFILE
-
-fi
-
-else
-
-echo "$(date "+%d/%m/%Y %T"),AZDB_maint_confiscation_recon_status,Recon didn't run today so check ORA recon ran ok,warn" >> $OUTFILE
-
+  echo "$(date "+%d/%m/%Y %T"),AZDB_maint_confiscation_recon_status,Recon didn't run today so check ORA recon ran ok,warn" >> $OUTFILE
 fi
 
 echo "$(date "+%d/%m/%Y %T") Connecting to $fines_db database" >> $OUTFILE_LOG
 echo "$(date "+%d/%m/%Y %T") Starting Check #9b" >> $OUTFILE_LOG
 
 if [[ $op_env == test ]];then
-psql "sslmode=require host=${fines_host} dbname=${fines_db} port=${fines_port} user=${fines_username} password=${fines_password}" --file=/sql/9bAZUREDB_AMD_fines_recon_result.sql
+  psql "sslmode=require host=${fines_host} dbname=${fines_db} port=${fines_port} user=${fines_username} password=${fines_password}" --file=/sql/9bAZUREDB_AMD_fines_recon_result.sql
 else
-psql "sslmode=require host=${fines_host} dbname=${fines_db} port=${fines_port} user=${fines_username} password=${fines_password}" --file=/sql/PROD___9bAZUREDB_AMD_fines_recon_result.sql
+  psql "sslmode=require host=${fines_host} dbname=${fines_db} port=${fines_port} user=${fines_username} password=${fines_password}" --file=/sql/PROD___9bAZUREDB_AMD_fines_recon_result.sql
 fi
 
 echo "$(date "+%d/%m/%Y %T") SQL for Check #9b has been run" >> $OUTFILE_LOG
@@ -542,9 +530,9 @@ line_count=`cat ${OPDIR}9bAZUREDB_AMD_fines_recon_result.csv | grep "." | grep "
 error_count=`grep "1$" ${OPDIR}9bAZUREDB_AMD_fines_recon_result.csv | wc -l`
 
 if [[ $op_env == test ]];then
-recon_threshold_count=1
+  recon_threshold_count=1
 else
-recon_threshold_count=46
+  recon_threshold_count=46
 fi
 
 if [[ `grep "$dt_today" ${OPDIR}9bAZUREDB_AMD_fines_recon_result.csv` ]];then
@@ -567,7 +555,7 @@ echo "missing_rec_count=$missing_rec_count"
     else
       echo "$(date "+%d/%m/%Y %T"),AZDB_maint_fines_recon_status,Recon only has unexpected $line_count/$recon_threshold_count rows of results and these are not queued up due to overnight locks so pls investigate,warn" >> $OUTFILE
     fi
- 
+
     echo "$(date "+%d/%m/%Y %T") Check #9d on $fines_db is complete" >> $OUTFILE_LOG
   fi
 else
@@ -578,9 +566,9 @@ echo "$(date "+%d/%m/%Y %T") Connecting to $maintenance_db database" >> $OUTFILE
 echo "$(date "+%d/%m/%Y %T") Starting Check #9c" >> $OUTFILE_LOG
 
 if [[ $op_env == test ]];then
-psql "sslmode=require host=${maintenance_host} dbname=${maintenance_db} port=${maintenance_port} user=${maintenance_username} password=${maintenance_password}" --file=/sql/9cAZUREDB_AMD_maintenance_recon_result.sql
+  psql "sslmode=require host=${maintenance_host} dbname=${maintenance_db} port=${maintenance_port} user=${maintenance_username} password=${maintenance_password}" --file=/sql/9cAZUREDB_AMD_maintenance_recon_result.sql
 else
-psql "sslmode=require host=${maintenance_host} dbname=${maintenance_db} port=${maintenance_port} user=${maintenance_username} password=${maintenance_password}" --file=/sql/PROD___9cAZUREDB_AMD_maintenance_recon_result.sql
+  psql "sslmode=require host=${maintenance_host} dbname=${maintenance_db} port=${maintenance_port} user=${maintenance_username} password=${maintenance_password}" --file=/sql/PROD___9cAZUREDB_AMD_maintenance_recon_result.sql
 fi
 
 echo "$(date "+%d/%m/%Y %T") SQL for Check #9c has been run" >> $OUTFILE_LOG
@@ -588,35 +576,23 @@ line_count=`cat ${OPDIR}9cAZUREDB_AMD_maintenance_recon_result.csv | grep "." | 
 error_count=`grep "1$" ${OPDIR}9cAZUREDB_AMD_maintenance_recon_result.csv | wc -l`
 
 if [[ $op_env == test ]];then
-recon_threshold_count=1
+  recon_threshold_count=1
 else
-recon_threshold_count=3
+  recon_threshold_count=3
 fi
 
 if [[ `grep "$dt_today" ${OPDIR}9cAZUREDB_AMD_maintenance_recon_result.csv` ]];then
-
-if [[ $line_count -eq $recon_threshold_count ]];then
-
-if [[ $error_count -gt 0 ]];then
-
-echo "$(date "+%d/%m/%Y %T"),AZDB_maint_maintenance_recon,Recon has $error_count error(s) so pls investigate,warn" >> $OUTFILE
-
+  if [[ $line_count -eq $recon_threshold_count ]];then
+    if [[ $error_count -gt 0 ]];then
+      echo "$(date "+%d/%m/%Y %T"),AZDB_maint_maintenance_recon,Recon has $error_count error(s) so pls investigate,warn" >> $OUTFILE
+    else
+      echo "$(date "+%d/%m/%Y %T"),AZDB_maint_maintenance_recon_status,$line_count/$recon_threshold_count Recon METs ran with no errors,ok" >> $OUTFILE
+    fi
+  else
+    echo "$(date "+%d/%m/%Y %T"),AZDB_maint_maintenance_recon_status,Recon only has unexpected $line_count/$recon_threshold_count rows of results so pls investigate,warn" >> $OUTFILE
+  fi
 else
-
-echo "$(date "+%d/%m/%Y %T"),AZDB_maint_maintenance_recon_status,$line_count/$recon_threshold_count Recon METs ran with no errors,ok" >> $OUTFILE
-
-fi
-
-else
-
-echo "$(date "+%d/%m/%Y %T"),AZDB_maint_maintenance_recon_status,Recon only has unexpected $line_count/$recon_threshold_count rows of results so pls investigate,warn" >> $OUTFILE
-
-fi
-
-else
-
-echo "$(date "+%d/%m/%Y %T"),AZDB_maint_maintenance_recon_status,Recon didn't run today so check ORA recon ran ok,warn" >> $OUTFILE
-
+  echo "$(date "+%d/%m/%Y %T"),AZDB_maint_maintenance_recon_status,Recon didn't run today so check ORA recon ran ok,warn" >> $OUTFILE
 fi
 
 echo "$(date "+%d/%m/%Y %T") Check #9 complete" >> $OUTFILE_LOG
