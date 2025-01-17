@@ -535,9 +535,9 @@ if [[ `grep "$dt_today" ${OPDIR}9aAZUREDB_AMD_confiscation_recon_result.csv` ]];
     done < ${OPDIR}9dAZUREDB_AMD_queued_recs.csv
 
     if [[ $actual_queued_rec_count == $missing_rec_count ]];then
-      echo "$(date "+%d/%m/%Y %T"),AZDB_maint_confiscation_recon_status,Recon only has unexpected $line_count/$recon_threshold_count rows of results but $actual_queued_rec_count rec(s) are queued up due to overnight locks so OK,ok" >> $OUTFILE
+      echo "$(date "+%d/%m/%Y %T"),AZDB_maint_confiscation_recon_status,Recon has unexpected $line_count/$recon_threshold_count rows of results but $actual_queued_rec_count rec(s) are queued up due to overnight locks so OK,ok" >> $OUTFILE
     else
-      echo "$(date "+%d/%m/%Y %T"),AZDB_maint_confiscation_recon_status,Recon only has unexpected $line_count/$recon_threshold_count rows of results and these are not queued up due to overnight locks so pls investigate,warn" >> $OUTFILE
+      echo "$(date "+%d/%m/%Y %T"),AZDB_maint_confiscation_recon_status,Recon has unexpected $line_count/$recon_threshold_count rows of results and these are not queued up due to overnight locks so pls investigate,warn" >> $OUTFILE
     fi
 
     echo "$(date "+%d/%m/%Y %T") Check #9d on $event_db for Confiscation is complete" >> $OUTFILE_LOG
@@ -595,9 +595,9 @@ if [[ `grep "$dt_today" ${OPDIR}9bAZUREDB_AMD_fines_recon_result.csv` ]];then
     done < ${OPDIR}9dAZUREDB_AMD_queued_recs.csv
 
     if [[ $actual_queued_rec_count == $missing_rec_count ]];then
-      echo "$(date "+%d/%m/%Y %T"),AZDB_maint_fines_recon_status,Recon only has unexpected $line_count/$recon_threshold_count rows of results but $actual_queued_rec_count rec(s) are queued up due to overnight locks so OK,ok" >> $OUTFILE
+      echo "$(date "+%d/%m/%Y %T"),AZDB_maint_fines_recon_status,Recon has unexpected $line_count/$recon_threshold_count rows of results but $actual_queued_rec_count rec(s) are queued up due to overnight locks so OK,ok" >> $OUTFILE
     else
-      echo "$(date "+%d/%m/%Y %T"),AZDB_maint_fines_recon_status,Recon only has unexpected $line_count/$recon_threshold_count rows of results and these are not queued up due to overnight locks so pls investigate,warn" >> $OUTFILE
+      echo "$(date "+%d/%m/%Y %T"),AZDB_maint_fines_recon_status,Recon has unexpected $line_count/$recon_threshold_count rows of results and these are not queued up due to overnight locks so pls investigate,warn" >> $OUTFILE
     fi
 
     echo "$(date "+%d/%m/%Y %T") Check #9d on $event_db for Fines is complete" >> $OUTFILE_LOG
@@ -655,9 +655,9 @@ if [[ `grep "$dt_today" ${OPDIR}9cAZUREDB_AMD_maintenance_recon_result.csv` ]];t
     done < ${OPDIR}9dAZUREDB_AMD_queued_recs.csv
 
     if [[ $actual_queued_rec_count == $missing_rec_count ]];then
-      echo "$(date "+%d/%m/%Y %T"),AZDB_maint_maintenance_recon_status,Recon only has unexpected $line_count/$recon_threshold_count rows of results but $actual_queued_rec_count rec(s) are queued up due to overnight locks so OK,ok" >> $OUTFILE
+      echo "$(date "+%d/%m/%Y %T"),AZDB_maint_maintenance_recon_status,Recon has unexpected $line_count/$recon_threshold_count rows of results but $actual_queued_rec_count rec(s) are queued up due to overnight locks so OK,ok" >> $OUTFILE
     else
-      echo "$(date "+%d/%m/%Y %T"),AZDB_maint_maintenance_recon_status,Recon only has unexpected $line_count/$recon_threshold_count rows of results and these are not queued up due to overnight locks so pls investigate,warn" >> $OUTFILE
+      echo "$(date "+%d/%m/%Y %T"),AZDB_maint_maintenance_recon_status,Recon has unexpected $line_count/$recon_threshold_count rows of results and these are not queued up due to overnight locks so pls investigate,warn" >> $OUTFILE
     fi
 
     echo "$(date "+%d/%m/%Y %T") Check #9d on $event_db for Maintenance is complete" >> $OUTFILE_LOG
