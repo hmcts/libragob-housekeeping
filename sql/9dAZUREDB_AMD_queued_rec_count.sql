@@ -1,1 +1,1 @@
-\copy (select count(*) from table_updates tu join update_requests uq on tu.update_request_id = uq.update_request_id where tu.table_name='RECONCILIATION_RESULT_XML' and uq.status!='COMPLETE';) To '/scripts/9dAZUREDB_AMD_queued_rec_count.csv' With CSV DELIMITER ','
+\copy (select count(*) from table_updates tu join update_requests uq on tu.update_request_id = uq.update_request_id where tu.table_name='RECONCILIATION_RESULT_XML' and uq.status!='COMPLETE') To '/tmp/ams-reporting/9dAZUREDB_AMD_queued_rec_count.csv' With CSV DELIMITER ','
