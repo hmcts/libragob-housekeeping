@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 ############################################################### This is the AMD AzureDB HealthCheck script, and the associated documentation is in Ensemble under the "Libra System Admin Documents" area:
 ############################################################### "GoB Phase 1 - Oracle_Postgres DB Checks_v11.8_MAP.docx" is the latest version as of 16/01/2025
-echo "Script Version 20.4 Fines rec line count"
+echo "Script Version 20.5 Fines specific rec check"
 echo "Designed by Mark A. Porter"
 
 if [[ `echo $KV_NAME | grep "test"` ]];then
@@ -547,18 +547,28 @@ if [[ `grep "$dt_today" ${OPDIR}9bAZUREDB_AMD_fines_recon_result.csv` ]];then
     fi
   else
     echo "$(date "+%d/%m/%Y %T") Connecting to $event_db database to run queued rec check 9d" >> $OUTFILE_LOG
-    psql "sslmode=require host=${event_host} dbname=${event_db} port=${event_port} user=${event_username} password=${event_password}" --file=/sql/9dAZUREDB_AMD_queued_rec_count.sql
-    echo "$(date "+%d/%m/%Y %T") SQL for Check #9d on $fines_db has been run" >> $OUTFILE_LOG
-    queued_rec_count=`cat ${OPDIR}9dAZUREDB_AMD_queued_rec_count.csv | xargs | wc -l`
+    psql "sslmode=require host=${event_host} dbname=${event_db} port=${event_port} user=${event_username} password=${event_password}" --file=/sql/9dAZUREDB_AMD_queued_recs.sql
+    echo "$(date "+%d/%m/%Y %T") SQL for Check #9d on $event_db has been run" >> $OUTFILE_LOG
+    queued_rec_count=`cat ${OPDIR}9dAZUREDB_AMD_queued_recs.csv | wc -l`
     missing_rec_count=$(($recon_threshold_count-$line_count))
-  
-    if [[ $queued_rec_count == $missing_rec_count ]];then
-      echo "$(date "+%d/%m/%Y %T"),AZDB_maint_fines_recon_status,Recon only has unexpected $line_count/$recon_threshold_count rows of results but $queued_rec_count rec(s) are queued up due to overnight locks so OK,ok" >> $OUTFILE
+    fines_queued_rec_count=0
+
+    while read -r line;do
+      met_rec_queued=`echo $line | awk -F"," '{print $8}' | awk -F"<ColumnName>SCHEMA_ID</ColumnName><NewValue>" '{print $1}' | awk -F"<" '{print $1}'`
+echo "met_rec_queued=$met_rec_queued"
+
+      if [[ `cat ${OPDIR}fines_mets | grep "$met_rec_queued"` ]];then
+        fines_queued_rec_count=$((fines_queued_rec_count+1))
+      fi
+    done < ${OPDIR}9dAZUREDB_AMD_queued_recs.csv
+
+    if [[ $fines_queued_rec_count == $missing_rec_count ]];then
+      echo "$(date "+%d/%m/%Y %T"),AZDB_maint_fines_recon_status,Recon only has unexpected $line_count/$recon_threshold_count rows of results but $fines_queued_rec_count rec(s) are queued up due to overnight locks so OK,ok" >> $OUTFILE
     else
       echo "$(date "+%d/%m/%Y %T"),AZDB_maint_fines_recon_status,Recon only has unexpected $line_count/$recon_threshold_count rows of results and these are not queued up due to overnight locks so pls investigate,warn" >> $OUTFILE
     fi
 
-    echo "$(date "+%d/%m/%Y %T") Check #9d on $fines_db is complete" >> $OUTFILE_LOG
+    echo "$(date "+%d/%m/%Y %T") Check #9d on $event_db is complete" >> $OUTFILE_LOG
   fi
 else
   echo "$(date "+%d/%m/%Y %T"),AZDB_maint_fines_recon_status,Recon didn't run today so check ORA recon ran ok,warn" >> $OUTFILE
