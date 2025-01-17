@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 ############################################################### This is the AMD AzureDB HealthCheck script, and the associated documentation is in Ensemble under the "Libra System Admin Documents" area:
 ############################################################### "GoB Phase 1 - Oracle_Postgres DB Checks_v11.8_MAP.docx" is the latest version as of 16/01/2025
-echo "Script Version 20.6 actual queued Fines rec check"
+echo "Script Version 20.7 new awk"
 echo "Designed by Mark A. Porter"
 
 if [[ `echo $KV_NAME | grep "test"` ]];then
@@ -554,7 +554,7 @@ if [[ `grep "$dt_today" ${OPDIR}9bAZUREDB_AMD_fines_recon_result.csv` ]];then
     actual_queued_rec_count=0
 
     while read -r line;do
-      met_rec_queued=`echo $line | awk -F"," '{print $8}' | awk -F"<ColumnName>SCHEMA_ID</ColumnName><NewValue>" '{print $1}' | awk -F"<" '{print $1}'`
+      met_rec_queued=`echo $line | awk -F"," '{print $8}' | awk -F"SCHEMA_ID" '{print $2}' | awk -F"NewValue>" '{print $2}' | awk -F"<" '{print $1}'`
 echo "met_rec_queued=$met_rec_queued"
       if [[ `cat ${OPDIR}fines_mets | grep "$met_rec_queued"` ]];then
         actual_queued_rec_count=$((actual_queued_rec_count+1))
