@@ -563,7 +563,7 @@ if [[ `grep "$dt_today" ${OPDIR}9bAZUREDB_AMD_fines_recon_result.csv` ]];then
 echo "queued_rec_count=$queued_rec_count"
 echo "missing_rec_count=$missing_rec_count"
     if [[ $queued_rec_count == $missing_rec_count ]];then
-      echo "$(date "+%d/%m/%Y %T"),AZDB_maint_fines_recon_status,Recon only has unexpected $line_count/$recon_threshold_count rows of results but $queued_rec_count rec(s) are queued up due to overnight locks so OK,warn" >> $OUTFILE
+      echo "$(date "+%d/%m/%Y %T"),AZDB_maint_fines_recon_status,Recon only has unexpected $line_count/$recon_threshold_count rows of results but $queued_rec_count rec(s) are queued up due to overnight locks so OK,ok" >> $OUTFILE
     else
       echo "$(date "+%d/%m/%Y %T"),AZDB_maint_fines_recon_status,Recon only has unexpected $line_count/$recon_threshold_count rows of results and these are not queued up due to overnight locks so pls investigate,warn" >> $OUTFILE
     fi
