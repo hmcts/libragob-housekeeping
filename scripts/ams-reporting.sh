@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 ############################################################### This is the AMD AzureDB HealthCheck script, and the associated documentation is in Ensemble under the "Libra System Admin Documents" area:
 ############################################################### "GoB Phase 1 - Oracle_Postgres DB Checks_v11.8_MAP.docx" is the latest version as of 16/01/2025
-echo "Script Version 20.0 removed Fines rec override"
+echo "Script Version 20.1 Fines rec echos"
 echo "Designed by Mark A. Porter"
 
 if [[ `echo $KV_NAME | grep "test"` ]];then
@@ -560,7 +560,8 @@ if [[ `grep "$dt_today" ${OPDIR}9bAZUREDB_AMD_fines_recon_result.csv` ]];then
     echo "$(date "+%d/%m/%Y %T") SQL for Check #9d on $fines_db has been run" >> $OUTFILE_LOG
     queued_rec_count=`cat ${OPDIR}9dAZUREDB_AMD_queued_rec_count.csv | xargs`
     missing_rec_count=$(($recon_threshold_count-$line_count))
-
+echo "queued_rec_count=$queued_rec_count"
+echo "missing_rec_count=$missing_rec_count"
     if [[ $queued_rec_count == $missing_rec_count ]];then
       echo "$(date "+%d/%m/%Y %T"),AZDB_maint_fines_recon_status,Recon only has unexpected $line_count/$recon_threshold_count rows of results but $queued_rec_count rec(s) are queued up due to overnight locks so OK,warn" >> $OUTFILE
     else
