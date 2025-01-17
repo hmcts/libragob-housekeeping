@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 ############################################################### This is the AMD AzureDB HealthCheck script, and the associated documentation is in Ensemble under the "Libra System Admin Documents" area:
 ############################################################### "GoB Phase 1 - Oracle_Postgres DB Checks_v11.8_MAP.docx" is the latest version as of 16/01/2025
-echo "Script Version 19.8 backlogs x4"
+echo "Script Version 19.9 queued rec check"
 echo "Designed by Mark A. Porter"
 
 if [[ `echo $KV_NAME | grep "test"` ]];then
@@ -548,29 +548,29 @@ recon_threshold_count=46
 fi
 
 if [[ `grep "$dt_today" ${OPDIR}9bAZUREDB_AMD_fines_recon_result.csv` ]];then
+  if [[ $line_count -eq $recon_threshold_count ]];then
+    if [[ $error_count -gt 0 ]];then
+      echo "$(date "+%d/%m/%Y %T"),AZDB_maint_fines_recon_status,Recon has $error_count error(s) so pls investigate,warn" >> $OUTFILE
+    else
+      echo "$(date "+%d/%m/%Y %T"),AZDB_maint_fines_recon_status,$line_count/$recon_threshold_count Recon METs ran with no errors,ok" >> $OUTFILE
+    fi
+  else
+    echo "$(date "+%d/%m/%Y %T") Connecting to $fines_db database to run queued rec check 9d" >> $OUTFILE_LOG
+    psql "sslmode=require host=${fines_host} dbname=${fines_db} port=${fines_port} user=${fines_username} password=${fines_password}" --file=/sql/9dAZUREDB_AMD_queued_rec_count.sql
+    echo "$(date "+%d/%m/%Y %T") SQL for Check #9d on $fines_db has been run" >> $OUTFILE_LOG
+    queued_rec_count=`cat ${OPDIR}9dAZUREDB_AMD_queued_rec_count.csv | xargs`
+    missing_rec_count=$(($recon_threshold_count-$line_count))
 
-if [[ $line_count -eq $recon_threshold_count ]];then
-
-if [[ $error_count -gt 0 ]];then
-
-echo "$(date "+%d/%m/%Y %T"),AZDB_maint_fines_recon_status,Recon has $error_count error(s) so pls investigate,warn" >> $OUTFILE
-
+    if [[ $queued_rec_count == $missing_rec_count ]];then
+      echo "$(date "+%d/%m/%Y %T"),AZDB_maint_fines_recon_status,Recon only has expected $line_count/$recon_threshold_count rows of results but $queued_rec_count rec(s) are queued up due to overnight locks so OK,warn" >> $OUTFILE
+    else
+      echo "$(date "+%d/%m/%Y %T"),AZDB_maint_fines_recon_status,Recon only has expected $line_count/$recon_threshold_count rows of results and these are not queued up due to overnight locks so pls investigate,warn" >> $OUTFILE
+    fi
+ 
+    echo "$(date "+%d/%m/%Y %T") Check #9d on $fines_db is complete" >> $OUTFILE_LOG
+  fi
 else
-
-echo "$(date "+%d/%m/%Y %T"),AZDB_maint_fines_recon_status,$line_count/$recon_threshold_count Recon METs ran with no errors,ok" >> $OUTFILE
-
-fi
-
-else
-
-echo "$(date "+%d/%m/%Y %T"),AZDB_maint_fines_recon_status,Recon only has expected $line_count/$recon_threshold_count rows of results so pls investigate,warn" >> $OUTFILE
-
-fi
-
-else
-
-echo "$(date "+%d/%m/%Y %T"),AZDB_maint_fines_recon_status,Recon didn't run today so check ORA recon ran ok,warn" >> $OUTFILE
-
+  echo "$(date "+%d/%m/%Y %T"),AZDB_maint_fines_recon_status,Recon didn't run today so check ORA recon ran ok,warn" >> $OUTFILE
 fi
 
 echo "$(date "+%d/%m/%Y %T") Connecting to $maintenance_db database" >> $OUTFILE_LOG
