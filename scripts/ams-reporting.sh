@@ -1169,6 +1169,8 @@ echo "16/01/2025.*AZDB_db_message_log_error(105|106).*23505.*duplicate key value
 
 echo "17/01/2025.*AZDB_update_processing_backlog38" >> $override_file
 
+echo "18/01/2025.*_recon_status" >> $override_file
+
 fi
 
 testit=`cat $override_file | wc -l | xargs`
